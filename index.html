@@ -143,7 +143,7 @@ footer{padding:50px 0 70px;color:var(--muted);font-size:14px}
     <h2>연락은 여기로</h2>
     <a class="go" href="https://www.youtube.com/@SKYING_DRONE" target="_blank" rel="noopener"><strong>유튜브</strong><span>@SKYING_DRONE</span></a>
     <a class="go" href="https://www.instagram.com/team._skying_drone" target="_blank" rel="noopener"><strong>인스타그램</strong><span>@team._skying_drone</span></a>
-    <a class="go" href="https://open.kakao.com/o/sK5fZsLi" target="_blank" rel="noopener"><strong>문의 · 협찬</strong><span>카카오톡 오픈채팅</span></a>
+    <a class="go" href="#links" onclick="ChannelIO('showMessenger');return false;"><strong>문의 · 협찬</strong><span>채널톡 상담</span></a>
     <a class="go" href="https://open.kakao.com/o/poToUPKi" target="_blank" rel="noopener"><strong>오픈채팅</strong><span>카카오톡 오픈채팅</span></a>
     <footer>© 2026 SKYING DRONE</footer>
   </section>
@@ -205,6 +205,13 @@ footer{padding:50px 0 70px;color:var(--muted);font-size:14px}
   new ResizeObserver(place).observe($('.nav'));
   document.fonts&&document.fonts.ready.then(place);active();
 })();
+</script>
+<script>
+  (function(){var w=window;if(w.ChannelIO){return w.console.error("ChannelIO script included twice.");}var ch=function(){ch.c(arguments);};ch.q=[];ch.c=function(args){ch.q.push(args);};w.ChannelIO=ch;function l(){if(w.ChannelIOInitialized){return;}w.ChannelIOInitialized=true;var s=document.createElement("script");s.type="text/javascript";s.async=true;s.src="https://cdn.channel.io/plugin/ch-plugin-web.js";var x=document.getElementsByTagName("script")[0];if(x.parentNode){x.parentNode.insertBefore(s,x);}}if(document.readyState==="complete"){l();}else{w.addEventListener("DOMContentLoaded",l);w.addEventListener("load",l);}})();
+
+  ChannelIO('boot', {
+    "pluginKey": "d7b67a42-5920-4dd3-83e5-57b5aaa19031"
+  });
 </script>
 </body>
 </html>
