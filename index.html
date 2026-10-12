@@ -19,6 +19,7 @@
 @media(min-width:1600px){.hero-content{margin-top:35px}.drone-stage{right:12%}}
 @media(max-width:900px){.hero{padding-top:170px}.drone-stage{width:44vw;right:2%;top:44%}.flight-caption{display:none}.intro{max-width:55%}.intro small{font-size:12px}.story{gap:35px;grid-template-columns:1fr 1fr}}
 @media(max-width:600px){.header{padding:22px 24px}.brand{width:102px}.menu-button{width:46px;height:46px}.hero{padding:155px 24px 28px;min-height:860px;min-height:max(860px,100svh)}h1{font-size:clamp(71px,17.5vw,106px);letter-spacing:-.07em}.eyebrow{font-size:9px;margin-bottom:24px}.intro{margin-top:28px;max-width:none;font-size:21px}.intro small{font-size:12px;max-width:23em}.drone-stage{width:76vw;top:47%;right:7%}.horizon{bottom:-46%}.hero-bottom{margin-top:300px}.hero-bottom p{font-size:8px}.hero-bottom p span{font-size:9px}.scroll-link{font-size:10px;gap:10px}.story{display:block;padding:75px 24px 80px}.story-copy{margin-top:30px}.story-copy p{font-size:14px}.footer{padding:24px;letter-spacing:.06em}.menu-panel{padding:130px 24px 60px}}
+@media(max-height:700px){.menu-panel{justify-content:flex-start;overflow-y:auto;padding-top:115px}.menu-panel nav{gap:8px}.menu-panel nav a{font-size:30px;padding-bottom:10px}.menu-footer{position:static;margin-top:28px;flex-shrink:0}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{animation-duration:.01ms!important;animation-delay:0s!important;transition-duration:.01ms!important}}
 </style>
 </head>
@@ -34,7 +35,7 @@
 <section class="story" id="perspective"><div><p class="eyebrow">OUR PERSPECTIVE</p><h2>시선이 달라지면,<br>풍경도 달라집니다.</h2></div><div class="story-copy"><p>AIR SKY는 DJI 드론으로 풍경을 기록하고, 영상으로 나눕니다.</p></div></section>
 </main>
 <footer class="footer"><span>© 2026 AIR SKY</span><span>A DIFFERENT PERSPECTIVE.</span></footer>
-<div class="menu-panel" id="main-menu" hidden role="dialog" aria-modal="true" aria-label="사이트 메뉴"><p class="menu-caption">AIR SKY</p><nav aria-label="주 메뉴"><a href="about.html">소개 <span aria-hidden="true">01</span></a><a href="request.html">촬영 신청하기 <span aria-hidden="true">02</span></a><a href="crew.html">촬영진 소개 <span aria-hidden="true">03</span></a></nav><a class="menu-footer admin-link" href="admin.html">관리자 페이지 ↗</a></div>
+<div class="menu-panel" id="main-menu" hidden role="dialog" aria-modal="true" aria-label="사이트 메뉴"><p class="menu-caption">AIR SKY</p><nav aria-label="주 메뉴"><a href="about.html">소개 <span aria-hidden="true">01</span></a><a href="request.html">촬영 신청하기 <span aria-hidden="true">02</span></a><a href="crew.html">촬영진 소개 <span aria-hidden="true">03</span></a><a href="principles.html">촬영 원칙 <span aria-hidden="true">04</span></a></nav><a class="menu-footer admin-link" href="admin.html">관리자 페이지 ↗</a></div>
 <script>
 (function(){
 var drone=document.querySelector('.drone-stage img'),fleet=['assets/drone-neo2.webp','assets/drone.webp','assets/drone-avata360.webp'];drone.src=fleet[Math.floor(Math.random()*fleet.length)];
