@@ -13,9 +13,10 @@ form.addEventListener('submit',async e=>{
  e.preventDefault();message.textContent='';
  if(!address.value){message.textContent='주소 검색으로 촬영 위치를 선택해주세요.';button.focus();return}
  if(!form.reportValidity())return;
+ if(form.instagram.value.trim()&&!document.querySelector('#instagram-agreed').checked){message.textContent='인스타그램 안내를 원하시면 선택 정보 수집·이용에 동의해주세요.';document.querySelector('#instagram-agreed').focus();return}
  const submit=form.querySelector('[type="submit"]');submit.disabled=true;submit.textContent='접수 중…';
  try{
- const response=await fetch('/api/filming-requests',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({nickname:form.nickname.value,address:address.value,details:form.details.value,notes:form.notes.value,website:form.website.value,agreed:document.querySelector('#agreed').checked})});
+ const response=await fetch('/api/filming-requests',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({nickname:form.nickname.value,instagram:form.instagram.value,instagramAgreed:document.querySelector('#instagram-agreed').checked,address:address.value,details:form.details.value,notes:form.notes.value,website:form.website.value,agreed:document.querySelector('#agreed').checked})});
  const data=await response.json();if(!response.ok)throw new Error(data.error||'접수하지 못했습니다. 다시 시도해주세요.');
  form.hidden=true;document.querySelector('#success').hidden=false;document.querySelector('#receipt').textContent=data.id;
  }catch(error){message.textContent=error.message==='Failed to fetch'?'연결을 확인하고 다시 시도해주세요.':error.message}
