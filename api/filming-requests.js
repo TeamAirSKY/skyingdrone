@@ -10,6 +10,9 @@ module.exports=async(req,res)=>{
  if(data?.website)return s.send(res,400,{error:'입력 내용을 확인해주세요.'});
  const result=s.validateRequest(data);if(result.error)return s.send(res,400,{error:result.error});
  if(await s.limited(req,'submit',5,3600))return s.send(res,429,{error:'신청이 많습니다. 잠시 후 다시 시도해주세요.'});
+ const hostname=new URL(req.headers.origin).hostname;
+ const verification=await require('../lib/recaptcha').verify(data.recaptchaToken,hostname);
+ if(!verification.ok)return s.send(res,verification.status,{error:verification.error});
  const id=crypto.randomUUID(),record={id,...result.value,status:'pending',createdAt:new Date().toISOString()};
  await s.redis(['SET',`airsky:request:${id}`,JSON.stringify(record),'EX',15552000]);
  try{await s.redis(['LPUSH','airsky:requests',id])}catch{await s.redis(['DEL',`airsky:request:${id}`]);throw new Error('STORAGE_UNAVAILABLE')}
