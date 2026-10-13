@@ -4,8 +4,8 @@ function node(tag,text,cls){const e=document.createElement(tag);if(text!==undefi
 const instances=[];
 class Records{
  constructor(kind){
-  this.kind=kind;this.isRequest=kind==='filming';this.endpoint=this.isRequest?'/api/filming-requests':'/api/suggestions';this.field=this.isRequest?'requests':'suggestions';
-  this.states=this.isRequest?['pending','accepted','rejected','completed']:['pending','reviewed'];this.entries=[];this.drafts=new Map();this.selected=new Set();this.offset=0;this.loaded=false;this.busy=false;
+  this.kind=kind;this.isRequest=kind==='filming';this.isApplication=kind==='application';this.endpoint=this.isRequest?'/api/filming-requests':this.isApplication?'/api/crew-applications':'/api/suggestions';this.field=this.isRequest?'requests':this.isApplication?'applications':'suggestions';
+  this.states=this.isRequest?['pending','accepted','rejected','completed']:this.isApplication?['pending','reviewed','accepted','rejected']:['pending','reviewed'];this.entries=[];this.drafts=new Map();this.selected=new Set();this.offset=0;this.loaded=false;this.busy=false;
   this.root=document.querySelector('#'+kind+'-panel');this.list=this.root.querySelector('[data-records]');this.message=this.root.querySelector('[data-message]');this.more=this.root.querySelector('[data-more]');
   this.search=this.root.querySelector('[data-search]');this.status=this.root.querySelector('[data-status]');this.sort=this.root.querySelector('[data-sort]');this.category=this.root.querySelector('[data-category]');this.bulk=this.root.querySelector('[data-bulk]');
   for(const select of [this.status,this.bulk]){for(const state of this.states){const o=node('option',labels[state]);o.value=state;select.append(o)}}
@@ -18,16 +18,17 @@ class Records{
   this.root.querySelector('[data-discard]').addEventListener('click',()=>{this.drafts.clear();this.message.textContent='미반영 변경을 되돌렸습니다.';this.render()});instances.push(this);this.render();
  }
  stage(item,status){if(status===item.status)this.drafts.delete(item.id);else this.drafts.set(item.id,status)}
- visible(){const query=this.search.value.trim().toLocaleLowerCase();return this.entries.filter(x=>(this.status.value==='all'||x.status===this.status.value)&&(!this.category||this.category.value==='all'||x.category===this.category.value)&&(!query||[x.nickname,x.address,x.details,x.notes,x.instagram,x.content,x.id].filter(Boolean).join(' ').toLocaleLowerCase().includes(query))).sort((a,b)=>this.sort.value==='oldest'?a.createdAt.localeCompare(b.createdAt):b.createdAt.localeCompare(a.createdAt))}
+ visible(){const query=this.search.value.trim().toLocaleLowerCase();return this.entries.filter(x=>(this.status.value==='all'||x.status===this.status.value)&&(!this.category||this.category.value==='all'||x.category===this.category.value)&&(!query||[x.name,x.introduction,x.nickname,x.address,x.details,x.notes,x.instagram,x.content,x.id].filter(Boolean).join(' ').toLocaleLowerCase().includes(query))).sort((a,b)=>this.sort.value==='oldest'?a.createdAt.localeCompare(b.createdAt):b.createdAt.localeCompare(a.createdAt))}
  render(){
   const visible=this.visible();this.list.replaceChildren();
   this.root.querySelector('[data-count]').textContent=`불러온 ${this.entries.length}건 · 표시 ${visible.length}건 · 검토 대기 ${this.entries.filter(x=>x.status==='pending').length}건`;
   const selectAll=this.root.querySelector('[data-select-all]');selectAll.checked=!!visible.length&&visible.every(x=>this.selected.has(x.id));selectAll.indeterminate=visible.some(x=>this.selected.has(x.id))&&!selectAll.checked;
   for(const item of visible){
-   const card=node('article',undefined,'request-card'),head=node('div',undefined,'request-head'),title=node('label',undefined,'record-selection'),check=node('input');check.type='checkbox';check.checked=this.selected.has(item.id);check.setAttribute('aria-label',(item.nickname||'익명')+' 항목 선택');check.addEventListener('change',()=>{check.checked?this.selected.add(item.id):this.selected.delete(item.id);this.render()});title.append(check,node('span',item.nickname||'익명'));head.append(title,node('time',new Date(item.createdAt).toLocaleString('ko-KR',{timeZone:'Asia/Seoul'})));card.append(head);
+   const card=node('article',undefined,'request-card'),head=node('div',undefined,'request-head'),title=node('label',undefined,'record-selection'),check=node('input');check.type='checkbox';check.checked=this.selected.has(item.id);check.setAttribute('aria-label',(item.name||item.nickname||'익명')+' 항목 선택');check.addEventListener('change',()=>{check.checked?this.selected.add(item.id):this.selected.delete(item.id);this.render()});title.append(check,node('span',item.name||item.nickname||'익명'));head.append(title,node('time',new Date(item.createdAt).toLocaleString('ko-KR',{timeZone:'Asia/Seoul'})));card.append(head);
    if(this.isRequest){card.append(node('p',item.address+(item.details?' · '+item.details:'')));const map=node('a','지도에서 위치 확인 ↗','map-link');map.href='https://map.kakao.com/?q='+encodeURIComponent(item.address);map.target='_blank';map.rel='noopener noreferrer';card.append(map);if(item.instagram){const link=node('a','@'+item.instagram+' · 인스타그램으로 안내 ↗','map-link');link.href='https://www.instagram.com/'+encodeURIComponent(item.instagram)+'/';link.target='_blank';link.rel='noopener noreferrer';card.append(node('br'),link)}if(item.notes)card.append(node('p',item.notes,'notes'));}
+   else if(this.isApplication)card.append(node('p',item.introduction,'notes'));
    else card.append(node('p',item.category==='site'?'사이트 건의':'채널 건의','suggestion-category'),node('p',item.content,'notes'));
-   const select=node('select');select.setAttribute('aria-label',(item.nickname||'익명')+' 처리 상태');select.dataset.stateId=item.id;for(const state of this.states){const o=node('option',labels[state]);o.value=state;select.append(o)}select.value=this.drafts.get(item.id)||item.status;select.addEventListener('change',()=>{this.stage(item,select.value);this.render();this.list.querySelector(`[data-state-id="${item.id}"]`)?.focus()});
+   const select=node('select');select.setAttribute('aria-label',(item.name||item.nickname||'익명')+' 처리 상태');select.dataset.stateId=item.id;for(const state of this.states){const o=node('option',labels[state]);o.value=state;select.append(o)}select.value=this.drafts.get(item.id)||item.status;select.addEventListener('change',()=>{this.stage(item,select.value);this.render();this.list.querySelector(`[data-state-id="${item.id}"]`)?.focus()});
    const actions=node('div',undefined,'request-actions');actions.append(select,node('span',this.drafts.has(item.id)?`${labels[item.status]} → ${labels[select.value]} · 미반영`:`현재 상태: ${labels[item.status]}`,'badge'));card.append(actions,node('p','접수 번호: '+item.id,'record-id'));this.list.append(card);
   }
   if(!visible.length)this.list.append(node('p',this.loaded?'조건에 맞는 항목이 없습니다.':'아직 목록을 불러오지 않았습니다.','empty'));
@@ -58,6 +59,7 @@ class Records{
    }catch{failed++;if(expired)break;}
   }
   this.busy=false;this.root.querySelectorAll('input,select,button').forEach(e=>e.disabled=false);this.render();this.message.textContent=failed?`${saved}건 반영했습니다. 남은 ${this.drafts.size}건은 저장되지 않았습니다. 다시 시도해주세요.`:`${saved}건 반영했습니다.`;
+  if(this.isApplication)window.dispatchEvent(new Event('airsky-applications-changed'));
   if(expired)window.dispatchEvent(new Event('airsky-auth-expired'));
  }
  clear(){this.entries=[];this.drafts.clear();this.selected.clear();this.loaded=false;this.offset=0;this.more.hidden=true;this.message.textContent='';this.render()}

@@ -1,0 +1,5 @@
+(function(){
+const form=document.querySelector('#crew-apply-form'),message=document.querySelector('#form-message');
+form.addEventListener('submit',async e=>{e.preventDefault();if(!form.reportValidity())return;const button=form.querySelector('[type=submit]');if(button.disabled)return;button.disabled=true;button.textContent='접수 중…';message.textContent='';
+try{const response=await fetch('/api/crew-applications',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name:form.elements.name.value,introduction:form.elements.introduction.value,website:form.elements.website.value,agreed:form.querySelector('#agreed').checked})}),data=await response.json();if(!response.ok)throw Error(data.error||'지원을 접수하지 못했습니다.');form.hidden=true;document.querySelector('#success').hidden=false;document.querySelector('#receipt').textContent=data.id;}catch(error){message.textContent=error.message==='Failed to fetch'?'연결을 확인하고 다시 시도해주세요.':error.message}finally{button.disabled=false;button.textContent='크루 지원하기'}});
+})();
