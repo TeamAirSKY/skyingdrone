@@ -9,5 +9,5 @@ module.exports=async(req,res)=>{
  await audit.append(req,res,'visit');saved=true;
  }catch{saved=false}
  }
- try{const html=fs.readFileSync(path.join(process.cwd(),'admin.html'),'utf8').replace('<body>',`<body data-audit-saved="${saved}">`);return res.status(200).send(req.method==='HEAD'?'':html)}catch{return res.status(500).send('관리자 페이지를 불러올 수 없습니다.')}
+ try{const html=fs.readFileSync(path.join(process.cwd(),'admin.html'),'utf8').replace(/<body([^>]*)>/,`<body$1 data-audit-saved="${saved}">`);return res.status(200).send(req.method==='HEAD'?'':html)}catch{return res.status(500).send('관리자 페이지를 불러올 수 없습니다.')}
 };
