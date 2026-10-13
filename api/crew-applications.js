@@ -4,7 +4,7 @@ function validate(data){
  const name=typeof data.name==='string'?data.name.trim():'',introduction=typeof data.introduction==='string'?data.introduction.trim():'';
  if(!name||name.length>30||!introduction||introduction.length>1000)return {error:'이름은 1~30자, 소개는 1~1,000자로 입력해주세요.'};
  if(data.agreed!==true)return {error:'크루 지원 정보 수집·이용에 동의해주세요.'};
- const department=data.department||'undecided';if(!['filming','editing','undecided'].includes(department))return {error:'희망 부서를 확인해주세요.'};
+ const department=data.department||'undecided';if(!['filming','planning','editing','undecided'].includes(department))return {error:'희망 부서를 확인해주세요.'};
  return {value:{name,introduction,department}};
 }
 module.exports=async(req,res)=>{
