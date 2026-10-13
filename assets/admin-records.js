@@ -26,7 +26,7 @@ class Records{
  }
  updateDraftControls(){const count=this.drafts.size;this.root.querySelector('[data-savebar]').hidden=!count;this.root.querySelector('[data-pending]').textContent=`미반영 ${count}건`;this.root.querySelector('[data-apply]').disabled=this.busy||!count;this.root.querySelector('[data-discard]').disabled=this.busy||!count;}
  matchesView(item){return this.view==='archived'?Boolean(item.archived):!item.archived}
- visible(){const query=this.search.value.trim().toLocaleLowerCase();return this.entries.filter(x=>this.matchesView(x)&&(this.status.value==='all'||x.status===this.status.value)&&(!this.category||this.category.value==='all'||(this.isApplication?(x.department||'undecided'):x.category)===this.category.value)&&(!query||[x.name,x.introduction,x.nickname,x.address,x.details,x.notes,x.adminNote,x.instagram,x.content,x.id].filter(Boolean).join(' ').toLocaleLowerCase().includes(query))).sort((a,b)=>this.sort.value==='oldest'?a.createdAt.localeCompare(b.createdAt):b.createdAt.localeCompare(a.createdAt))}
+ visible(){const query=this.search.value.trim().toLocaleLowerCase();return this.entries.filter(x=>this.matchesView(x)&&(this.status.value==='all'||x.status===this.status.value)&&(!this.category||this.category.value==='all'||(this.isApplication?(x.department||'undecided'):x.category)===this.category.value)&&(!query||[x.name,x.introduction,x.nickname,x.address,x.details,x.notes,x.adminNote,x.instagram,x.content,this.isRequest?x.number||x.id:null].filter(Boolean).join(' ').toLocaleLowerCase().includes(query))).sort((a,b)=>this.sort.value==='oldest'?a.createdAt.localeCompare(b.createdAt):b.createdAt.localeCompare(a.createdAt))}
  render(){
   const visible=this.visible(),loaded=this.entries.filter(x=>this.matchesView(x));this.list.replaceChildren();
   this.root.querySelector('[data-count]').textContent=`${visible.length}건 표시 · 검토 대기 ${loaded.filter(x=>x.status==='pending').length}건`;
@@ -38,7 +38,7 @@ class Records{
   if(this.busy)this.root.querySelectorAll('input,textarea,select,button').forEach(e=>e.disabled=true);
  }
  card(item){
-  const patch=this.drafts.get(item.id)||{},deleting=Boolean(patch._delete),name=item.name||item.nickname||'익명';
+  const patch=this.drafts.get(item.id)||{},deleting=Boolean(patch._delete),name=(this.isRequest&&item.number?item.number+'번 · ':'')+(item.name||item.nickname||'익명');
   const card=node('article',undefined,'request-card'+(deleting?' is-delete-pending':'')),head=node('div',undefined,'request-head'),title=node('label',undefined,'record-selection'),check=node('input');check.type='checkbox';check.checked=this.selected.has(item.id);check.setAttribute('aria-label',name+' 항목 선택');check.addEventListener('change',()=>{check.checked?this.selected.add(item.id):this.selected.delete(item.id);this.render()});title.append(check,node('span',name));head.append(title,node('time',new Date(item.createdAt).toLocaleString('ko-KR',{timeZone:'Asia/Seoul',dateStyle:'medium',timeStyle:'short'})));card.append(head);
   const category=this.isApplication?'희망 부서 · '+departments[item.department||'undecided']:!this.isRequest?(item.category==='site'?'사이트 건의':'채널 건의'):'';if(category)card.append(node('p',category,'record-category'));
   card.append(node('p',this.isRequest?item.address:item.introduction||item.content,'record-preview'));
@@ -53,7 +53,7 @@ class Records{
   else details.append(node('p',item.content,'notes'));
   const noteLabel=node('label','관리자 내부 메모','admin-note-label'),note=node('textarea');note.maxLength=2000;note.rows=3;note.disabled=deleting;note.value=patch.adminNote??item.adminNote??'';note.placeholder='검토 이유나 다음 작업을 기록해주세요. 신청자에게는 공개되지 않습니다.';note.addEventListener('input',()=>this.stageFields(item,{adminNote:note.value}));noteLabel.append(note);details.append(noteLabel);
   if(this.isRequest){const label=node('label','촬영 예정일 · 관리자용','admin-note-label'),date=node('input');date.type='date';date.disabled=deleting;date.value=patch.scheduledDate??item.scheduledDate??'';date.addEventListener('input',()=>this.stageFields(item,{scheduledDate:date.value}));label.append(date);details.append(label)}
-  details.append(node('p','접수 번호: '+item.id,'record-id'));card.append(details);return card;
+  if(this.isRequest){details.append(node('p',item.number?'신청 번호: '+item.number:'이전 접수 번호: '+item.id,'record-id'));if(item.number&&!item.receiptProtected)details.append(node('p','이전 신청 조회 번호: '+item.id,'record-id'))}card.append(details);return card;
  }
  async load(reset=true){
   if(this.busy)return;const generation=++this.generation;this.busy=true;this.render();this.message.textContent='불러오는 중…';

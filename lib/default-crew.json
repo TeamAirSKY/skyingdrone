@@ -2,7 +2,7 @@
   {
     "id": "ant",
     "name": "ANT",
-    "bio": "F1을 좋아해서 ANT라는 이름을 지었습니다. 좋아하는 레이스를 챙겨보는 것만큼, 드론을 들고 촬영을 다니는 것도 좋아합니다.\n\n새로운 장소를 찾아가 하늘에서 풍경을 바라보고, 지상에서는 놓치기 쉬운 장면을 담는 시간을 즐깁니다.",
+    "bio": "안녕하세요, 팀 총괄 ANT입니다. 팀에서는 Se7님과 협력하여 사이트 제작, 채널 운영 등의 역할을 맡고 있습니다. 드론 비행과 모터스포츠를 취미로 두고 있습니다. 감사합니다.\n\n(사진은 F1 드라이버인 Kimi Antonelli의 사진입니다.)",
     "photo": "assets/ant.jpg",
     "owner": true,
     "coOwner": false,
@@ -30,7 +30,7 @@
   {
     "id": "avata",
     "name": "AVATA",
-    "bio": "안녕하세요, AVATA입니다!",
+    "bio": "안녕하세요, Avata입니다. 부오너인 만큼 제가 하는 모든 행동에 책임을 지고, 안전을 최우선으로 하는 비행자가 되겠습니다.",
     "photo": "assets/avata.jpg",
     "owner": false,
     "coOwner": true,
@@ -39,6 +39,22 @@
     "equipment": [
       "neo2",
       "avata360"
+    ],
+    "active": true
+  },
+  {
+    "id": "lkv",
+    "name": "L.KV팀장",
+    "bio": "촬영팀 L.kV 팀장입니다.\n특수비행과 촬영 기술이 많아요.",
+    "photo": "assets/lkv.jpg",
+    "owner": false,
+    "coOwner": false,
+    "department": "planning",
+    "leader": true,
+    "equipment": [
+      "mavic4pro",
+      "avata2",
+      "neo2"
     ],
     "active": true
   }
