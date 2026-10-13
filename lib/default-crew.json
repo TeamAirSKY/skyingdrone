@@ -1,0 +1,45 @@
+[
+  {
+    "id": "ant",
+    "name": "ANT",
+    "bio": "F1을 좋아해서 ANT라는 이름을 지었습니다. 좋아하는 레이스를 챙겨보는 것만큼, 드론을 들고 촬영을 다니는 것도 좋아합니다.\n\n새로운 장소를 찾아가 하늘에서 풍경을 바라보고, 지상에서는 놓치기 쉬운 장면을 담는 시간을 즐깁니다.",
+    "photo": "assets/ant.jpg",
+    "owner": true,
+    "coOwner": false,
+    "department": "",
+    "leader": false,
+    "equipment": [
+      "neo2"
+    ],
+    "active": true
+  },
+  {
+    "id": "se7",
+    "name": "Se7",
+    "bio": "유튜브 ‘뜯어봅시다’를 운영하고 있는 Se7입니다.",
+    "photo": "assets/se7.jpg",
+    "owner": true,
+    "coOwner": false,
+    "department": "",
+    "leader": false,
+    "equipment": [
+      "lito1"
+    ],
+    "active": true
+  },
+  {
+    "id": "avata",
+    "name": "AVATA",
+    "bio": "안녕하세요, AVATA입니다!",
+    "photo": "assets/avata.jpg",
+    "owner": false,
+    "coOwner": true,
+    "department": "filming",
+    "leader": true,
+    "equipment": [
+      "neo2",
+      "avata360"
+    ],
+    "active": true
+  }
+]

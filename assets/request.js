@@ -5,6 +5,7 @@ async function setupCaptcha(){
  submit.disabled=true;
  try{
   const response=await fetch('/api/request-config'),config=await response.json();if(!response.ok)throw Error('인증 설정을 불러오지 못했습니다. 새로고침해주세요.');
+  if(config.open===false){form.hidden=true;const notice=document.querySelector('#intake-notice');notice.hidden=false;notice.textContent=config.message;return}
   captchaRequired=config.required;
   if(!config.required){captchaReady=true;submit.disabled=false;return}
   if(!config.ready)throw Error('신청 인증 설정을 준비 중입니다. 잠시 후 다시 방문해주세요.');
@@ -34,7 +35,7 @@ form.addEventListener('submit',async e=>{
  try{
  const response=await fetch('/api/filming-requests',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({recaptchaToken,nickname:form.nickname.value,instagram:form.instagram.value,instagramAgreed:document.querySelector('#instagram-agreed').checked,address:address.value,details:form.details.value,notes:form.notes.value,website:form.website.value,agreed:document.querySelector('#agreed').checked})});
  const data=await response.json();if(!response.ok)throw new Error(data.error||'접수하지 못했습니다. 다시 시도해주세요.');
- form.hidden=true;document.querySelector('#success').hidden=false;document.querySelector('#receipt').textContent=data.id;
+ form.hidden=true;document.querySelector('#success').hidden=false;document.querySelector('#receipt').textContent=data.id;document.querySelector('#receipt-status-link').href='receipt.html#'+new URLSearchParams({kind:'filming',id:data.id});
  }catch(error){message.textContent=error.message==='Failed to fetch'?'연결을 확인하고 다시 시도해주세요.':error.message}
  finally{if(captchaId!==null&&window.grecaptcha)grecaptcha.reset(captchaId);submit.disabled=false;submit.textContent='촬영 신청하기'}
 });

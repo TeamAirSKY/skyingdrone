@@ -6,6 +6,7 @@ module.exports=async(req,res)=>{
  if(!s.configured())return s.send(res,503,{error:'신청 접수가 아직 준비 중입니다. 잠시 후 다시 방문해주세요.'});
  try {
  if(req.method==='POST'){
+ const settings=await require('../lib/site-settings').read();if(!settings.filmingOpen)return s.send(res,403,{error:settings.filmingMessage});
  const data=s.body(req);
  if(data?.website)return s.send(res,400,{error:'입력 내용을 확인해주세요.'});
  const result=s.validateRequest(data);if(result.error)return s.send(res,400,{error:result.error});
@@ -27,7 +28,8 @@ module.exports=async(req,res)=>{
  const data=s.body(req);
  if(!data||! /^[a-f0-9-]{36}$/.test(data.id)||!['pending','accepted','rejected','completed'].includes(data.status))return s.send(res,400,{error:'변경 내용을 확인해주세요.'});
  const key=`airsky:request:${data.id}`,raw=await s.redis(['GET',key]);if(!raw)return s.send(res,404,{error:'신청을 찾을 수 없습니다.'});
- const record=await s.updateRecord(key,current=>{current.status=data.status;current.updatedAt=new Date().toISOString();
+ const fields=require('../lib/admin-fields').validate(data);if(fields.error)return s.send(res,400,{error:fields.error});
+ const record=await s.updateRecord(key,current=>{Object.assign(current,fields.value);current.status=data.status;current.updatedAt=new Date().toISOString();
  if(['completed','rejected'].includes(data.status)){delete current.instagram;delete current.instagramConsentAt;}return current;});
  return s.send(res,200,{ok:true,request:record});
  }catch{return s.send(res,503,{error:'현재 처리할 수 없습니다. 잠시 후 다시 시도해주세요.'})}
