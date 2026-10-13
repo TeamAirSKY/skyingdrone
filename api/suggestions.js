@@ -29,7 +29,7 @@ module.exports=async(req,res)=>{
  }
  const data=s.body(req);if(!data||!/^[a-f0-9-]{36}$/.test(data.id)||!['pending','reviewed'].includes(data.status))return s.send(res,400,{error:'변경 내용을 확인해주세요.'});
  const key=`airsky:suggestion:${data.id}`,raw=await s.redis(['GET',key]);if(!raw)return s.send(res,404,{error:'건의사항을 찾을 수 없습니다.'});
- const record=JSON.parse(raw);record.status=data.status;record.updatedAt=new Date().toISOString();await s.redis(['SET',key,JSON.stringify(record),'KEEPTTL']);return s.send(res,200,{ok:true});
+ await s.updateRecord(key,record=>({...record,status:data.status,updatedAt:new Date().toISOString()}));return s.send(res,200,{ok:true});
  }catch{return s.send(res,503,{error:'현재 처리할 수 없습니다. 잠시 후 다시 시도해주세요.'})}
 };
 module.exports.validate=validate;

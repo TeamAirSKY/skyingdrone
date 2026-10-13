@@ -1,1 +1,29 @@
-{"functions":{"api/admin-page.js":{"includeFiles":"admin.html"}},"routes":[{"src":"^/admin\\.html$","dest":"/api/admin-page"},{"handle":"filesystem"}]}
+{
+  "functions": {
+    "api/admin-page.js": {
+      "includeFiles": "admin.html"
+    }
+  },
+  "routes": [
+    {
+      "src": "^/index\\.html$",
+      "status": 308,
+      "headers": {
+        "Location": "/"
+      }
+    },
+    {
+      "src": "^/admin\\.html$",
+      "dest": "/api/admin-page"
+    },
+    {
+      "handle": "filesystem"
+    }
+  ],
+  "crons": [
+    {
+      "path": "/api/storage-cleanup",
+      "schedule": "0 3 * * *"
+    }
+  ]
+}
