@@ -1,0 +1,7 @@
+{
+ "neo2":{"name":"DJI Neo 2","title":"NEO 2","image":"assets/drone-neo2.webp","description":"작고 가벼워서 가까이서 따라가며 찍기 좋아요."},
+ "lito1":{"name":"DJI Lito 1","title":"LITO 1","image":"assets/drone.webp","description":"249g급 4K 드론이에요. 장애물 감지가 있어서 좀 더 마음 편하게 날려요."},
+ "avata360":{"name":"DJI AVATA 360","title":"AVATA 360","image":"assets/drone-avata360.webp","description":"360° 영상을 찍는 드론이에요. 찍고 나서 화면 방향을 고를 수 있어요."},
+ "mavic4pro":{"name":"DJI Mavic 4 Pro","title":"MAVIC 4 PRO","image":"assets/drone-mavic4pro.png","fit":"cover","description":"세 개의 카메라로 다양한 시선의 풍경을 담는 드론이에요."},
+ "avata2":{"name":"DJI Avata 2","title":"AVATA 2","image":"assets/drone-avata2.png","fit":"cover","description":"FPV 비행으로 움직임이 있는 장면을 담는 드론이에요."}
+}

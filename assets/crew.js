@@ -37,13 +37,13 @@ tabs.forEach((tab,i)=>{tab.addEventListener('click',()=>activate(i));tab.addEven
 let profileObserver=null;
 if('IntersectionObserver' in window&&!matchMedia('(prefers-reduced-motion: reduce)').matches){profileObserver=new IntersectionObserver(entries=>{entries.forEach(entry=>{if(entry.isIntersecting){entry.target.classList.add('is-visible');profileObserver.unobserve(entry.target)}})},{threshold:.12})}
 function node(tag,text,cls){const e=document.createElement(tag);if(text!==undefined)e.textContent=text;if(cls)e.className=cls;return e}
-const equipment={neo2:{name:'Dji Neo 2',image:'assets/drone-neo2.webp'},lito1:{name:'Dji Lito 1',image:'assets/drone.webp'},avata360:{name:'Dji AVATA 360',image:'assets/drone-avata360.webp'}};
+let equipment={};
 function card(member,role,context,index){
  const article=node('article',undefined,'crew-member');article.dataset.crewId=member.id;article.setAttribute('aria-labelledby','crew-'+context+'-'+member.id);
  const figure=node('figure',undefined,'crew-photo');if(member.photo){const image=node('img');image.src=member.photo;image.alt=member.name+' 프로필 이미지';image.decoding='async';image.loading='lazy';image.addEventListener('error',()=>{figure.replaceChildren(node('span',member.name.slice(0,2)));figure.classList.add('crew-photo-placeholder')},{once:true});figure.append(image)}else{figure.classList.add('crew-photo-placeholder');figure.append(node('span',member.name.slice(0,2)))}
  const content=node('div'),name=node('h2',member.name);name.id='crew-'+context+'-'+member.id;content.append(node('p','AIR SKY / '+String(index+1).padStart(2,'0'),'crew-number'),name);if(role)content.append(node('p',role,'crew-role'));
  const bio=node('div',undefined,'crew-bio');member.bio.split(/\n+/).filter(Boolean).forEach(line=>bio.append(node('p',line)));content.append(bio);
- if(member.equipment.length){const section=node('div',undefined,'crew-equipment'),list=node('div',undefined,'equipment-list');section.append(node('p','기체:','equipment-label'));for(const key of member.equipment){const data=equipment[key];if(!data)continue;const row=node('div',undefined,'equipment-item'),image=node('img');image.src=data.image;image.alt=data.name;image.width=90;image.height=55;image.loading='lazy';row.append(node('span',data.name),image);list.append(row)}section.append(list);content.append(section)}
+ if(member.equipment.length){const section=node('div',undefined,'crew-equipment'),list=node('div',undefined,'equipment-list');section.append(node('p','기체:','equipment-label'));for(const key of member.equipment){const data=equipment[key];if(!data)continue;const row=node('div',undefined,'equipment-item'),image=node('img');image.src=data.image;image.alt=data.name;image.width=90;image.height=55;image.loading='lazy';image.style.objectFit=data.fit||'contain';row.append(node('span',data.name),image);list.append(row)}section.append(list);content.append(section)}
  article.append(figure,content);if(profileObserver){article.classList.add('reveal-ready');profileObserver.observe(article)}return article;
 }
 function renderRoster(members){
@@ -54,7 +54,7 @@ function renderRoster(members){
  for(const [key,title] of [['filming','촬영팀'],['planning','기획팀'],['editing','편집팀']]){const panel=document.querySelector('#crew-panel-'+key),selected=members.filter(x=>x.department===key);panel.replaceChildren();if(selected.length){const list=node('div',undefined,'crew-list');selected.forEach(member=>list.append(card(member,member.leader?'Team Leader':'Crew',key,members.indexOf(member))));panel.append(list)}else{panel.append(node('p',title,'eyebrow'),node('h2','함께할 크루를 기다리고 있어요.','crew-empty-title'),node('p','새로운 크루가 합류하면 이곳에서 소개할게요.','lead'));const link=node('a','크루 지원하기 ↗','map-link');link.href='crew-apply.html';panel.append(link)}}
 }
 async function loadRoster(){
- try{const response=await fetch('/api/crew-roster'),data=await response.json();if(!response.ok||!Array.isArray(data.members))throw Error('ROSTER_UNAVAILABLE');rosterReady=false;renderRoster(data.members);lastTotal=crewTotal();rosterReady=true;document.querySelector('#roster-error')?.remove();if(pageShown)countUp();}
+ try{const response=await fetch('/api/crew-roster'),data=await response.json();if(!response.ok||!Array.isArray(data.members))throw Error('ROSTER_UNAVAILABLE');equipment=data.catalog||{};rosterReady=false;renderRoster(data.members);lastTotal=crewTotal();rosterReady=true;document.querySelector('#roster-error')?.remove();if(pageShown)countUp();}
  catch{rosterReady=false;document.querySelectorAll('.crew-department').forEach(panel=>panel.replaceChildren());cancelAnimationFrame(frame);counter.textContent='—';counter.setAttribute('aria-label','인원 확인 불가');if(!document.querySelector('#roster-error')){const error=node('p','크루 소개를 불러오지 못했습니다. 연결을 확인하고 새로고침해주세요.','message');error.id='roster-error';document.querySelector('.crew-intro').append(error)}}
 }
 loadRoster();
