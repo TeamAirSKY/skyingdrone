@@ -10,7 +10,7 @@ function setCount(value,roll=false){
  counter.replaceChildren(incoming);
  if(!roll||typeof incoming.animate!=='function')return;
  const outgoing=incoming.cloneNode();outgoing.textContent=previous;counter.prepend(outgoing);
- const options={duration:110,easing:'cubic-bezier(.2,.65,.3,1)',fill:'forwards'};
+ const options={duration:65,easing:'cubic-bezier(.2,.65,.3,1)',fill:'forwards'};
  outgoing.animate([{transform:'translateY(0)',opacity:1},{transform:'translateY(-100%)',opacity:0}],options);
  const animation=incoming.animate([{transform:'translateY(100%)',opacity:0},{transform:'translateY(0)',opacity:1}],options);
  animation.onfinish=()=>{outgoing.remove();animation.cancel()};
@@ -18,7 +18,7 @@ function setCount(value,roll=false){
 function countUp(){
  cancelAnimationFrame(frame);const total=crewTotal();counter.setAttribute('aria-label',String(total));counter.style.width=Math.max(1,String(total).length)+'ch';setCount(0);
  if(matchMedia('(prefers-reduced-motion: reduce)').matches){setCount(total);return}
- const steps=Math.min(total,6),beat=140,start=performance.now();let lastStep=0;
+ const steps=Math.min(total,6),beat=80,start=performance.now();let lastStep=0;
  function tick(now){
   const step=Math.min(steps,Math.floor((now-start)/beat));
   if(step>lastStep){setCount(Math.round(total*step/steps),true);lastStep=step}
