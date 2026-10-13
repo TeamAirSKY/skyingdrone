@@ -11,7 +11,7 @@ Vercel의 이 저장소에 연결된 프로젝트에서 Settings → Environment
 
 Vercel Marketplace의 Upstash Redis 연동 또는 Upstash Console에서 데이터베이스를 생성합니다. 연동이 `UPSTASH_REDIS_REST_URL`, `UPSTASH_REDIS_REST_TOKEN`으로 값을 제공하는 경우 코드가 이 이름도 지원합니다. 로컬 파일이나 브라우저 저장소에 신청을 저장하지 않습니다.
 
-관리자 세션은 1시간 유효한 서명된 HttpOnly/Secure/SameSite=Strict 쿠키입니다. 서버가 6자리 PIN을 확인합니다. 로그인과 신청 접수에는 IP별 속도 제한이 있습니다. 신청 레코드는 접수부터 180일 후 만료됩니다. 원본 IP는 저장하지 않습니다. 외부 주소 검색은 Daum 우편번호 서비스를 이용하며 주소가 경기도인지 클라이언트와 서버에서 확인합니다. 지도 확인은 Kakao Map의 주소 검색 화면을 엽니다.
+관리자 세션은 1시간 유효한 서명된 HttpOnly/Secure/SameSite=Strict 쿠키입니다. 서버가 6자리 PIN을 확인합니다. 로그인과 신청 접수에는 IP별 속도 제한이 있습니다. 신청 레코드는 접수부터 180일 후 만료됩니다. 원본 IP는 저장하지 않습니다. 외부 주소 검색은 Daum 우편번호 서비스를 이용하며 지역 제한 없이 주소를 선택할 수 있으며 서버에서 주소의 필수 입력과 길이를 확인합니다. 지도 확인은 Kakao Map의 주소 검색 화면을 엽니다.
 
 설정 전에는 신청 API가 503과 준비 중 안내를 반환하며 접수 성공을 표시하지 않습니다. 관리자 목록은 인증 없이 읽을 수 없습니다. `/api` 서버 함수 실행이 가능한 Vercel에 배포해야 하며 GitHub Pages에서는 접수 기능을 사용할 수 없습니다.
 

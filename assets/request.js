@@ -3,9 +3,8 @@ const form=document.querySelector('#request-form'),address=document.querySelecto
 button.addEventListener('click',()=>{
  if(!window.daum?.Postcode){message.textContent='주소 검색을 불러오지 못했습니다. 새로고침 후 다시 시도해주세요.';return}
  new daum.Postcode({oncomplete(data){
- if(data.sido!=='경기도'){message.textContent='경기도 내 주소를 선택해주세요.';return}
  const selected=data.roadAddress||data.jibunAddress;
- if(!/^경기도\s/.test(selected)){message.textContent='경기도 주소를 확인할 수 없습니다. 다시 선택해주세요.';return}
+ if(!selected){message.textContent='주소를 확인할 수 없습니다. 다시 선택해주세요.';return}
  address.value=selected;map.href='https://map.kakao.com/?q='+encodeURIComponent(selected);map.hidden=false;message.textContent='';
  }}).open();
 });
