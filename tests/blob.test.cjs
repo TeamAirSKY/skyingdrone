@@ -1,6 +1,7 @@
 const {test}=require('node:test'),assert=require('node:assert/strict');
 const sdk=require('@vercel/blob');let files=new Map(),revision=0;
-sdk.get=async path=>{const value=files.get(path);return value?{stream:new Response(value.body).body,blob:{etag:value.etag}}:null};
+sdk.get=async path=>{const value=files.get(path);return value?{stream:new Response(value.body).body,blob:{etag:'\"'+value.etag+'\"'}}:null};
+sdk.head=async path=>{const value=files.get(path);if(!value)throw new sdk.BlobNotFoundError();return {etag:value.etag}};
 sdk.put=async(path,body,options)=>{
  assert.equal(options.access,'private');assert.equal(options.addRandomSuffix,false);
  const old=files.get(path);
