@@ -1,1 +1,1 @@
-{"functions":{"api/admin-page.js":{"includeFiles":"admin.html"}},"rewrites":[{"source":"/admin.html","destination":"/api/admin-page"}]}
+{"functions":{"api/admin-page.js":{"includeFiles":"admin.html"}},"routes":[{"src":"^/admin\\.html$","dest":"/api/admin-page"},{"handle":"filesystem"}]}
