@@ -1,0 +1,26 @@
+(function(){
+const roots=document.querySelectorAll('.embedded-about,.standalone-about');
+roots.forEach(root=>{
+ const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
+ const logo=root.querySelector('.mark');
+ if(logo){if(!('IntersectionObserver' in window)||reduced)logo.classList.add('logo-visible');else{const observer=new IntersectionObserver(entries=>{if(entries.some(e=>e.isIntersecting)){logo.classList.add('logo-visible');observer.disconnect()}},{threshold:.2});observer.observe(logo)}}
+ const say=root.querySelector('.say');if(say){say.querySelectorAll('.ln').forEach(line=>{line.replaceChildren(...line.textContent.split(' ').flatMap((word,i)=>{const span=document.createElement('span');span.className='w';span.textContent=word;return i?[document.createTextNode(' '),span]:[span]}))})}
+ const cards=root.querySelectorAll('.craft');const stats=root.querySelector('.big');
+ function count(el){if(reduced){el.textContent=Number(el.dataset.n).toLocaleString('ko-KR');return}const start=performance.now(),to=Number(el.dataset.n);function tick(now){const p=Math.min(1,(now-start)/1600);el.textContent=Math.round(to*(1-Math.pow(1-p,4))).toLocaleString('ko-KR');if(p<1)requestAnimationFrame(tick)}requestAnimationFrame(tick)}
+ if('IntersectionObserver' in window){const observer=new IntersectionObserver(entries=>entries.forEach(entry=>{if(!entry.isIntersecting)return;if(entry.target.classList.contains('craft'))entry.target.classList.add('in');else entry.target.querySelectorAll('[data-n]').forEach(count);observer.unobserve(entry.target)}),{threshold:.25});cards.forEach(card=>observer.observe(card));if(stats)observer.observe(stats)}else{cards.forEach(card=>card.classList.add('in'));stats?.querySelectorAll('[data-n]').forEach(count)}
+ const images=[...cards].map(card=>card.querySelector('img').src);const pilot=root.classList.contains('standalone-about')?document.querySelector('.pilot'):null;if(pilot){pilot.querySelector('img').src=images[1];if(reduced)pilot.hidden=true}root.querySelectorAll('.pass').forEach((pass,i)=>{pass.querySelector('img').src=images[i%images.length];if(!reduced&&'IntersectionObserver' in window){new IntersectionObserver(entries=>{if(entries[0].isIntersecting)pass.classList.add('go');else pass.classList.remove('go')},{threshold:.3}).observe(pass.parentElement)}});
+ const daylight=root.querySelector('.intro-daylight'),sticky=daylight?.querySelector('.daylight-sticky'),scene=daylight?.querySelector('.light-scene');
+ const mix=(a,b,t)=>'rgb('+a.map((v,i)=>Math.round(v+(b[i]-v)*t)).join(',')+')';
+ function measure(){if(sticky&&scene)sticky.style.setProperty('--scene-center',(scene.offsetTop+scene.offsetHeight/2)+'px')}
+ function update(){
+ if(say){const r=say.getBoundingClientRect(),progress=Math.max(0,Math.min(1,(innerHeight*.85-r.top)/(r.height+innerHeight*.25))),words=say.querySelectorAll('.w');words.forEach((word,i)=>word.classList.toggle('on',reduced||i<Math.round(progress*words.length)))}
+ if(pilot&&!reduced){const progress=scrollY/Math.max(1,document.documentElement.scrollHeight-innerHeight);pilot.classList.toggle('on',scrollY>innerHeight*.35);pilot.style.transform='translate('+(innerWidth/2+innerWidth*.3*Math.sin(progress*Math.PI*7))+'px,'+(innerHeight*.62+innerHeight*.12*Math.sin(progress*Math.PI*11+1))+'px)'}
+ if(!scene)return;const rect=daylight.getBoundingClientRect(),padding=parseFloat(getComputedStyle(daylight).paddingTop),normalCenter=rect.top+padding+scene.offsetTop+scene.offsetHeight/2;const travel=Math.max(innerHeight*.8,daylight.offsetHeight-sticky.offsetHeight-padding*2);const p=Math.max(0,Math.min(1,(innerHeight/2-normalCenter)/travel));
+ const dusk=p<.5?p*2:(p-.5)*2;
+ scene.style.setProperty('--sky-top',p<.5?mix([34,71,103],[116,66,49],dusk):mix([116,66,49],[3,8,20],dusk));scene.style.setProperty('--sky-bottom',p<.5?mix([124,169,195],[226,143,87],dusk):mix([226,143,87],[13,25,43],dusk));scene.style.setProperty('--sun-y',(20+p*125)+'%');scene.style.setProperty('--night',String(Math.max(0,(p-.55)/.45)));scene.dataset.phase=p<.3?'day':p<.75?'sunset':'night';scene.querySelector('.light-time').textContent=p<.3?'낮':p<.75?'해 질 무렵':'밤';
+ }
+ let queued=false;addEventListener('scroll',()=>{if(queued)return;queued=true;requestAnimationFrame(()=>{queued=false;update()})},{passive:true});addEventListener('resize',()=>{measure();update()});document.fonts?.ready.then(()=>{measure();update()});measure();update();
+});
+// Retain the standalone introduction's section navigation.
+const nav=document.querySelector('.nav .links');if(nav){const links=[...nav.querySelectorAll('a[href^="#"]')],pill=document.createElement('i');pill.className='pill';nav.append(pill);function active(){let selected=-1;links.forEach((link,i)=>{if(document.querySelector(link.getAttribute('href')).getBoundingClientRect().top<innerHeight*.4)selected=i});links.forEach((link,i)=>link.classList.toggle('on',i===selected));if(selected<0){pill.style.opacity=0;return}const a=links[selected];pill.style.cssText=`left:${a.offsetLeft}px;top:${a.offsetTop}px;width:${a.offsetWidth}px;height:${a.offsetHeight}px;opacity:1`}addEventListener('scroll',active,{passive:true});addEventListener('resize',active);document.fonts?.ready.then(active);active()}
+})();
