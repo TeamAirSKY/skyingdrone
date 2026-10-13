@@ -1,11 +1,19 @@
 const crypto=require('node:crypto'),s=require('../lib/server');
+function normalizePhone(value){
+ if(typeof value!=='string'||value.trim().length>25||! /^[+0-9()\s-]+$/.test(value))return null;
+ let phone=value.trim().replace(/[()\s-]/g,'');
+ if(phone.startsWith('+82'))phone='0'+phone.slice(3).replace(/^0/,'');
+ else if(phone.startsWith('0082'))phone='0'+phone.slice(4).replace(/^0/,'');
+ return /^(?:010\d{8}|01[16789]\d{7,8})$/.test(phone)?phone:null;
+}
 function validate(data){
  if(!data||typeof data!=='object')return {error:'지원 내용을 확인해주세요.'};
  const name=typeof data.name==='string'?data.name.trim():'',introduction=typeof data.introduction==='string'?data.introduction.trim():'';
  if(!name||name.length>30||!introduction||introduction.length>1000)return {error:'이름은 1~30자, 소개는 1~1,000자로 입력해주세요.'};
+ const phone=normalizePhone(data.phone);if(!phone)return {error:'알림을 받을 휴대전화번호를 정확히 입력해주세요.'};
  if(data.agreed!==true)return {error:'크루 지원 정보 수집·이용에 동의해주세요.'};
  const department=data.department||'undecided';if(!['filming','planning','editing','undecided'].includes(department))return {error:'희망 부서를 확인해주세요.'};
- return {value:{name,introduction,department}};
+ return {value:{name,introduction,department,phone}};
 }
 module.exports=async(req,res)=>{
  if(!['POST','GET','PATCH'].includes(req.method))return s.send(res,405,{error:'허용되지 않는 요청입니다.'});
@@ -40,3 +48,5 @@ module.exports=async(req,res)=>{
  }catch{return s.send(res,503,{error:'현재 처리할 수 없습니다. 잠시 후 다시 시도해주세요.'})}
 };
 module.exports.validate=validate;
+
+module.exports.normalizePhone=normalizePhone;
