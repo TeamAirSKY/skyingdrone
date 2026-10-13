@@ -11,13 +11,31 @@ roots.forEach(root=>{
  const images=[...cards].map(card=>card.querySelector('img').src);const pilot=root.classList.contains('standalone-about')?document.querySelector('.pilot'):null;if(pilot){pilot.querySelector('img').src=images[1];if(reduced)pilot.hidden=true}root.querySelectorAll('.pass').forEach((pass,i)=>{pass.querySelector('img').src=images[i%images.length];if(!reduced&&'IntersectionObserver' in window){new IntersectionObserver(entries=>{if(entries[0].isIntersecting)pass.classList.add('go');else pass.classList.remove('go')},{threshold:.3}).observe(pass.parentElement)}});
  const daylight=root.querySelector('.intro-daylight'),sticky=daylight?.querySelector('.daylight-sticky'),scene=daylight?.querySelector('.light-scene');
  const mix=(a,b,t)=>'rgb('+a.map((v,i)=>Math.round(v+(b[i]-v)*t)).join(',')+')';
- function measure(){if(sticky&&scene)sticky.style.setProperty('--scene-center',(scene.offsetTop+scene.offsetHeight/2)+'px')}
+ let currentProgress=null,targetProgress=0,renderedTop=null,targetTop=0,offset=0,frame=0,lastFrame=0;
+ function paint(p){
+ const dusk=p<.5?p*2:(p-.5)*2;
+ scene.style.setProperty('--sky-top',p<.5?mix([34,71,103],[116,66,49],dusk):mix([116,66,49],[3,8,20],dusk));scene.style.setProperty('--sky-bottom',p<.5?mix([124,169,195],[226,143,87],dusk):mix([226,143,87],[13,25,43],dusk));scene.style.setProperty('--sun-y',(20+p*125)+'%');scene.style.setProperty('--night',String(Math.max(0,(p-.55)/.45)));scene.dataset.phase=p<.3?'day':p<.75?'sunset':'night';scene.querySelector('.light-time').textContent=p<.3?'낮':p<.75?'해 질 무렵':'밤';
+ }
+ function glide(now){
+ frame=0;const dt=lastFrame?Math.min(50,now-lastFrame):16;lastFrame=now;const ease=1-Math.exp(-dt/140);
+ renderedTop+= (targetTop-renderedTop)*ease;currentProgress+=(targetProgress-currentProgress)*ease;
+ offset=Math.max(-56,Math.min(56,renderedTop-targetTop));renderedTop=targetTop+offset;
+ sticky.style.transform='translateY('+offset.toFixed(2)+'px)';paint(currentProgress);
+ if(Math.abs(offset)>.15||Math.abs(targetProgress-currentProgress)>.0005)frame=requestAnimationFrame(glide);
+ else{offset=0;renderedTop=targetTop;currentProgress=targetProgress;sticky.style.transform='';paint(targetProgress);lastFrame=0}
+ }
+ function follow(p){
+ const baseline=sticky.getBoundingClientRect().top-offset;targetTop=baseline;targetProgress=p;
+ if(reduced||currentProgress===null){currentProgress=p;renderedTop=baseline;paint(p);return}
+ renderedTop=Math.max(baseline-56,Math.min(baseline+56,renderedTop));
+ if(!frame)frame=requestAnimationFrame(glide);
+ }
+ function measure(){if(sticky&&scene){if(frame)cancelAnimationFrame(frame);frame=0;lastFrame=0;offset=0;renderedTop=null;currentProgress=null;sticky.style.transform='';sticky.style.setProperty('--scene-center',(scene.offsetTop+scene.offsetHeight/2)+'px')}}
  function update(){
  if(say){const r=say.getBoundingClientRect(),progress=Math.max(0,Math.min(1,(innerHeight*.85-r.top)/(r.height+innerHeight*.25))),words=say.querySelectorAll('.w');words.forEach((word,i)=>word.classList.toggle('on',reduced||i<Math.round(progress*words.length)))}
  if(pilot&&!reduced){const progress=scrollY/Math.max(1,document.documentElement.scrollHeight-innerHeight);pilot.classList.toggle('on',scrollY>innerHeight*.35);pilot.style.transform='translate('+(innerWidth/2+innerWidth*.3*Math.sin(progress*Math.PI*7))+'px,'+(innerHeight*.62+innerHeight*.12*Math.sin(progress*Math.PI*11+1))+'px)'}
  if(!scene)return;const rect=daylight.getBoundingClientRect(),padding=parseFloat(getComputedStyle(daylight).paddingTop),normalCenter=rect.top+padding+scene.offsetTop+scene.offsetHeight/2;const travel=Math.max(innerHeight*.8,daylight.offsetHeight-sticky.offsetHeight-padding*2);const p=Math.max(0,Math.min(1,(innerHeight/2-normalCenter)/travel));
- const dusk=p<.5?p*2:(p-.5)*2;
- scene.style.setProperty('--sky-top',p<.5?mix([34,71,103],[116,66,49],dusk):mix([116,66,49],[3,8,20],dusk));scene.style.setProperty('--sky-bottom',p<.5?mix([124,169,195],[226,143,87],dusk):mix([226,143,87],[13,25,43],dusk));scene.style.setProperty('--sun-y',(20+p*125)+'%');scene.style.setProperty('--night',String(Math.max(0,(p-.55)/.45)));scene.dataset.phase=p<.3?'day':p<.75?'sunset':'night';scene.querySelector('.light-time').textContent=p<.3?'낮':p<.75?'해 질 무렵':'밤';
+ follow(p);
  }
  let queued=false;addEventListener('scroll',()=>{if(queued)return;queued=true;requestAnimationFrame(()=>{queued=false;update()})},{passive:true});addEventListener('resize',()=>{measure();update()});document.fonts?.ready.then(()=>{measure();update()});measure();update();
 });
