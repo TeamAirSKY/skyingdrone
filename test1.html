@@ -32,38 +32,107 @@ top();addEventListener('DOMContentLoaded',top,{once:true});addEventListener('pag
 .light-scene{background:linear-gradient(#224767,#7ca9c3);--dusk:0;--night:0;--sun-offset:0px;isolation:isolate}.sky-layer{position:absolute;inset:0;pointer-events:none;will-change:opacity}.sky-dusk{background:linear-gradient(#744231,#e28f57);opacity:var(--dusk,0)}.sky-night{background:linear-gradient(#030814,#0d192b);opacity:var(--night,0)}.light-sun{top:20%;transform:translate3d(0,var(--sun-offset,0px),0);will-change:transform}.light-stars,.light-moon{will-change:opacity}@media(prefers-reduced-motion:reduce){.sky-layer,.light-sun,.light-stars,.light-moon{will-change:auto}}
 :root{color-scheme:dark;--bg:#050607;--ink:#f3f4f5;--dim:#a3a7ac;--ease:cubic-bezier(.16,1,.3,1)}
 *{box-sizing:border-box}html{scroll-behavior:smooth;scrollbar-gutter:stable}body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.7 'Noto Sans KR',sans-serif;word-break:keep-all}body.menu-open{overflow:hidden}a{color:inherit;text-decoration:none}button{font:inherit;color:inherit}a:focus-visible,button:focus-visible{outline:2px solid #fff;outline-offset:6px}button{cursor:pointer}::selection{background:#fff;color:#050607}
-.header{position:absolute;top:0;left:0;right:0;z-index:10;display:flex;justify-content:space-between;align-items:center;padding:30px clamp(24px,5vw,80px);padding-top:calc(30px + env(safe-area-inset-top))}.brand{display:block;width:126px}.brand img{display:block;width:100%;height:30px}.menu-button{display:grid;place-content:center;gap:7px;width:50px;height:50px;background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.15);border-radius:50%;transition:background .25s}.menu-button:hover{background:rgba(255,255,255,.12)}.menu-button span{display:block;width:19px;height:1px;background:#fff;transition:transform .35s var(--ease)}.menu-open .menu-button span:first-child{transform:translateY(4px) rotate(45deg)}.menu-open .menu-button span:last-child{transform:translateY(-4px) rotate(-45deg)}
+.header{position:absolute;top:0;left:0;right:0;z-index:10;display:flex;justify-content:space-between;align-items:center;padding:30px clamp(24px,5vw,80px);padding-top:calc(30px + env(safe-area-inset-top))}.brand{display:block;width:126px}.brand img{display:block;width:100%;height:30px}
 .hero{min-height:100svh;position:relative;isolation:isolate;overflow:hidden;padding:180px clamp(24px,5vw,80px) 40px;display:flex;flex-direction:column;justify-content:space-between}.atmosphere{position:absolute;inset:0;z-index:-2;overflow:hidden;background:radial-gradient(ellipse at 77% 57%,#1b2028 0,rgba(13,17,22,.85) 28%,#050607 66%)}.horizon{position:absolute;width:160%;height:75%;left:-30%;bottom:-54%;border-radius:50%;border-top:1px solid rgba(182,205,224,.48);box-shadow:0 -7px 35px -13px #829aaf,0 -90px 110px -100px #7595b1;transform:rotate(-9deg)}.horizon::after{content:'';position:absolute;inset:0;border-radius:inherit;background:linear-gradient(#0d1218,#050607 45%)}.hero::after{content:'';position:absolute;inset:0;z-index:-1;pointer-events:none;background:linear-gradient(0deg,#050607,transparent 24%)}.hero-content{position:relative;z-index:2;max-width:1100px}.eyebrow{margin:0 0 25px;font:500 11px/1.5 'Archivo',sans-serif;letter-spacing:.24em;color:#b8bcc3;display:flex;align-items:center;gap:12px}.eyebrow::before{content:'';width:24px;height:1px;background:#b8bcc3}h1{margin:0;font:900 clamp(76px,14vw,210px)/.86 'Archivo',sans-serif;letter-spacing:-.065em}.hero-wordmark{display:block;width:min(100%,1050px);height:auto;overflow:hidden}.mark-letter{opacity:0;transform:translateY(18px);animation:arrive 1.1s calc(.2s + var(--i)*.14s) var(--ease) forwards}.intro{max-width:18em;margin:37px 0 0;font-size:clamp(19px,2.3vw,30px);line-height:1.6;letter-spacing:-.04em}.intro small{display:block;margin-top:12px;font-size:14px;color:var(--dim);font-weight:400;letter-spacing:0}.text-link{display:inline-flex;gap:38px;align-items:center;margin-top:33px;padding-bottom:10px;border-bottom:1px solid rgba(255,255,255,.5);font-size:13px;transition:gap .35s}.text-link:hover{gap:52px}.text-link span{font-size:20px;line-height:1}.drone-stage{position:absolute;width:min(41vw,560px);top:38%;right:7%;z-index:1;pointer-events:none}.drone-stage img{width:100%;height:auto;display:block;filter:drop-shadow(0 42px 24px rgba(0,0,0,.75));animation:flight-in 1.8s .3s var(--ease) both}.flight-caption{position:absolute;right:10%;top:72%;margin:0;font:500 10px/1.8 'Archivo',sans-serif;letter-spacing:.2em;color:#626c79;pointer-events:none}.hero-bottom{position:relative;z-index:2;display:flex;align-items:flex-end;justify-content:space-between;gap:24px;margin-top:170px;padding-top:24px;border-top:1px solid rgba(255,255,255,.12)}.hero-bottom p{margin:0;font:500 10px/1.6 'Archivo',sans-serif;letter-spacing:.18em;color:#9da3ad}.hero-bottom p span{display:block;margin-top:5px;font-size:11px;letter-spacing:.04em;color:#ddd}.scroll-link{font-size:11px;color:#b3b8bf;display:flex;gap:16px;align-items:center}.scroll-link span{font-size:19px}
 .story{padding:120px clamp(24px,5vw,80px) 110px;max-width:1600px;margin:auto;display:grid;grid-template-columns:1fr 1.2fr;gap:70px}.story h2{margin:0;font:600 clamp(32px,4vw,58px)/1.25 'Noto Sans KR',sans-serif;letter-spacing:-.05em}.story-copy p{color:var(--dim);max-width:31em;margin:4px 0 0;line-height:1.9;font-size:16px}.story-copy .text-link{margin-top:30px}.footer{padding:25px clamp(24px,5vw,80px) 30px;border-top:1px solid rgba(255,255,255,.1);display:flex;justify-content:space-between;gap:20px;font:500 10px/1.6 'Archivo',sans-serif;letter-spacing:.13em;color:#83888e}
-.header{pointer-events:none}.header>*{pointer-events:auto}.menu-suggestion{position:absolute;top:calc(45px + env(safe-area-inset-top));right:calc(clamp(24px,5vw,80px) + 72px);font-size:12px;color:#b3bac3;padding:6px 0}.menu-suggestion:hover{color:#fff}
-.menu-panel{position:fixed;inset:0;background:rgba(5,6,7,.97);backdrop-filter:blur(24px);z-index:9;padding:150px clamp(24px,8vw,120px) 45px;display:flex;flex-direction:column;justify-content:center}.menu-panel[hidden]{display:none}.menu-caption{font:500 11px 'Archivo',sans-serif;letter-spacing:.2em;color:var(--dim);margin:0 0 30px}.menu-panel nav{display:flex;flex-direction:column;gap:18px;max-width:700px}.menu-panel nav a{font-size:clamp(36px,5.5vw,64px);line-height:1.2;font-weight:500;letter-spacing:-.05em;border-bottom:1px solid #25282c;padding-bottom:18px;display:flex;justify-content:space-between;align-items:center;transition:color .2s}.menu-panel nav a span{font:400 20px 'Archivo',sans-serif;color:#747b85}.menu-panel nav a:hover{color:#b7c6d7}.menu-status-link{display:inline-block;align-self:flex-start;margin-top:22px;font-size:13px;color:#aebbc9}.menu-status-link:hover{color:#fff}.menu-footer{position:absolute;bottom:40px;font:500 11px 'Archivo',sans-serif;letter-spacing:.15em;color:#737a83}
+.header{pointer-events:none}.header>*{pointer-events:auto}
+
 @keyframes arrive{to{opacity:1;transform:none}}@keyframes flight-in{from{opacity:0;transform:translate(42vw,18vh) scale(.45) rotate(-16deg)}to{opacity:1;transform:none}}
 @media(min-width:1600px){.hero-content{margin-top:35px}.drone-stage{right:12%}}
 @media(max-width:900px){.hero{padding-top:170px}.drone-stage{width:44vw;right:2%;top:44%}.flight-caption{display:none}.intro{max-width:48%}.intro small{font-size:12px}.story{gap:35px;grid-template-columns:1fr 1fr}}
-@media(max-width:600px){.header{padding:22px 24px}.brand{width:102px}.menu-button{width:46px;height:46px}.hero{padding:155px 24px 28px;min-height:860px;min-height:max(860px,100svh)}h1{font-size:clamp(71px,17.5vw,106px);letter-spacing:-.07em}.eyebrow{font-size:9px;margin-bottom:24px}.intro{margin-top:28px;max-width:none;font-size:21px}.intro small{font-size:12px;max-width:23em}.drone-stage{width:76vw;top:auto;bottom:145px;right:7%}.horizon{bottom:-46%}.hero-bottom{margin-top:300px}.hero-bottom p{font-size:8px}.hero-bottom p span{font-size:9px}.scroll-link{font-size:10px;gap:10px}.story{display:block;padding:75px 24px 80px}.story-copy{margin-top:30px}.story-copy p{font-size:14px}.footer{padding:24px;letter-spacing:.06em}.menu-panel{padding:130px 24px 60px}}
-@media(max-width:600px){.menu-suggestion{top:30px;right:90px}}
-@media(max-height:700px){.menu-panel{justify-content:flex-start;overflow-y:auto;padding-top:115px}.menu-panel nav{gap:8px}.menu-panel nav a{font-size:30px;padding-bottom:10px}.menu-footer{position:static;margin-top:28px;flex-shrink:0}}
+@media(max-width:600px){.header{padding:22px 24px}.brand{width:102px}.hero{padding:155px 24px 28px;min-height:860px;min-height:max(860px,100svh)}h1{font-size:clamp(71px,17.5vw,106px);letter-spacing:-.07em}.eyebrow{font-size:9px;margin-bottom:24px}.intro{margin-top:28px;max-width:none;font-size:21px}.intro small{font-size:12px;max-width:23em}.drone-stage{width:76vw;top:auto;bottom:145px;right:7%}.horizon{bottom:-46%}.hero-bottom{margin-top:300px}.hero-bottom p{font-size:8px}.hero-bottom p span{font-size:9px}.scroll-link{font-size:10px;gap:10px}.story{display:block;padding:75px 24px 80px}.story-copy{margin-top:30px}.story-copy p{font-size:14px}.footer{padding:24px;letter-spacing:.06em}}
+
+
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{animation-duration:.01ms!important;animation-delay:0s!important;transition-duration:.01ms!important}}
 #fleet .craft .ph{aspect-ratio:1.8;overflow:hidden}#fleet .craft .ph img{width:100%;height:100%;object-fit:contain}
 </style>
+
+<style id="v2">
+/* ===== Liquid glass ===== */
+.lg{position:relative;border:0;background:linear-gradient(135deg,rgba(255,255,255,.14),rgba(255,255,255,.035));-webkit-backdrop-filter:blur(7px) saturate(210%) brightness(1.18);backdrop-filter:blur(7px) saturate(210%) brightness(1.18);box-shadow:inset 3px 3px 4px -2px rgba(255,255,255,.5),inset -3px -3px 4px -2px rgba(255,255,255,.25),inset 0 0 26px rgba(255,255,255,.05),0 22px 44px -22px rgba(0,0,0,.85)}
+.lg::before{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;background:radial-gradient(120% 90% at 20% -20%,rgba(255,255,255,.34),transparent 55%)}
+.lg::after{content:"";position:absolute;inset:0;border-radius:inherit;padding:1.2px;pointer-events:none;background:linear-gradient(135deg,rgba(255,255,255,.8),rgba(255,255,255,.05) 36%,rgba(255,255,255,.05) 64%,rgba(255,255,255,.55));-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude}
+
+/* ===== Hamburger (round glass) ===== */
+.menu-button{position:fixed;z-index:30;top:calc(19px + env(safe-area-inset-top));right:clamp(24px,5vw,80px);display:grid;place-content:center;gap:6.5px;width:52px;height:52px;padding:0;border-radius:50%;cursor:pointer;transition:transform .5s cubic-bezier(.3,1.5,.4,1);animation:lg-pop 1.1s .35s cubic-bezier(.3,1.4,.4,1) backwards}
+.menu-button:hover{transform:scale(1.07)}.menu-button:active{transform:scale(.9)}
+.menu-button span{position:relative;z-index:1;display:block;width:20px;height:1.5px;border-radius:2px;background:#fff;transition:transform .55s var(--ease)}
+.menu-open .menu-button span:first-of-type{transform:translateY(4px) rotate(45deg)}
+.menu-open .menu-button span:last-of-type{transform:translateY(-4px) rotate(-45deg)}
+@keyframes lg-pop{0%{opacity:0;transform:translateY(-18px) scale(.3)}60%{opacity:1;transform:scale(1.1,.94)}100%{opacity:1;transform:none}}
+
+/* ===== Menu panel ===== */
+.menu-panel{position:fixed;inset:0;z-index:9;pointer-events:none}
+.menu-panel[hidden]{display:none}
+.menu-panel.is-open{pointer-events:auto}
+.menu-scrim{position:absolute;inset:0;background:rgba(5,6,7,.58);-webkit-backdrop-filter:blur(5px);backdrop-filter:blur(5px);opacity:0;transition:opacity .45s ease}
+.is-open .menu-scrim{opacity:1;transition-duration:.6s}
+.menu-card{position:absolute;top:calc(19px + env(safe-area-inset-top) + 52px + 12px);right:clamp(24px,5vw,80px);width:min(340px,calc(100vw - 32px));padding:20px 14px 14px;border-radius:32px;transform-origin:calc(100% - 26px) -38px;transform:scale(.1);opacity:0;visibility:hidden;transition:transform .42s cubic-bezier(.5,0,.2,1),opacity .28s ease,visibility 0s .42s}
+.is-open .menu-card{transform:none;opacity:1;visibility:visible;transition:transform .75s cubic-bezier(.3,1.25,.4,1),opacity .3s ease,visibility 0s}
+.menu-card>*{position:relative}
+.menu-caption{margin:0 0 10px 16px;font:500 11px 'Archivo',sans-serif;letter-spacing:.22em;color:#aab3be}
+.menu-nav{display:flex;flex-direction:column;gap:2px}
+.menu-nav a{display:flex;justify-content:space-between;align-items:center;padding:15px 16px;border-radius:20px;font-size:19px;letter-spacing:-.03em;transition:background .25s}
+.menu-nav a b{font-weight:500}
+.menu-nav a span{font:500 12px 'Archivo',sans-serif;letter-spacing:.1em;color:#8f9aa8}
+.menu-nav a:hover,.menu-nav a:focus-visible{background:rgba(255,255,255,.12)}
+.menu-sub{display:flex;flex-wrap:wrap;gap:2px 6px;margin-top:10px;padding:12px 6px 0;border-top:1px solid rgba(255,255,255,.14)}
+.menu-sub a{padding:8px 10px;border-radius:99px;font-size:13px;color:#b7c0cb;transition:background .25s,color .25s}
+.menu-sub a i{font-style:normal;opacity:.7}
+.menu-sub a:hover,.menu-sub a:focus-visible{background:rgba(255,255,255,.12);color:#fff}
+/* items fly in one by one after the glass opens */
+.mi{opacity:0;transform:translateY(12px);filter:blur(4px);transition:opacity .2s,transform .2s,filter .2s}
+.is-open .mi{opacity:1;transform:none;filter:none;transition:opacity .5s calc(.2s + var(--i)*.06s) ease,transform .75s calc(.2s + var(--i)*.06s) var(--ease),filter .5s calc(.2s + var(--i)*.06s) ease,background .25s,color .25s}
+.menu-nav a.mi:hover,.menu-nav a.mi:focus-visible{background:rgba(255,255,255,.12)}
+
+/* ===== Hero buttons ===== */
+.hero-cta{display:flex;flex-wrap:wrap;gap:12px;margin-top:32px}
+.hero-btn{display:inline-block;padding:13px 28px;border-radius:99px;border:1px solid #fff;font-size:15px;font-weight:700;line-height:1.5;transition:transform .5s var(--ease),background .3s,color .3s,border-color .3s}
+.hero-btn:hover{background:#fff;color:#000}.hero-btn:active{transform:scale(.96)}
+.hero-btn.fill{background:#fff;color:#000}.hero-btn.fill:hover{background:#ff8a1f;border-color:#ff8a1f}
+
+/* ===== Scroll cue ===== */
+.hero-bottom{justify-content:center}
+.scroll-link{display:flex;flex-direction:column;align-items:center;padding:4px 20px;color:#d3dae2}
+.scroll-link .chev{display:block;width:30px;height:34px;overflow:visible}
+.scroll-link .chev path{opacity:0;animation:chev 1.9s ease-in-out infinite}
+.scroll-link .chev path:nth-child(2){animation-delay:.3s}
+@keyframes chev{0%{opacity:0;transform:translateY(-8px)}35%{opacity:1}70%{opacity:1;transform:translateY(3px)}100%{opacity:0;transform:translateY(11px)}}
+
+@media(max-width:600px){
+.menu-button{top:calc(14px + env(safe-area-inset-top));width:46px;height:46px;gap:6px}
+.menu-card{top:calc(14px + env(safe-area-inset-top) + 46px + 12px);transform-origin:calc(100% - 23px) -35px}
+.menu-nav a{font-size:18px}
+/* 폰: 드론을 아래 고정에서 문서 흐름으로 옮겨 첫 화면 안에 보이게 */
+.hero{min-height:100svh;padding:116px 24px 24px;justify-content:flex-start}
+.eyebrow{margin-bottom:18px}
+.intro{margin-top:24px}
+.hero-cta{margin-top:24px}
+.hero-btn{padding:12px 22px;font-size:14px}
+.drone-stage{position:relative;top:auto;right:auto;bottom:auto;align-self:flex-end;width:min(72vw,300px);margin:26px 0 0}
+.hero-bottom{margin-top:auto;padding-top:14px}
+}
+@media(max-width:600px) and (max-height:700px){.intro{font-size:19px}.drone-stage{width:min(58vw,240px);margin-top:18px}.hero{padding-top:104px}}
+@media(prefers-reduced-motion:reduce){
+.scroll-link .chev path{animation:none;opacity:.85}
+.menu-button{animation:none}
+.menu-card,.is-open .menu-card{transition:opacity .2s}
+.menu-card{transform:none}
+.mi,.is-open .mi{filter:none;transform:none;transition:opacity .2s}
+}
+</style>
 </head>
 <body>
-<header class="header"><a class="brand" href="/" aria-label="AIR SKY 홈"><img src="assets/air-sky-wordmark.svg" alt="AIR SKY" width="126" height="30"></a><button class="menu-button" type="button" aria-label="메뉴 열기" aria-expanded="false" aria-controls="main-menu"><span></span><span></span></button></header>
+<header class="header"><a class="brand" href="/" aria-label="AIR SKY 홈"><img src="assets/air-sky-wordmark.svg" alt="AIR SKY" width="126" height="30"></a><button class="menu-button lg" type="button" aria-label="메뉴 열기" aria-expanded="false" aria-controls="main-menu"><span></span><span></span></button></header>
 <main id="page-content">
 <section class="hero" aria-labelledby="hero-title">
 <div class="atmosphere" aria-hidden="true"><div class="horizon"></div></div>
-<div class="hero-content"><p class="eyebrow">DRONE VIDEO TEAM</p><h1 id="hero-title" aria-label="AIR SKY"><svg class="hero-wordmark" viewBox="160 510 950 140" aria-hidden="true" preserveAspectRatio="xMidYMid meet"><defs><image id="air-sky-artwork" href="assets/air-sky.jpg" width="1254" height="1254"/><mask id="home-logo-alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="1254" height="1254"><use href="#air-sky-artwork"/></mask><clipPath id="air-sky-letter-0"><rect x="160" y="510" width="190" height="140"/></clipPath><clipPath id="air-sky-letter-1"><rect x="350" y="510" width="90" height="140"/></clipPath><clipPath id="air-sky-letter-2"><rect x="440" y="510" width="180" height="140"/></clipPath><clipPath id="air-sky-letter-3"><rect x="620" y="510" width="160" height="140"/></clipPath><clipPath id="air-sky-letter-4"><rect x="780" y="510" width="170" height="140"/></clipPath><clipPath id="air-sky-letter-5"><rect x="950" y="510" width="160" height="140"/></clipPath><clipPath id="air-sky-subtitle"><rect x="0" y="680" width="1254" height="60"/></clipPath></defs><g clip-path="url(#air-sky-letter-0)"><rect width="1254" height="1254" fill="white" mask="url(#home-logo-alpha)" class="mark-letter" style="--i:0"/></g><g clip-path="url(#air-sky-letter-1)"><rect width="1254" height="1254" fill="white" mask="url(#home-logo-alpha)" class="mark-letter" style="--i:1"/></g><g clip-path="url(#air-sky-letter-2)"><rect width="1254" height="1254" fill="white" mask="url(#home-logo-alpha)" class="mark-letter" style="--i:2"/></g><g clip-path="url(#air-sky-letter-3)"><rect width="1254" height="1254" fill="white" mask="url(#home-logo-alpha)" class="mark-letter" style="--i:3"/></g><g clip-path="url(#air-sky-letter-4)"><rect width="1254" height="1254" fill="white" mask="url(#home-logo-alpha)" class="mark-letter" style="--i:4"/></g><g clip-path="url(#air-sky-letter-5)"><rect width="1254" height="1254" fill="white" mask="url(#home-logo-alpha)" class="mark-letter" style="--i:5"/></g></svg></h1><p class="intro">익숙한 풍경을,<br>새로운 시선으로.<small>우리가 바라본 세상을 드론으로 기록합니다.</small></p></div>
+<div class="hero-content"><p class="eyebrow">DRONE VIDEO TEAM</p><h1 id="hero-title" aria-label="AIR SKY"><svg class="hero-wordmark" viewBox="160 510 950 140" aria-hidden="true" preserveAspectRatio="xMidYMid meet"><defs><image id="air-sky-artwork" href="assets/air-sky.jpg" width="1254" height="1254"/><mask id="home-logo-alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="1254" height="1254"><use href="#air-sky-artwork"/></mask><clipPath id="air-sky-letter-0"><rect x="160" y="510" width="190" height="140"/></clipPath><clipPath id="air-sky-letter-1"><rect x="350" y="510" width="90" height="140"/></clipPath><clipPath id="air-sky-letter-2"><rect x="440" y="510" width="180" height="140"/></clipPath><clipPath id="air-sky-letter-3"><rect x="620" y="510" width="160" height="140"/></clipPath><clipPath id="air-sky-letter-4"><rect x="780" y="510" width="170" height="140"/></clipPath><clipPath id="air-sky-letter-5"><rect x="950" y="510" width="160" height="140"/></clipPath><clipPath id="air-sky-subtitle"><rect x="0" y="680" width="1254" height="60"/></clipPath></defs><g clip-path="url(#air-sky-letter-0)"><rect width="1254" height="1254" fill="white" mask="url(#home-logo-alpha)" class="mark-letter" style="--i:0"/></g><g clip-path="url(#air-sky-letter-1)"><rect width="1254" height="1254" fill="white" mask="url(#home-logo-alpha)" class="mark-letter" style="--i:1"/></g><g clip-path="url(#air-sky-letter-2)"><rect width="1254" height="1254" fill="white" mask="url(#home-logo-alpha)" class="mark-letter" style="--i:2"/></g><g clip-path="url(#air-sky-letter-3)"><rect width="1254" height="1254" fill="white" mask="url(#home-logo-alpha)" class="mark-letter" style="--i:3"/></g><g clip-path="url(#air-sky-letter-4)"><rect width="1254" height="1254" fill="white" mask="url(#home-logo-alpha)" class="mark-letter" style="--i:4"/></g><g clip-path="url(#air-sky-letter-5)"><rect width="1254" height="1254" fill="white" mask="url(#home-logo-alpha)" class="mark-letter" style="--i:5"/></g></svg></h1><p class="intro">익숙한 풍경을,<br>새로운 시선으로.<small>우리가 바라본 세상을 드론으로 기록합니다.</small></p><div class="hero-cta"><a class="hero-btn fill" href="https://www.youtube.com/@SKYING_DRONE" target="_blank" rel="noopener">유튜브 보러가기</a><a class="hero-btn" href="#links">문의 · 협찬</a></div></div>
 <div class="drone-stage" aria-hidden="true"><img src="assets/drone.webp" alt="" width="640" height="329" fetchpriority="high"></div><p class="flight-caption" aria-hidden="true">A DIFFERENT PERSPECTIVE<br>AIR SKY / DRONE FILM</p>
-<div class="hero-bottom"><p>AIR SKY<span>DRONE VIDEO TEAM</span></p><a class="scroll-link" href="#introduction">소개 보기 <span aria-hidden="true">↓</span></a></div>
+<div class="hero-bottom"><a class="scroll-link" href="#introduction" aria-label="아래로 스크롤"><svg class="chev" viewBox="0 0 24 28" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5l8 8 8-8"/><path d="M4 14l8 8 8-8"/></svg></a></div>
 </section>
 <section id="introduction" class="embedded-about" aria-label="AIR SKY 소개">
-  <div class="intro-hero">
-    <h2 class="mark" aria-label="AIR SKY"><svg class="hero-wordmark" viewBox="0 0 1254 1254" aria-hidden="true" preserveAspectRatio="xMidYMid meet"><defs><image id="intro-air-sky-artwork" href="assets/air-sky.jpg" width="1254" height="1254"/><clipPath id="intro-air-sky-letter-0"><rect x="160" y="510" width="190" height="140"/></clipPath><clipPath id="intro-air-sky-letter-1"><rect x="350" y="510" width="90" height="140"/></clipPath><clipPath id="intro-air-sky-letter-2"><rect x="440" y="510" width="180" height="140"/></clipPath><clipPath id="intro-air-sky-letter-3"><rect x="620" y="510" width="160" height="140"/></clipPath><clipPath id="intro-air-sky-letter-4"><rect x="780" y="510" width="170" height="140"/></clipPath><clipPath id="intro-air-sky-letter-5"><rect x="950" y="510" width="160" height="140"/></clipPath><clipPath id="intro-air-sky-subtitle"><rect x="0" y="680" width="1254" height="60"/></clipPath></defs><g clip-path="url(#intro-air-sky-letter-0)"><use href="#intro-air-sky-artwork" class="mark-letter" style="--i:0"/></g><g clip-path="url(#intro-air-sky-letter-1)"><use href="#intro-air-sky-artwork" class="mark-letter" style="--i:1"/></g><g clip-path="url(#intro-air-sky-letter-2)"><use href="#intro-air-sky-artwork" class="mark-letter" style="--i:2"/></g><g clip-path="url(#intro-air-sky-letter-3)"><use href="#intro-air-sky-artwork" class="mark-letter" style="--i:3"/></g><g clip-path="url(#intro-air-sky-letter-4)"><use href="#intro-air-sky-artwork" class="mark-letter" style="--i:4"/></g><g clip-path="url(#intro-air-sky-letter-5)"><use href="#intro-air-sky-artwork" class="mark-letter" style="--i:5"/></g><g clip-path="url(#intro-air-sky-subtitle)"><use href="#intro-air-sky-artwork" class="mark-subtitle"/></g></svg></h2>
-    <p class="tag">DJI 드론으로 풍경을 찍고 영상을 올리는 팀이에요.</p>
-    <div class="cta"><a class="btn fill" href="https://www.youtube.com/@SKYING_DRONE" target="_blank" rel="noopener">유튜브 보러가기</a><a class="btn" href="#links">문의 · 협찬</a></div>
-  </div>
-
-  <section id="about">
+    <section id="about">
     <i class="pass" aria-hidden="true"><img alt=""></i>
     <p class="say" id="say"><span class="ln">안녕하세요! AIR SKY입니다.</span><span class="ln">저희는 DJI 드론을 사용하여 풍경을 찍고, 영상을 올리는 팀입니다.</span></p>
   </section>
@@ -96,15 +165,30 @@ top();addEventListener('DOMContentLoaded',top,{once:true});addEventListener('pag
 </section>
 </main>
 <footer class="footer"><span>© 2026 AIR SKY</span><span>A DIFFERENT PERSPECTIVE.</span></footer>
-<div class="menu-panel" id="main-menu" hidden role="dialog" aria-modal="true" aria-label="사이트 메뉴"><a class="menu-suggestion" href="suggestions.html">건의사항 ↗</a><p class="menu-caption">AIR SKY</p><nav aria-label="주 메뉴"><a href="request.html">촬영 신청하기 <span aria-hidden="true">01</span></a><a href="crew.html">크루 소개 <span aria-hidden="true">02</span></a><a href="principles.html">촬영 원칙 <span aria-hidden="true">03</span></a></nav><a href="receipt.html" class="menu-status-link">접수 결과 확인 ↗</a><a class="menu-footer admin-link" href="admin.html">관리자 페이지 ↗</a></div>
+<div class="menu-panel" id="main-menu" hidden role="dialog" aria-modal="true" aria-label="사이트 메뉴">
+<div class="menu-scrim"></div>
+<div class="menu-card lg">
+<p class="menu-caption mi" style="--i:0">AIR SKY</p>
+<nav class="menu-nav" aria-label="주 메뉴">
+<a class="mi" style="--i:1" href="request.html"><b>촬영 신청하기</b><span aria-hidden="true">01</span></a>
+<a class="mi" style="--i:2" href="crew.html"><b>크루 소개</b><span aria-hidden="true">02</span></a>
+<a class="mi" style="--i:3" href="principles.html"><b>촬영 원칙</b><span aria-hidden="true">03</span></a>
+</nav>
+<div class="menu-sub mi" style="--i:4"><a href="receipt.html">접수 결과 확인 <i aria-hidden="true">↗</i></a><a href="suggestions.html">건의사항 <i aria-hidden="true">↗</i></a><a class="admin-link" href="admin.html">관리자 페이지 <i aria-hidden="true">↗</i></a></div>
+</div>
+</div>
 <script>
 (function(){
 if('IntersectionObserver' in window&&!matchMedia('(prefers-reduced-motion: reduce)').matches){var sections=document.querySelectorAll('.home-reveal'),observer=new IntersectionObserver(function(entries){entries.forEach(function(entry){if(entry.isIntersecting){entry.target.classList.add('visible');observer.unobserve(entry.target)}})},{threshold:.08});sections.forEach(function(section){section.classList.add('ready');observer.observe(section)})}
 var drone=document.querySelector('.drone-stage img'),fleet=[{src:'assets/drone-neo2.webp',width:286,height:114},{src:'assets/drone.webp',width:640,height:329},{src:'assets/drone-avata360.webp',width:274,height:115}],chosen=fleet[Math.floor(Math.random()*fleet.length)];drone.width=chosen.width;drone.height=chosen.height;drone.src=chosen.src;
-var button=document.querySelector('.menu-button'),panel=document.querySelector('.menu-panel'),content=document.querySelector('main'),footer=document.querySelector('footer'),brand=document.querySelector('.brand');
-function toggle(open){button.setAttribute('aria-expanded',String(open));button.setAttribute('aria-label',open?'메뉴 닫기':'메뉴 열기');panel.hidden=!open;document.body.classList.toggle('menu-open',open);content.inert=open;footer.inert=open;brand.inert=open;if(open)panel.querySelector('a').focus();else button.focus()}
-button.addEventListener('click',function(){toggle(button.getAttribute('aria-expanded')!=='true')});
-document.addEventListener('keydown',function(e){if(panel.hidden)return;if(e.key==='Escape'){e.preventDefault();toggle(false)}if(e.key==='Tab'){var items=[button].concat(Array.from(panel.querySelectorAll('a'))),first=items[0],last=items[items.length-1];if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus()}else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus()}}});
+var button=document.querySelector('.menu-button'),panel=document.querySelector('.menu-panel'),scrim=panel.querySelector('.menu-scrim'),content=document.querySelector('main'),footer=document.querySelector('footer'),brand=document.querySelector('.brand'),closeTimer=0,reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+function isOpen(){return panel.classList.contains('is-open')}
+function toggle(open){clearTimeout(closeTimer);button.setAttribute('aria-expanded',String(open));button.setAttribute('aria-label',open?'메뉴 닫기':'메뉴 열기');document.body.classList.toggle('menu-open',open);content.inert=open;footer.inert=open;brand.inert=open;
+if(open){panel.hidden=false;void panel.offsetWidth;panel.classList.add('is-open');panel.querySelector('a').focus({preventScroll:true})}
+else{panel.classList.remove('is-open');button.focus({preventScroll:true});closeTimer=setTimeout(function(){panel.hidden=true},reduce?0:520)}}
+button.addEventListener('click',function(){toggle(!isOpen())});
+scrim.addEventListener('click',function(){toggle(false)});
+document.addEventListener('keydown',function(e){if(!isOpen())return;if(e.key==='Escape'){e.preventDefault();toggle(false)}if(e.key==='Tab'){var items=[button].concat(Array.from(panel.querySelectorAll('a'))),first=items[0],last=items[items.length-1];if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus()}else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus()}}});
 })();
 </script>
 <script>
