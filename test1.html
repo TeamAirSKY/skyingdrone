@@ -116,8 +116,8 @@ top();addEventListener('DOMContentLoaded',top,{once:true});addEventListener('pag
 .hero-bottom{border-top:0;margin-top:120px}
 .hero-btn:not(.fill){border-color:rgba(255,255,255,.38)}
 .hero-wordmark{width:min(100%,740px)}
-.drone-stage{top:50%;width:min(31vw,420px)}
-@media(max-width:900px){.drone-stage{top:56%;width:34vw}}
+.drone-stage{top:60%;width:min(31vw,420px)}
+@media(max-width:900px){.drone-stage{top:64%;width:34vw}}
 @media(max-width:600px){
 .menu-button{top:calc(14px + env(safe-area-inset-top));width:46px;height:46px;gap:6px}
 .menu-panel{--bs:46px;--bt:14px}
@@ -128,7 +128,8 @@ top();addEventListener('DOMContentLoaded',top,{once:true});addEventListener('pag
 .intro{margin-top:24px}
 .hero-cta{margin-top:24px}
 .hero-btn{padding:12px 22px;font-size:14px}
-.drone-stage{position:relative;top:auto;right:auto;bottom:auto;align-self:flex-end;width:min(54vw,230px);margin:46px 0 0}
+.drone-stage{position:relative;top:auto;right:auto;bottom:auto;align-self:flex-end;width:min(54vw,230px);margin:46px 0 0;transform:translateY(44px)}
+.horizon{width:340%;left:-120%;height:380px;bottom:-190px}
 .hero-wordmark{width:min(80%,320px)}
 .hero-bottom{margin-top:auto;padding-top:14px}
 }
@@ -194,11 +195,11 @@ top();addEventListener('DOMContentLoaded',top,{once:true});addEventListener('pag
 <i class="menu-sheen" aria-hidden="true"></i>
 <p class="menu-caption mi" style="--i:0">AIR SKY</p>
 <nav class="menu-nav" aria-label="주 메뉴">
-<a class="mi" style="--i:1" href="request.html"><b>촬영 신청하기</b></a>
-<a class="mi" style="--i:2" href="crew.html"><b>크루 소개</b></a>
-<a class="mi" style="--i:3" href="principles.html"><b>촬영 원칙</b></a>
+<a class="mi" style="--i:1" href="crew.html"><b>크루 소개</b></a>
+<a class="mi" style="--i:2" href="principles.html"><b>촬영 원칙</b></a>
+<a class="mi" style="--i:3" href="request.html"><b>촬영 신청하기</b></a>
 </nav>
-<div class="menu-sub"><a class="mi" style="--i:4" href="receipt.html">접수 결과 확인 <i aria-hidden="true">↗</i></a><a class="mi" style="--i:5" href="suggestions.html">건의사항 <i aria-hidden="true">↗</i></a></div>
+<div class="menu-sub"><a class="mi" style="--i:4" href="suggestions.html">건의사항 <i aria-hidden="true">↗</i></a><a class="mi" style="--i:5" href="receipt.html">접수 결과 확인 <i aria-hidden="true">↗</i></a></div>
 </div>
 <a class="admin-fab" href="admin.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="11" width="16" height="10" rx="2.5"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>관리자</a>
 </div>
