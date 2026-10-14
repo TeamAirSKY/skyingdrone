@@ -389,7 +389,7 @@ let three=null;try{three=make()}catch(x){three=null}
 let done=false,seen=false,top=0,travel=1,cur=0,tgt=0,vis=false,raf=0,last=0,wc=-1,phase='',applied=-1;
 function measure(){top=sec.getBoundingClientRect().top+scrollY;travel=Math.max(1,sec.offsetHeight-innerHeight)}
 function apply(p,t){
- const ti=e(.25,.32,p);intro.style.opacity=1-ti;intro.style.transform='scale('+(1-.08*ti)+')';intro.style.filter=ti?'blur('+ti*10+'px)':'';intro.style.visibility=ti>=1?'hidden':'';
+ const ti=e(.25,.32,p);intro.style.opacity=1-ti;intro.style.transform='scale('+(1-.08*ti)+')';intro.style.filter='none';intro.style.visibility=ti>=1?'hidden':'';
  const g=1-Math.pow(1-e(.3,.45,p),3),sx=innerWidth<700?20:34,sy=36;
  frame.style.opacity=e(.27,.31,p);frame.style.clipPath='inset('+sy*(1-g)+'% '+sx*(1-g)+'% '+sy*(1-g)+'% '+sx*(1-g)+'% round '+22*(1-g)+'px)';
  const s=e(.5,.88,p),b=e(.88,.97,p),dusk=sm(cl(1-Math.abs(s-.45)/.3)),night=sm(cl((s-.45)/.35));
