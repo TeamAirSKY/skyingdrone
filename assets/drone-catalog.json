@@ -1,7 +1,52 @@
 {
- "neo2":{"name":"DJI Neo 2","title":"NEO 2","image":"assets/drone-neo2.webp","description":"작고 가벼워서 가까이서 따라가며 찍기 좋아요."},
- "lito1":{"name":"DJI Lito 1","title":"LITO 1","image":"assets/drone.webp","description":"249g급 4K 드론이에요. 장애물 감지가 있어서 좀 더 마음 편하게 날려요."},
- "avata360":{"name":"DJI AVATA 360","title":"AVATA 360","image":"assets/drone-avata360.webp","description":"360° 영상을 찍는 드론이에요. 찍고 나서 화면 방향을 고를 수 있어요."},
- "mavic4pro":{"name":"DJI Mavic 4 Pro","title":"MAVIC 4 PRO","image":"assets/drone-mavic4pro.png","fit":"cover","description":"세 개의 카메라로 다양한 시선의 풍경을 담는 드론이에요."},
- "avata2":{"name":"DJI Avata 2","title":"AVATA 2","image":"assets/drone-avata2.png","fit":"cover","description":"FPV 비행으로 움직임이 있는 장면을 담는 드론이에요."}
+  "neo2": {
+    "name": "DJI Neo 2",
+    "title": "NEO 2",
+    "image": "assets/drone-neo2.webp",
+    "description": "작고 가벼워서 가까이서 따라가며 찍기 좋아요."
+  },
+  "lito1": {
+    "name": "DJI Lito 1",
+    "title": "LITO 1",
+    "image": "assets/drone.webp",
+    "description": "249g급 4K 드론이에요. 장애물 감지가 있어서 좀 더 마음 편하게 날려요."
+  },
+  "avata360": {
+    "name": "DJI AVATA 360",
+    "title": "AVATA 360",
+    "image": "assets/drone-avata360.webp",
+    "description": "360° 영상을 찍는 드론이에요. 찍고 나서 화면 방향을 고를 수 있어요."
+  },
+  "mavic4pro": {
+    "name": "DJI Mavic 4 Pro",
+    "title": "MAVIC 4 PRO",
+    "image": "assets/drone-mavic4pro.png",
+    "fit": "cover",
+    "description": "세 개의 카메라로 다양한 시선의 풍경을 담는 드론이에요."
+  },
+  "avata2": {
+    "name": "DJI Avata 2",
+    "title": "AVATA 2",
+    "image": "assets/drone-avata2.png",
+    "fit": "cover",
+    "description": "FPV 비행으로 움직임이 있는 장면을 담는 드론이에요."
+  },
+  "neo1": {
+    "name": "DJI Neo 1",
+    "title": "NEO 1",
+    "image": "assets/drone-neo1.png",
+    "description": "손바닥 크기의 가벼운 드론으로 가까운 풍경을 담아요."
+  },
+  "air3s": {
+    "name": "DJI Air 3S",
+    "title": "AIR 3S",
+    "image": "assets/drone-air3s.png",
+    "description": "두 개의 카메라로 여행지와 넓은 풍경을 담아요."
+  },
+  "mini5pro": {
+    "name": "DJI Mini 5 Pro",
+    "title": "MINI 5 PRO",
+    "image": "assets/drone-mini5pro.png",
+    "description": "작은 기체로 일상의 풍경을 섬세하게 기록해요."
+  }
 }

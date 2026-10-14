@@ -43,7 +43,14 @@ function card(member,role,context,index){
  const figure=node('figure',undefined,'crew-photo');if(member.photo){const image=node('img');image.src=member.photo;image.alt=member.name+' 프로필 이미지';image.decoding='async';image.loading='lazy';image.addEventListener('error',()=>{figure.replaceChildren(node('span',member.name.slice(0,2)));figure.classList.add('crew-photo-placeholder')},{once:true});figure.append(image)}else{figure.classList.add('crew-photo-placeholder');figure.append(node('span',member.name.slice(0,2)))}
  const content=node('div'),name=node('h2',member.name);name.id='crew-'+context+'-'+member.id;content.append(node('p','AIR SKY / '+String(index+1).padStart(2,'0'),'crew-number'),name);if(role)content.append(node('p',role,'crew-role'));
  const bio=node('div',undefined,'crew-bio');member.bio.split(/\n+/).filter(Boolean).forEach(line=>bio.append(node('p',line)));content.append(bio);
- if(member.equipment.length){const section=node('div',undefined,'crew-equipment'),list=node('div',undefined,'equipment-list');section.append(node('p','기체:','equipment-label'));for(const key of member.equipment){const data=equipment[key];if(!data)continue;const row=node('div',undefined,'equipment-item'),image=node('img');image.src=data.image;image.alt=data.name;image.width=90;image.height=55;image.loading='lazy';image.style.objectFit=data.fit||'contain';row.append(node('span',data.name),image);list.append(row)}section.append(list);content.append(section)}
+ if(member.equipment.length){
+ const section=node('div',undefined,'crew-equipment'),list=node('div',undefined,'equipment-list'),keys=[...new Set(member.equipment)].filter(key=>equipment[key]);
+ const paired=keys.includes('neo1')&&keys.includes('neo2');if(paired){keys.splice(keys.indexOf('neo1'),1);keys.splice(keys.indexOf('neo2'),1);keys.unshift('neo1','neo2');list.classList.add('has-neo-pair')}
+ list.id='equipment-'+context+'-'+member.id;section.append(node('p','기체:','equipment-label'));
+ keys.forEach((key,i)=>{const data=equipment[key],row=node('div',undefined,'equipment-item'+(paired&&i<2?' equipment-pair':'')),image=node('img');row.dataset.droneId=key;row.hidden=i>=3;image.src=data.image;image.alt=data.name;image.width=90;image.height=55;image.loading='lazy';image.style.objectFit=data.fit||'contain';row.append(node('span',data.name),image);list.append(row)});section.append(list);
+ if(keys.length>3){const button=node('button','더보기 · '+(keys.length-3)+'개 ▾','equipment-more');button.type='button';button.setAttribute('aria-expanded','false');button.setAttribute('aria-controls',list.id);button.addEventListener('click',()=>{const expanded=button.getAttribute('aria-expanded')!=='true';[...list.children].forEach((row,i)=>row.hidden=!expanded&&i>=3);button.setAttribute('aria-expanded',String(expanded));button.textContent=expanded?'접기 ▴':'더보기 · '+(keys.length-3)+'개 ▾'});section.append(button)}content.append(section);
+ }
+
  article.append(figure,content);if(profileObserver){article.classList.add('reveal-ready');profileObserver.observe(article)}return article;
 }
 function renderRoster(members){
