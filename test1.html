@@ -188,6 +188,8 @@ addEventListener('pageshow',event=>{if(event.persisted)interacted=false;top()});
 #fleet .fleet-track .craft h3{font-size:clamp(28px,3.4vw,44px);margin-bottom:8px}
 #fleet .fleet-track .craft p{max-width:none;font-size:15.5px}
 #links .reveal,#links h2{transition:opacity .5s,transform .7s var(--ease)}
+#links.pinsec{height:auto!important;padding:100px 0 120px}
+#links .pin{position:relative;height:auto;overflow:visible;display:block}
 #links .go{transition:padding .5s var(--ease),color .3s,opacity .5s,transform .7s var(--ease)}
 html,body{overflow-anchor:none}
 #sky-story.seen{height:auto}
@@ -447,7 +449,7 @@ function tick(now){const dt=last?Math.min(50,now-last):16;last=now;cur=reduced?t
 function update(){
  if(fleet){tgt=cl((scrollY-fT)/fL);if(!raf){raf=requestAnimationFrame(tick)}}
  if(ch&&!counted&&scrollY>cT-innerHeight*.2&&window.__countStats){counted=true;window.__countStats()}
- if(lk){const lp=(scrollY-(lT-innerHeight*.4))/(lL*.6+innerHeight*.4);items.forEach((el,i)=>{const o=e(i*.08,.12+i*.08,lp);el.style.opacity=o;el.style.transform='translateY('+(1-o)*26+'px)'})}}
+ }
 function relayout(){measure();update()}
 addEventListener('scroll',update,{passive:true});addEventListener('resize',relayout);addEventListener('load',relayout);document.fonts&&document.fonts.ready.then(relayout);
 measure();cur=tgt=fleet?cl((scrollY-fT)/fL):0;if(track)place(cur);update();
