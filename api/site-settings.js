@@ -2,7 +2,7 @@ const s=require('../lib/server'),settings=require('../lib/site-settings');
 module.exports=async(req,res)=>{
  if(!['GET','PATCH'].includes(req.method))return s.send(res,405,{error:'METHOD_NOT_ALLOWED'});
  if(req.method==='PATCH'&&!s.sameOrigin(req))return s.send(res,403,{error:'요청 출처를 확인할 수 없습니다.'});
- if(!s.authorized(req))return s.send(res,401,{error:'관리자 로그인이 필요합니다.'});
+ if(!await require('../lib/admin-access').requireAccess(req,res,'settings'))return;
  try{
  if(req.method==='GET')return s.send(res,200,await settings.read());
  const data=s.body(req),result=settings.validate(data);if(result.error)return s.send(res,400,{error:result.error});

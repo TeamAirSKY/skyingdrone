@@ -18,7 +18,7 @@ function validate(data){
 module.exports=async(req,res)=>{
  if(!['POST','GET','PATCH','DELETE'].includes(req.method))return s.send(res,405,{error:'허용되지 않는 요청입니다.'});
  if(req.method!=='GET'&&!s.sameOrigin(req))return s.send(res,403,{error:'요청 출처를 확인할 수 없습니다.'});
- if(req.method!=='POST'&&!s.authorized(req))return s.send(res,401,{error:'관리자 로그인이 필요합니다.'});
+ if(req.method!=='POST'&&!await require('../lib/admin-access').requireAccess(req,res,'application'))return;
  if(!s.configured())return s.send(res,503,{error:'크루 지원 접수가 아직 준비 중입니다.'});
  try{
  if(req.method==='DELETE')return await require('../lib/record-management').remove(req,res,'application');
