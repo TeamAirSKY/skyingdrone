@@ -3,7 +3,6 @@ module.exports=async(req,res)=>{
  if(!['POST','DELETE','GET','PATCH'].includes(req.method))return s.send(res,405,{error:'허용되지 않는 요청입니다.'});
  if(req.method==='GET'){if(req.query?.accounts==='1')return access.manage(req,res);try{const user=await access.identity(req);return s.send(res,200,{authenticated:Boolean(user),user})}catch{return s.send(res,503,{error:'권한을 확인할 수 없습니다.'})}}
  if(!s.sameOrigin(req))return s.send(res,403,{error:'요청 출처를 확인할 수 없습니다.'});
- if(req.method==='POST'&&s.body(req)?.action==='sealed-migration')return require('../lib/sealed-migration')(req,res);
  if(req.method==='PATCH'||req.method==='POST'&&s.body(req)?.action==='create'||req.method==='DELETE'&&s.body(req)?.id)return access.manage(req,res);
  if(req.method==='DELETE'){
  let auditSaved=true;
