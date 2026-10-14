@@ -2,71 +2,240 @@
 <html lang="ko">
 <head>
 <meta charset="utf-8">
-<script src="assets/home-start.js"></script>
+<script>
+(function(){
+if('scrollRestoration' in history)history.scrollRestoration='manual';
+if(location.hash){try{history.replaceState(null,'',location.pathname+location.search)}catch(e){}}
+let interacted=false;
+['wheel','touchstart','keydown','mousedown'].forEach(type=>addEventListener(type,()=>{interacted=true},{passive:true,once:true}));
+function top(){if(interacted)return;const d=document.documentElement;d.style.scrollBehavior='auto';scrollTo(0,0);d.style.scrollBehavior=''}
+top();addEventListener('DOMContentLoaded',top,{once:true});
+addEventListener('load',()=>{top();setTimeout(top,100);setTimeout(top,400);setTimeout(top,1000)},{once:true});
+addEventListener('pageshow',event=>{if(event.persisted)interacted=false;top()});
+})();
+</script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#050607">
 <meta name="description" content="AIR SKY. 드론으로 기록하는 풍경, 새로운 시선으로 만나는 세상.">
 <title>AIR SKY | 새로운 시선</title>
 <link rel="icon" type="image/jpeg" href="assets/air-sky.jpg">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;900&family=Noto+Sans+KR:wght@400;500;700&display=swap">
-<link rel="stylesheet" href="assets/home-sections.css">
-<link rel="stylesheet" href="assets/about-section.css"><link rel="stylesheet" href="assets/intro-daylight.css"><script defer src="assets/home-fleet.js"></script><script defer src="assets/introduction.js"></script>
 <style>
+.home-section{max-width:1600px;margin:auto;padding:90px clamp(24px,5vw,80px);border-top:1px solid #20252b}.section-heading{display:flex;justify-content:space-between;align-items:flex-end;gap:35px;margin-bottom:45px}.section-heading h2{font-size:clamp(32px,4.5vw,64px);font-weight:500;line-height:1.25;letter-spacing:-.055em;margin:0}.section-heading>p{color:#929ba6;font-size:14px;line-height:1.9;max-width:22em;margin:0}.perspective-controls{display:flex;gap:10px;margin-bottom:22px}.perspective-controls button{background:none;color:#a5b0bd;border:1px solid #303943;border-radius:99px;padding:10px 24px;font-size:12px;transition:background .25s,color .25s}.perspective-controls button[aria-pressed="true"]{background:#ecf0f4;color:#10161e;border-color:#ecf0f4}.perspective-scene{position:relative;height:390px;overflow:hidden;background:#0b1119}.perspective-scene svg{width:100%;height:100%;display:block}.landscape{transform-origin:50% 78%;transform:scale(1);transition:transform 1.3s cubic-bezier(.16,1,.3,1)}.scene-label{position:absolute;bottom:24px;left:28px;font:500 9px 'Archivo',sans-serif;letter-spacing:.15em;color:#8c9dae}.scene-caption{color:#8996a5;font-size:12px;margin:18px 0 0;line-height:1.8}.light-scene{--sky-top:rgb(96,68,63);--sky-bottom:rgb(199,150,114);--sun-y:58%;position:relative;height:400px;overflow:hidden;background:linear-gradient(var(--sky-top),var(--sky-bottom));transition:background .15s}.light-sun{position:absolute;left:36%;top:var(--sun-y);width:50px;height:50px;border-radius:50%;background:#fff2d0;box-shadow:0 0 70px 25px #ffdbaa55;transition:top .15s,left .15s}.light-ridge{position:absolute;left:-10%;width:120%;height:190px;bottom:-65px;background:#0b141c;clip-path:polygon(0 40%,10% 25%,23% 35%,38% 12%,51% 30%,62% 8%,78% 32%,88% 15%,100% 30%,100% 100%,0 100%)}.ridge-back{bottom:-12px;background:#263544;opacity:.82}.ridge-front{transform:scaleX(-1)}.light-time{position:absolute;left:28px;bottom:24px;color:#cad1d8;font-size:11px;letter-spacing:.08em}.light-control{display:flex;align-items:center;gap:24px;margin-top:25px}.light-control label,.light-control span{font-size:11px;white-space:nowrap;color:#a0acb9}.light-control input{width:100%;max-width:600px;accent-color:#dce5ed;cursor:pointer}.closing-view{padding-top:115px;padding-bottom:125px;text-align:center}.closing-view .eyebrow{justify-content:center}.closing-line{font-size:clamp(40px,6vw,84px);letter-spacing:-.065em;line-height:1.25;margin:35px 0 25px}.closing-caption{color:#8f9aaa;font-size:14px}.home-reveal.ready{opacity:0;transform:translateY(28px);transition:opacity .9s cubic-bezier(.16,1,.3,1),transform .9s cubic-bezier(.16,1,.3,1)}.home-reveal.ready.visible{opacity:1;transform:none}@media(max-width:800px){.section-heading{display:block}.section-heading>p{margin-top:24px}.perspective-scene{height:320px}}@media(max-width:600px){.home-section{padding:65px 24px}.section-heading{margin-bottom:32px}.perspective-scene,.light-scene{height:270px}.perspective-controls button{padding:9px 20px}.scene-label{left:18px;bottom:18px;font-size:8px}.light-time{left:18px;bottom:18px}.light-control{gap:15px}.closing-view{padding-top:80px;padding-bottom:90px}}@media(prefers-reduced-motion:reduce){.home-reveal.ready{opacity:1;transform:none;transition:none}.landscape,.light-sun{transition:none}}
+
+.perspective-scene .landscape{transform-origin:50% 90%;transform:translateY(var(--terrain-y,42px)) scale(var(--terrain-scale,1.975));transition:transform .85s cubic-bezier(.16,1,.3,1)}.sea-view{opacity:var(--sea-opacity,.5);transition:opacity .7s}.distant-scene{opacity:var(--distant-opacity,.5);transition:opacity .7s}.height-control{display:flex;align-items:center;gap:20px;margin-top:24px}.height-control label,.height-control span{font-size:12px;color:#a5b2c0;white-space:nowrap}.height-control input{width:100%;max-width:600px;accent-color:#d7e7f0;cursor:pointer}@media(max-width:600px){.height-control{gap:12px}.height-control label,.height-control span{font-size:11px}}@media(prefers-reduced-motion:reduce){.perspective-scene .landscape,.sea-view,.distant-scene{transition:none}}
+.embedded-about{max-width:1040px;margin:0 auto;padding:0 24px;position:relative}.embedded-about .intro-hero{min-height:0;padding:95px 0 70px}.embedded-about .mark{max-width:680px}.embedded-about .cta{animation:none;opacity:1}.embedded-about .tag{animation:none;opacity:1}
+.embedded-about{color-scheme:dark;--muted:#a3a3a3;--orange:#ff8a1f;--mono:"Space Mono",ui-monospace,monospace;--disp:"Archivo","Noto Sans KR",sans-serif;--ease:cubic-bezier(.16,1,.3,1);--p:0}.embedded-about *{box-sizing:border-box}.embedded-about a{color:inherit}.embedded-about :focus-visible{outline:2px solid var(--orange);outline-offset:4px}.embedded-about .sky{position:fixed;inset:0;z-index:-1;pointer-events:none;background:radial-gradient(120% 70% at 50% 108%,rgba(80,105,150,calc(var(--p)*.5)),transparent 70%),radial-gradient(90% 40% at 50% 106%,rgba(255,140,60,calc(var(--p)*.22)),transparent 70%)}.embedded-about .glass{position:relative;background:linear-gradient(135deg,rgba(255,255,255,.14),rgba(255,255,255,.035));-webkit-backdrop-filter:blur(7px) saturate(210%) brightness(1.18);backdrop-filter:blur(7px) saturate(210%) brightness(1.18);
+ box-shadow:inset 3px 3px 4px -2px rgba(255,255,255,.5),inset -3px -3px 4px -2px rgba(255,255,255,.25),inset 0 0 26px rgba(255,255,255,.05),0 22px 44px -22px rgba(0,0,0,.85)}.embedded-about .glass::after{content:"";position:absolute;inset:0;border-radius:inherit;padding:1.2px;pointer-events:none;background:linear-gradient(135deg,rgba(255,255,255,.8),rgba(255,255,255,.05) 36%,rgba(255,255,255,.05) 64%,rgba(255,255,255,.55));-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude}.embedded-about .nav{--w:min(470px,calc(100vw - 20px));position:fixed;z-index:20;top:calc(14px + env(safe-area-inset-top,0px));left:50%;width:var(--w);height:64px;transform:translateX(-50%);display:flex;align-items:center;justify-content:space-between;padding:0 8px 0 20px;border-radius:99px;overflow:hidden;white-space:nowrap;animation:intro-open 1.6s .3s cubic-bezier(.3,1.2,.4,1) both}.embedded-about .nav>*{opacity:0;animation:intro-fade .5s 1.4s both}@keyframes intro-open{0%{width:52px;opacity:0;transform:translateX(-50%) translateY(-24px) scale(.4)}18%{width:52px;opacity:1;transform:translateX(-50%) scale(1.07,.95)}32%{width:52px;transform:translateX(-50%) scale(.98,1.03)}44%{width:52px;transform:translateX(-50%)}72%{width:calc(var(--w)*1.05);height:58px}88%{width:calc(var(--w)*.98);height:66px}100%{width:var(--w);height:64px;transform:translateX(-50%)}}@keyframes intro-fade{to{opacity:1}}.embedded-about .logo{position:relative;display:flex;align-items:center;flex:none;width:76px;height:48px;text-decoration:none}.embedded-about .nav-wordmark{display:block;width:100%;height:36px;overflow:hidden}.embedded-about .links{position:relative;display:flex;gap:2px}.embedded-about .links a{position:relative;z-index:1;padding:6px 14px;border-radius:99px;color:var(--muted);font-size:14.5px;text-decoration:none;transition:color .3s}.embedded-about .links a.on{color:#fff}.embedded-about .pill{position:absolute;left:0;top:0;width:0;height:0;opacity:0;border-radius:99px;background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.38);box-shadow:inset 0 1px 1px rgba(255,255,255,.4);transition:left .6s cubic-bezier(.25,1.15,.35,1),width .6s cubic-bezier(.25,1.15,.35,1),opacity .3s}.embedded-about .home-return{position:fixed;right:20px;bottom:calc(20px + env(safe-area-inset-bottom,0px));z-index:21;padding:10px 18px;border-radius:99px;font-size:13px;text-decoration:none;white-space:nowrap}.embedded-about .pilot{position:fixed;left:0;top:0;z-index:0;width:84px;margin:-21px 0 0 -42px;pointer-events:none;opacity:0;transition:opacity .8s;will-change:transform}.embedded-about .pilot.on{opacity:1}.embedded-about .pilot img,.embedded-about .pass img{display:block;width:100%;height:auto;filter:drop-shadow(0 26px 14px rgba(0,0,0,.55))}.embedded-about .pass{position:absolute;left:50%;top:10px;width:70px;margin-left:-35px;opacity:0;pointer-events:none}.embedded-about .pass.go{animation:intro-pass 6s cubic-bezier(.45,.05,.4,1) 1 both}@keyframes intro-pass{0%{opacity:0;transform:translate(-62vw,40px) rotate(8deg)}8%{opacity:1}50%{transform:translate(0,-34px) rotate(-5deg)}92%{opacity:1}100%{opacity:0;transform:translate(62vw,30px) rotate(6deg)}}.embedded-about .intro-hero{min-height:100svh;display:flex;flex-direction:column;justify-content:center;padding:110px 0 70px}.embedded-about .mark{margin:0;width:min(100%,680px);align-self:center;line-height:0}.embedded-about .intro-hero-wordmark{display:block;width:100%;height:auto;overflow:hidden}.embedded-about .mark-letter{animation-play-state:paused;opacity:0;transform:translateY(18px);animation:mark-reveal .85s calc(.35s + var(--i)*.14s) var(--ease) both}.embedded-about .mark-subtitle{animation-play-state:paused;opacity:0;animation:intro-fade .8s 1.65s both}@keyframes mark-reveal{to{opacity:1;transform:translateY(0)}}.embedded-about .tag{margin:36px 0 0;max-width:26em;font-size:clamp(17px,2.3vw,21px);color:#e4e4e4;opacity:0;animation:intro-fade 1s 2.7s forwards}.embedded-about .cta{display:flex;flex-wrap:wrap;gap:12px;margin-top:26px;opacity:0;animation:intro-fade 1s 2.9s forwards}.embedded-about .btn{display:inline-block;padding:13px 28px;border-radius:99px;border:1px solid #fff;font-weight:700;text-decoration:none;transition:transform .5s var(--ease),background .3s,color .3s}.embedded-about .btn:hover{background:#fff;color:#000}.embedded-about .btn:active{transform:scale(.96)}.embedded-about .btn.fill{background:#fff;color:#000}.embedded-about .btn.fill:hover{background:var(--orange);border-color:var(--orange)}.embedded-about section{position:relative;padding:110px 0}.embedded-about h2{margin:0 0 40px;font:900 clamp(28px,4.6vw,44px)/1.25 "Noto Sans KR",sans-serif;letter-spacing:-.03em}.embedded-about .say{margin:0;max-width:18em;font:700 clamp(25px,5.4vw,58px)/1.4 "Noto Sans KR",sans-serif;letter-spacing:-.03em;text-wrap:balance}.embedded-about .say .ln{display:block}.embedded-about .say .ln+.ln{margin-top:.7em}.embedded-about .say .w{color:rgba(255,255,255,.2);transition:color .5s}.embedded-about .say .w.on{color:#fff}.embedded-about .craft{display:flex;align-items:center;gap:clamp(20px,5vw,64px);padding:34px 0}.embedded-about .craft:nth-of-type(even){flex-direction:row-reverse}.embedded-about .craft .ph{flex:none;display:block;width:clamp(150px,34vw,360px);animation:intro-bob 5s ease-in-out infinite alternate}.embedded-about .craft .ph img{display:block;width:100%;height:auto;filter:drop-shadow(0 24px 20px rgba(0,0,0,.7));opacity:0;transform:translateY(30px) scale(.9) rotate(-4deg);transition:opacity 1s .2s,transform 1.4s .2s var(--ease)}.embedded-about .craft.in .ph img{opacity:1;transform:none}@keyframes intro-bob{to{transform:translateY(-9px) rotate(-2deg)}}.embedded-about .craft h3{margin:0 0 6px;font:900 clamp(34px,7vw,76px)/1 var(--disp);letter-spacing:-.03em}.embedded-about .craft p{margin:0;color:#cfcfcf;font-size:16.5px;line-height:1.7;max-width:20em}.embedded-about .big{margin:0;font:700 clamp(26px,5.2vw,52px)/1.5 "Noto Sans KR",sans-serif;letter-spacing:-.03em;max-width:18em}.embedded-about .big b{font-family:var(--disp);font-weight:900;color:var(--orange)}.embedded-about .go{display:flex;align-items:baseline;justify-content:space-between;gap:16px;padding:22px 0;text-decoration:none;transition:padding .5s var(--ease),color .3s}.embedded-about .go strong{font:900 clamp(28px,6vw,56px)/1.2 "Noto Sans KR",sans-serif;letter-spacing:-.03em}.embedded-about .go span{color:var(--muted);font-size:15px;text-align:right;overflow-wrap:anywhere}.embedded-about .go:hover{padding-left:20px;color:var(--orange)}.embedded-about footer{padding:50px 0 70px;color:var(--muted);font-size:14px}@media(max-width:760px){.embedded-about .craft,.embedded-about .craft:nth-of-type(even){flex-direction:column;align-items:flex-start;gap:14px}.embedded-about .craft .ph{width:min(76vw,320px)}.embedded-about .links a{padding:6px 10px}.embedded-about .go{flex-direction:column;gap:0}.embedded-about .go span{text-align:left}}@media(max-width:420px){.embedded-about .logo{width:50px;height:48px}.embedded-about .nav-wordmark{height:36px}.embedded-about .nav{padding:0 6px 0 10px}.embedded-about .links a{padding:6px 8px;font-size:13px}.embedded-about .pilot{width:64px;margin:-16px 0 0 -32px}}@media(prefers-reduced-motion:reduce){.embedded-about *{animation-duration:.01ms!important;animation-delay:0s!important;transition-duration:.01ms!important}}.embedded-about .mark.logo-visible .mark-letter,.embedded-about .mark.logo-visible .mark-subtitle{animation-play-state:running}
+.embedded-about .intro-hero{min-height:0;padding:95px 0 70px}.embedded-about .home-return{display:none}
+.intro-daylight{position:relative;min-height:230svh;padding:80px 0}.daylight-sticky{position:sticky;top:max(20px,calc(50svh - var(--scene-center,320px)))}.daylight-sticky h2{margin:0;font:500 clamp(30px,4vw,48px)/1.3 'Noto Sans KR',sans-serif;letter-spacing:-.04em}.daylight-sticky .eyebrow{font:500 10px 'Archivo',sans-serif;letter-spacing:.2em;color:#a6b6c6;margin:0 0 20px}.daylight-description{font-size:13px;color:#a1adba;margin:20px 0 25px}.light-scene{--sky-top:#224767;--sky-bottom:#7ca9c3;--sun-y:20%;position:relative;height:380px;overflow:hidden;background:linear-gradient(var(--sky-top),var(--sky-bottom));border-radius:4px}.light-sun{position:absolute;left:36%;top:var(--sun-y);width:50px;height:50px;border-radius:50%;background:#fff2d0;box-shadow:0 0 70px 25px #ffdbaa55}.light-moon{position:absolute;top:25%;right:24%;width:34px;height:34px;border-radius:50%;background:#e3eef5;box-shadow:0 0 45px #c5e6ff40;opacity:var(--night,0)}.light-stars{position:absolute;inset:0;opacity:var(--night,0);background-image:radial-gradient(circle at 12% 18%,#eee 0 1px,transparent 2px),radial-gradient(circle at 37% 11%,#cde3ff 0 1px,transparent 2px),radial-gradient(circle at 61% 32%,#fff 0 1px,transparent 2px),radial-gradient(circle at 80% 12%,#d8e7ff 0 1px,transparent 2px),radial-gradient(circle at 22% 43%,#fff 0 1px,transparent 2px),radial-gradient(circle at 92% 40%,#def 0 1px,transparent 2px),radial-gradient(circle at 51% 24%,#fff 0 1px,transparent 2px)}.light-ridge{position:absolute;left:-10%;width:120%;height:190px;bottom:-65px;background:#0b141c;clip-path:polygon(0 40%,10% 25%,23% 35%,38% 12%,51% 30%,62% 8%,78% 32%,88% 15%,100% 30%,100% 100%,0 100%)}.ridge-back{bottom:-12px;background:#263544;opacity:.82}.ridge-front{transform:scaleX(-1)}.light-time{position:absolute;left:25px;bottom:22px;color:#dde6ef;font-size:12px}.scene-caption{color:#8fa0b2;font-size:12px;line-height:1.8;margin:18px 0 0}.standalone-about .mark .mark-letter,.standalone-about .mark .mark-subtitle,.embedded-about .mark .mark-letter,.embedded-about .mark .mark-subtitle{animation-play-state:paused}.standalone-about .mark.logo-visible .mark-letter,.standalone-about .mark.logo-visible .mark-subtitle,.embedded-about .mark.logo-visible .mark-letter,.embedded-about .mark.logo-visible .mark-subtitle{animation-play-state:running}@media(max-width:600px){.light-scene{height:260px}.intro-daylight{padding:60px 0;min-height:220svh}.daylight-description{font-size:12px}.light-sun{width:36px;height:36px}.light-ridge{height:160px}.light-moon{width:27px;height:27px}}@media(max-height:500px){.light-scene{height:190px}.daylight-sticky h2{font-size:25px}.daylight-description{margin:10px 0 15px}.daylight-sticky .eyebrow{margin-bottom:12px}.scene-caption{font-size:10px;margin-top:10px}}@media(prefers-reduced-motion:reduce){.standalone-about .mark .mark-letter,.standalone-about .mark .mark-subtitle,.embedded-about .mark .mark-letter,.embedded-about .mark .mark-subtitle{animation:none;opacity:1;transform:none}}
+
+.daylight-sticky{will-change:auto}@media(prefers-reduced-motion:reduce){.daylight-sticky{will-change:auto;transform:none!important}}
+
+.light-scene{background:linear-gradient(#224767,#7ca9c3);--dusk:0;--night:0;--sun-offset:0px;isolation:isolate}.sky-layer{position:absolute;inset:0;pointer-events:none;will-change:opacity}.sky-dusk{background:linear-gradient(#744231,#e28f57);opacity:var(--dusk,0)}.sky-night{background:linear-gradient(#030814,#0d192b);opacity:var(--night,0)}.light-sun{top:20%;transform:translate3d(0,var(--sun-offset,0px),0);will-change:transform}.light-stars,.light-moon{will-change:opacity}@media(prefers-reduced-motion:reduce){.sky-layer,.light-sun,.light-stars,.light-moon{will-change:auto}}
 :root{color-scheme:dark;--bg:#050607;--ink:#f3f4f5;--dim:#a3a7ac;--ease:cubic-bezier(.16,1,.3,1)}
 *{box-sizing:border-box}html{scroll-behavior:smooth;scrollbar-gutter:stable}body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.7 'Noto Sans KR',sans-serif;word-break:keep-all}body.menu-open{overflow:hidden}a{color:inherit;text-decoration:none}button{font:inherit;color:inherit}a:focus-visible,button:focus-visible{outline:2px solid #fff;outline-offset:6px}button{cursor:pointer}::selection{background:#fff;color:#050607}
-.header{position:absolute;top:0;left:0;right:0;z-index:10;display:flex;justify-content:space-between;align-items:center;padding:30px clamp(24px,5vw,80px);padding-top:calc(30px + env(safe-area-inset-top))}.brand{display:block;width:126px}.brand img{display:block;width:100%;height:30px}.menu-button{display:grid;place-content:center;gap:7px;width:50px;height:50px;background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.15);border-radius:50%;transition:background .25s}.menu-button:hover{background:rgba(255,255,255,.12)}.menu-button span{display:block;width:19px;height:1px;background:#fff;transition:transform .35s var(--ease)}.menu-open .menu-button span:first-child{transform:translateY(4px) rotate(45deg)}.menu-open .menu-button span:last-child{transform:translateY(-4px) rotate(-45deg)}
+.header{position:absolute;top:0;left:0;right:0;z-index:10;display:flex;justify-content:space-between;align-items:center;padding:30px clamp(24px,5vw,80px);padding-top:calc(30px + env(safe-area-inset-top))}.brand{display:block;width:126px}.brand img{display:block;width:100%;height:30px}
 .hero{min-height:100svh;position:relative;isolation:isolate;overflow:hidden;padding:180px clamp(24px,5vw,80px) 40px;display:flex;flex-direction:column;justify-content:space-between}.atmosphere{position:absolute;inset:0;z-index:-2;overflow:hidden;background:radial-gradient(ellipse at 77% 57%,#1b2028 0,rgba(13,17,22,.85) 28%,#050607 66%)}.horizon{position:absolute;width:160%;height:75%;left:-30%;bottom:-54%;border-radius:50%;border-top:1px solid rgba(182,205,224,.48);box-shadow:0 -7px 35px -13px #829aaf,0 -90px 110px -100px #7595b1;transform:rotate(-9deg)}.horizon::after{content:'';position:absolute;inset:0;border-radius:inherit;background:linear-gradient(#0d1218,#050607 45%)}.hero::after{content:'';position:absolute;inset:0;z-index:-1;pointer-events:none;background:linear-gradient(0deg,#050607,transparent 24%)}.hero-content{position:relative;z-index:2;max-width:1100px}.eyebrow{margin:0 0 25px;font:500 11px/1.5 'Archivo',sans-serif;letter-spacing:.24em;color:#b8bcc3;display:flex;align-items:center;gap:12px}.eyebrow::before{content:'';width:24px;height:1px;background:#b8bcc3}h1{margin:0;font:900 clamp(76px,14vw,210px)/.86 'Archivo',sans-serif;letter-spacing:-.065em}.hero-wordmark{display:block;width:min(100%,1050px);height:auto;overflow:hidden}.mark-letter{opacity:0;transform:translateY(18px);animation:arrive 1.1s calc(.2s + var(--i)*.14s) var(--ease) forwards}.intro{max-width:18em;margin:37px 0 0;font-size:clamp(19px,2.3vw,30px);line-height:1.6;letter-spacing:-.04em}.intro small{display:block;margin-top:12px;font-size:14px;color:var(--dim);font-weight:400;letter-spacing:0}.text-link{display:inline-flex;gap:38px;align-items:center;margin-top:33px;padding-bottom:10px;border-bottom:1px solid rgba(255,255,255,.5);font-size:13px;transition:gap .35s}.text-link:hover{gap:52px}.text-link span{font-size:20px;line-height:1}.drone-stage{position:absolute;width:min(41vw,560px);top:38%;right:7%;z-index:1;pointer-events:none}.drone-stage img{width:100%;height:auto;display:block;filter:drop-shadow(0 42px 24px rgba(0,0,0,.75));animation:flight-in 1.8s .3s var(--ease) both}.flight-caption{position:absolute;right:10%;top:72%;margin:0;font:500 10px/1.8 'Archivo',sans-serif;letter-spacing:.2em;color:#626c79;pointer-events:none}.hero-bottom{position:relative;z-index:2;display:flex;align-items:flex-end;justify-content:space-between;gap:24px;margin-top:170px;padding-top:24px;border-top:1px solid rgba(255,255,255,.12)}.hero-bottom p{margin:0;font:500 10px/1.6 'Archivo',sans-serif;letter-spacing:.18em;color:#9da3ad}.hero-bottom p span{display:block;margin-top:5px;font-size:11px;letter-spacing:.04em;color:#ddd}.scroll-link{font-size:11px;color:#b3b8bf;display:flex;gap:16px;align-items:center}.scroll-link span{font-size:19px}
 .story{padding:120px clamp(24px,5vw,80px) 110px;max-width:1600px;margin:auto;display:grid;grid-template-columns:1fr 1.2fr;gap:70px}.story h2{margin:0;font:600 clamp(32px,4vw,58px)/1.25 'Noto Sans KR',sans-serif;letter-spacing:-.05em}.story-copy p{color:var(--dim);max-width:31em;margin:4px 0 0;line-height:1.9;font-size:16px}.story-copy .text-link{margin-top:30px}.footer{padding:25px clamp(24px,5vw,80px) 30px;border-top:1px solid rgba(255,255,255,.1);display:flex;justify-content:space-between;gap:20px;font:500 10px/1.6 'Archivo',sans-serif;letter-spacing:.13em;color:#83888e}
-.header{pointer-events:none}.header>*{pointer-events:auto}.menu-suggestion{position:absolute;top:calc(45px + env(safe-area-inset-top));right:calc(clamp(24px,5vw,80px) + 72px);font-size:12px;color:#b3bac3;padding:6px 0}.menu-suggestion:hover{color:#fff}
-.menu-panel{position:fixed;inset:0;background:rgba(5,6,7,.97);backdrop-filter:blur(24px);z-index:9;padding:150px clamp(24px,8vw,120px) 45px;display:flex;flex-direction:column;justify-content:center}.menu-panel[hidden]{display:none}.menu-caption{font:500 11px 'Archivo',sans-serif;letter-spacing:.2em;color:var(--dim);margin:0 0 30px}.menu-panel nav{display:flex;flex-direction:column;gap:18px;max-width:700px}.menu-panel nav a{font-size:clamp(36px,5.5vw,64px);line-height:1.2;font-weight:500;letter-spacing:-.05em;border-bottom:1px solid #25282c;padding-bottom:18px;display:flex;justify-content:space-between;align-items:center;transition:color .2s}.menu-panel nav a span{font:400 20px 'Archivo',sans-serif;color:#747b85}.menu-panel nav a:hover{color:#b7c6d7}.menu-status-link{display:inline-block;align-self:flex-start;margin-top:22px;font-size:13px;color:#aebbc9}.menu-status-link:hover{color:#fff}.menu-footer{position:absolute;bottom:40px;font:500 11px 'Archivo',sans-serif;letter-spacing:.15em;color:#737a83}
+.header{pointer-events:none}.header>*{pointer-events:auto}
+
 @keyframes arrive{to{opacity:1;transform:none}}@keyframes flight-in{from{opacity:0;transform:translate(42vw,18vh) scale(.45) rotate(-16deg)}to{opacity:1;transform:none}}
 @media(min-width:1600px){.hero-content{margin-top:35px}.drone-stage{right:12%}}
 @media(max-width:900px){.hero{padding-top:170px}.drone-stage{width:44vw;right:2%;top:44%}.flight-caption{display:none}.intro{max-width:48%}.intro small{font-size:12px}.story{gap:35px;grid-template-columns:1fr 1fr}}
-@media(max-width:600px){.header{padding:22px 24px}.brand{width:102px}.menu-button{width:46px;height:46px}.hero{padding:155px 24px 28px;min-height:860px;min-height:max(860px,100svh)}h1{font-size:clamp(71px,17.5vw,106px);letter-spacing:-.07em}.eyebrow{font-size:9px;margin-bottom:24px}.intro{margin-top:28px;max-width:none;font-size:21px}.intro small{font-size:12px;max-width:23em}.drone-stage{width:76vw;top:auto;bottom:145px;right:7%}.horizon{bottom:-46%}.hero-bottom{margin-top:300px}.hero-bottom p{font-size:8px}.hero-bottom p span{font-size:9px}.scroll-link{font-size:10px;gap:10px}.story{display:block;padding:75px 24px 80px}.story-copy{margin-top:30px}.story-copy p{font-size:14px}.footer{padding:24px;letter-spacing:.06em}.menu-panel{padding:130px 24px 60px}}
-@media(max-width:600px){.menu-suggestion{top:30px;right:90px}}
-@media(max-height:700px){.menu-panel{justify-content:flex-start;overflow-y:auto;padding-top:115px}.menu-panel nav{gap:8px}.menu-panel nav a{font-size:30px;padding-bottom:10px}.menu-footer{position:static;margin-top:28px;flex-shrink:0}}
+@media(max-width:600px){.header{padding:22px 24px}.brand{width:102px}.hero{padding:155px 24px 28px;min-height:860px;min-height:max(860px,100svh)}h1{font-size:clamp(71px,17.5vw,106px);letter-spacing:-.07em}.eyebrow{font-size:9px;margin-bottom:24px}.intro{margin-top:28px;max-width:none;font-size:21px}.intro small{font-size:12px;max-width:23em}.drone-stage{width:76vw;top:auto;bottom:145px;right:7%}.horizon{bottom:-46%}.hero-bottom{margin-top:300px}.hero-bottom p{font-size:8px}.hero-bottom p span{font-size:9px}.scroll-link{font-size:10px;gap:10px}.story{display:block;padding:75px 24px 80px}.story-copy{margin-top:30px}.story-copy p{font-size:14px}.footer{padding:24px;letter-spacing:.06em}}
+
+
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{animation-duration:.01ms!important;animation-delay:0s!important;transition-duration:.01ms!important}}
 #fleet .craft .ph{aspect-ratio:1.8;overflow:hidden}#fleet .craft .ph img{width:100%;height:100%;object-fit:contain}
 </style>
+
+<style id="v2">
+/* ===== Liquid glass ===== */
+.lg{position:relative;border:0;background:linear-gradient(135deg,rgba(255,255,255,.14),rgba(255,255,255,.035));-webkit-backdrop-filter:blur(7px) saturate(210%) brightness(1.18);backdrop-filter:blur(7px) saturate(210%) brightness(1.18);box-shadow:inset 3px 3px 4px -2px rgba(255,255,255,.5),inset -3px -3px 4px -2px rgba(255,255,255,.25),inset 0 0 26px rgba(255,255,255,.05),0 22px 44px -22px rgba(0,0,0,.85)}
+.lg::before{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;background:radial-gradient(120% 90% at 20% -20%,rgba(255,255,255,.34),transparent 55%)}
+.lg::after{content:"";position:absolute;inset:0;border-radius:inherit;padding:1.2px;pointer-events:none;background:linear-gradient(135deg,rgba(255,255,255,.8),rgba(255,255,255,.05) 36%,rgba(255,255,255,.05) 64%,rgba(255,255,255,.55));-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude}
+
+/* ===== Hamburger (round glass) ===== */
+.menu-button{position:fixed;z-index:30;top:calc(19px + env(safe-area-inset-top));right:clamp(24px,5vw,80px);display:grid;place-content:center;gap:6.5px;width:52px;height:52px;padding:0;border-radius:50%;cursor:pointer;transition:transform .5s cubic-bezier(.3,1.5,.4,1)}
+.menu-button:hover{transform:scale(1.07)}.menu-button:active{transform:scale(.9)}
+.menu-button span{position:relative;z-index:1;display:block;width:20px;height:1.5px;border-radius:2px;background:#fff;transition:transform .55s var(--ease)}
+.menu-open .menu-button span:first-of-type{transform:translateY(4px) rotate(45deg)}
+.menu-open .menu-button span:last-of-type{transform:translateY(-4px) rotate(-45deg)}
+
+/* ===== Menu panel ===== */
+.menu-panel{--bs:52px;--bt:19px;--br:clamp(24px,5vw,80px);--bx:calc(100% - var(--br) - var(--bs)/2);--by:calc(var(--bt) + env(safe-area-inset-top,0px) + var(--bs)/2);position:fixed;inset:0;z-index:9;pointer-events:none}
+.menu-panel[hidden]{display:none}
+.menu-panel.is-open{pointer-events:auto}
+/* dim layer: a circle ripples out from the button, and shrinks back into it on close */
+.menu-scrim{position:absolute;inset:0;background:rgba(5,6,7,.62);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);clip-path:circle(0px at var(--bx) var(--by));opacity:0;transition:clip-path .6s cubic-bezier(.65,0,.3,1) .12s,opacity .35s ease .25s}
+.is-open .menu-scrim{clip-path:circle(125vmax at var(--bx) var(--by));opacity:1;transition:clip-path .95s cubic-bezier(.3,.65,.2,1),opacity .3s ease}
+/* card: springs out of the button, tilts into place; closes by sucking back in */
+.menu-card{position:absolute;overflow:hidden;top:calc(var(--bt) + env(safe-area-inset-top,0px) + var(--bs) + 12px);right:var(--br);width:min(340px,calc(100vw - 32px));padding:20px 14px 14px;border-radius:32px;background:linear-gradient(135deg,rgba(255,255,255,.2),rgba(255,255,255,.07));-webkit-backdrop-filter:blur(9px) saturate(210%) brightness(1.15);backdrop-filter:blur(9px) saturate(210%) brightness(1.15);transform-origin:calc(100% - var(--bs)/2) calc(-12px - var(--bs)/2);transform:scale(.06) rotate(-9deg);opacity:0;visibility:hidden;transition:transform .5s cubic-bezier(.65,0,.35,1) .1s,opacity .22s ease .3s,visibility 0s .62s}
+.is-open .menu-card{transform:none;opacity:1;visibility:visible;transition:transform .95s cubic-bezier(.2,1.3,.3,1),opacity .2s ease,visibility 0s}
+.menu-card>*{position:relative}
+.menu-card>.menu-sheen{position:absolute;inset:0;pointer-events:none;background:linear-gradient(112deg,transparent 32%,rgba(255,255,255,.2) 50%,transparent 68%);transform:translateX(-130%)}
+.is-open .menu-sheen{transform:translateX(130%);transition:transform 1.1s .3s cubic-bezier(.3,.6,.2,1)}
+.menu-caption{margin:0 0 8px 16px;font:500 11px 'Archivo',sans-serif;letter-spacing:.22em;color:#aab3be}
+.menu-nav{display:flex;flex-direction:column;gap:0}
+.menu-nav a{position:relative;display:flex;justify-content:space-between;align-items:center;padding:17px 16px;border-radius:20px;font-size:19px;letter-spacing:-.03em}
+.menu-nav a b{font-weight:500}
+.menu-nav a::after{content:"→";font:500 16px 'Archivo',sans-serif;color:#d5dde6;opacity:0;transform:translateX(-10px);transition:opacity .25s,transform .4s var(--ease)}
+.menu-nav a:hover::after,.menu-nav a:focus-visible::after{opacity:1;transform:none}
+.menu-nav a:hover,.menu-nav a:focus-visible{background:rgba(255,255,255,.12)}
+/* dividers between the main buttons draw in from the left */
+.menu-nav a+a::before{content:"";position:absolute;left:16px;right:16px;top:0;height:1px;background:linear-gradient(90deg,rgba(255,255,255,.3),rgba(255,255,255,.07));transform:scaleX(0);transform-origin:left;transition:transform .2s}
+.is-open .menu-nav a+a::before{transform:none;transition:transform .8s calc(.4s + var(--i)*.08s) var(--ease)}
+/* secondary buttons: a bit more visible */
+.menu-sub{position:relative;display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:6px;padding:6px 2px 0}
+.menu-sub a{display:flex;align-items:center;justify-content:center;gap:5px;padding:8px 6px;border-radius:12px;font-size:12px;letter-spacing:-.02em;white-space:nowrap;color:#cdd5de;background:rgba(255,255,255,.06);border:0}
+.menu-sub a i{font-style:normal;opacity:.6}
+.menu-sub a:hover,.menu-sub a:focus-visible{background:rgba(255,255,255,.14);color:#fff}
+/* items: close fast in reverse order, open one by one after the glass lands */
+.menu-panel .mi{opacity:0;transform:translateY(14px) scale(.95);filter:blur(5px);transition:opacity .16s calc((5 - var(--i))*.02s),transform .22s calc((5 - var(--i))*.02s) ease,filter .16s calc((5 - var(--i))*.02s)}
+.menu-panel.is-open .mi{opacity:1;transform:none;filter:none;transition:opacity .5s calc(.28s + var(--i)*.07s) ease,transform .95s calc(.28s + var(--i)*.07s) cubic-bezier(.2,1.25,.3,1),filter .5s calc(.28s + var(--i)*.07s) ease,background .25s,color .25s,border-color .25s}
+/* admin button: bottom-left of the screen, only while the menu is open */
+.admin-fab{position:fixed;left:var(--br);bottom:calc(22px + env(safe-area-inset-bottom,0px));display:inline-flex;align-items:center;gap:8px;padding:10px 16px 10px 13px;border-radius:99px;font-size:12.5px;color:#a9b5c2;background:rgba(14,17,22,.62);border:1px solid rgba(255,255,255,.15);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);opacity:0;transform:translateY(18px);pointer-events:none;transition:opacity .16s,transform .22s ease}
+.admin-fab svg{width:14px;height:14px;flex:none}
+.is-open .admin-fab{opacity:1;transform:none;pointer-events:auto;transition:opacity .5s .6s ease,transform .9s .6s cubic-bezier(.2,1.25,.3,1),color .25s,border-color .25s,background .25s}
+.admin-fab:hover,.admin-fab:focus-visible{color:#fff;border-color:rgba(255,255,255,.42);background:rgba(255,255,255,.14)}
+@media(hover:none){.menu-nav a::after{opacity:.4;transform:none}}
+
+/* ===== Hero buttons ===== */
+.hero-cta{display:flex;flex-wrap:wrap;gap:12px;margin-top:32px}
+.hero-btn{display:inline-block;padding:13px 28px;border-radius:99px;border:1px solid #fff;font-size:15px;font-weight:700;line-height:1.5;transition:transform .5s var(--ease),background .3s,color .3s,border-color .3s}
+.hero-btn:hover{background:#fff;color:#000}.hero-btn:active{transform:scale(.96)}
+.hero-btn.fill{background:#fff;color:#000}.hero-btn.fill:hover{background:#ff8a1f;border-color:#ff8a1f}
+
+/* ===== Scroll cue ===== */
+.hero-bottom{justify-content:center}
+.scroll-link{display:flex;flex-direction:column;align-items:center;padding:4px 20px;color:#d3dae2}
+.scroll-link .chev{display:block;width:30px;height:34px;overflow:visible}
+.scroll-link .chev path{opacity:0;animation:chev 1.9s ease-in-out infinite}
+.scroll-link .chev path:nth-child(2){animation-delay:.3s}
+@keyframes chev{0%{opacity:0;transform:translateY(-8px)}35%{opacity:1}70%{opacity:1;transform:translateY(3px)}100%{opacity:0;transform:translateY(11px)}}
+
+/* ===== Hero tidy ===== */
+.hero-bottom{border-top:0;margin-top:120px}
+.hero-btn:not(.fill){border-color:rgba(255,255,255,.38)}
+.hero-wordmark{width:min(100%,740px)}
+.drone-stage{top:60%;width:min(31vw,420px)}
+@media(max-width:900px){.drone-stage{top:64%;width:34vw}}
+@media(max-width:600px){
+.menu-button{top:calc(14px + env(safe-area-inset-top));width:46px;height:46px;gap:6px}
+.menu-panel{--bs:46px;--bt:14px}
+.menu-nav a{font-size:18px}
+/* 폰: 드론을 아래 고정에서 문서 흐름으로 옮겨 첫 화면 안에 보이게 */
+.hero{min-height:100svh;padding:116px 24px 24px;justify-content:flex-start}
+.eyebrow{margin-bottom:18px}
+.intro{margin-top:24px}
+.hero-cta{margin-top:24px}
+.hero-btn{padding:12px 22px;font-size:14px}
+.drone-stage{position:relative;top:auto;right:auto;bottom:auto;align-self:flex-end;width:min(54vw,230px);margin:46px 0 0;transform:translateY(44px)}
+.horizon{width:340%;left:-120%;height:380px;bottom:-190px}
+.hero-wordmark{width:min(80%,320px)}
+.hero-bottom{margin-top:auto;padding-top:14px}
+}
+@media(max-width:600px) and (max-height:700px){.intro{font-size:19px}.drone-stage{width:min(46vw,190px);margin-top:30px}.hero{padding-top:104px}}
+@media(prefers-reduced-motion:reduce){
+.scroll-link .chev path{animation:none;opacity:.85}
+.menu-button{animation:none}
+.menu-card,.is-open .menu-card{transition:opacity .2s}
+.menu-scrim,.is-open .menu-scrim{clip-path:none;transition:opacity .2s}
+.menu-sheen,.menu-nav a+a::before{display:none}
+.admin-fab,.is-open .admin-fab{transform:none;transition:opacity .2s}
+.menu-card{transform:none}
+.menu-panel .mi,.menu-panel.is-open .mi{filter:none;transform:none;transition:opacity .2s}
+}
+</style>
+<style id="v3">
+#sky-story{position:relative;height:800svh}
+.ss-pin{position:sticky;top:0;height:100svh;overflow:hidden}
+.ss-intro{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;padding:0 clamp(24px,5vw,80px)}
+.ss-in{width:min(100%,1040px)}
+.ss-say{margin:0;max-width:18em;font:700 clamp(25px,5.4vw,58px)/1.4 'Noto Sans KR',sans-serif;letter-spacing:-.03em;text-wrap:balance}
+.ss-say .ln{display:block}.ss-say .ln+.ln{margin-top:.7em}
+.ss-say .w{color:rgba(255,255,255,.18);transition:color .5s}.ss-say .w.on{color:#fff}
+.ss-frame{position:absolute;inset:0;opacity:0;clip-path:inset(36% 34% 36% 34% round 22px);overflow:hidden}
+.ss-frame::after{content:'';position:absolute;inset:0;pointer-events:none;background:radial-gradient(120% 90% at 50% 55%,transparent 55%,rgba(0,0,0,.42))}
+.ss-world{position:absolute;inset:0;transform:scale(1.5);transform-origin:50% 62%}
+.ss-sky,.ss-canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+.sk-day{background:linear-gradient(#224767,#7ca9c3 80%)}
+.sk-dusk{background:linear-gradient(#34406a,#e28f57 86%);opacity:var(--dusk,0)}
+.sk-night{background:linear-gradient(#030814,#0d192b 86%);opacity:var(--night,0)}
+.ss-copy{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:0 24px;opacity:0;pointer-events:none}
+.ss-guide{justify-content:flex-start;padding-top:16svh}
+.ss-guide h2,.ss-final h2{margin:0;color:#fff;text-shadow:0 2px 28px rgba(0,0,0,.4)}
+.ss-guide h2{font:500 clamp(24px,3.6vw,44px)/1.45 'Noto Sans KR',sans-serif;letter-spacing:-.04em}
+.ss-guide .eyebrow{color:#dbe6f0}.ss-guide .eyebrow::before{background:#dbe6f0}
+.ss-cue{margin-top:26px}
+.ss-final{z-index:3}.ss-final h2{font:600 clamp(36px,7vw,96px)/1.25 'Noto Sans KR',sans-serif;letter-spacing:-.055em}
+.ss-time{position:absolute;left:clamp(24px,5vw,80px);bottom:28px;font:500 12px 'Archivo','Noto Sans KR',sans-serif;letter-spacing:.2em;color:#dde6ef;opacity:0}
+@media(prefers-reduced-motion:reduce){.ss-say .w{transition:none}}
+</style>
+<style id="v4">
+.embedded-about{max-width:none;padding:0}
+.embedded-about .pinsec{padding:0;height:var(--len,200svh)}
+.pin{position:sticky;top:0;height:100svh;overflow:hidden;display:flex;flex-direction:column;justify-content:center}
+.ss-wrap{width:min(100%,1040px);margin:0 auto;padding:0 24px}
+.ss-wrap h2{margin-bottom:40px}
+#fleet .pin h2{margin:0;padding:0 clamp(24px,5vw,80px)}
+.fleet-track{display:flex;gap:28px;width:max-content;margin-top:34px;will-change:transform}
+#fleet .fleet-track .craft{flex:none;flex-direction:column;align-items:stretch;justify-content:flex-start;gap:16px;width:clamp(270px,30vw,440px);padding:26px;border-radius:32px}
+#fleet .fleet-track .craft>*{position:relative;z-index:1}
+#fleet .fleet-track .craft .ph{width:100%;aspect-ratio:1.8}
+#fleet .fleet-track .craft .ph img{opacity:1;transform:none;transition:none}
+#fleet .fleet-track .craft h3{font-size:clamp(28px,3.4vw,44px);margin-bottom:8px}
+#fleet .fleet-track .craft p{max-width:none;font-size:15.5px}
+#links .reveal,#links h2{transition:opacity .5s,transform .7s var(--ease)}
+#links.pinsec{height:auto!important;padding:100px 0 120px}
+#links .pin{position:relative;height:auto;overflow:visible;display:block}
+#links .go{transition:padding .5s var(--ease),color .3s,opacity .5s,transform .7s var(--ease)}
+html,body{overflow-anchor:none}
+#sky-story.seen{height:auto}
+#sky-story.seen .ss-pin{position:relative;top:auto;height:auto;overflow:visible}
+#sky-story.seen .ss-intro{position:relative;inset:auto;padding-top:clamp(110px,18svh,180px);padding-bottom:clamp(70px,12svh,120px);opacity:1!important;transform:none!important;filter:none!important;visibility:visible!important}
+#sky-story.seen .ss-frame{position:relative;inset:auto;height:100svh;opacity:1;clip-path:none}
+#sky-story.seen .ss-final{inset:auto 0 0 0;height:100svh}
+</style>
+<link rel="stylesheet" href="assets/site-menu.css">
+<script defer src="assets/site-menu.js"></script>
 </head>
 <body>
-<header class="header"><a class="brand" href="/" aria-label="AIR SKY 홈"><img src="assets/air-sky-wordmark.svg" alt="AIR SKY" width="126" height="30"></a><button class="menu-button" type="button" aria-label="메뉴 열기" aria-expanded="false" aria-controls="main-menu"><span></span><span></span></button></header>
+<header class="header"><a class="brand" href="/" aria-label="AIR SKY 홈"><img src="assets/air-sky-wordmark.svg" alt="AIR SKY" width="126" height="30"></a></header>
 <main id="page-content">
 <section class="hero" aria-labelledby="hero-title">
 <div class="atmosphere" aria-hidden="true"><div class="horizon"></div></div>
-<div class="hero-content"><p class="eyebrow">DRONE VIDEO TEAM</p><h1 id="hero-title" aria-label="AIR SKY"><svg class="hero-wordmark" viewBox="160 510 950 140" aria-hidden="true" preserveAspectRatio="xMidYMid meet"><defs><image id="air-sky-artwork" href="assets/air-sky.jpg" width="1254" height="1254"/><mask id="home-logo-alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="1254" height="1254"><use href="#air-sky-artwork"/></mask><clipPath id="air-sky-letter-0"><rect x="160" y="510" width="190" height="140"/></clipPath><clipPath id="air-sky-letter-1"><rect x="350" y="510" width="90" height="140"/></clipPath><clipPath id="air-sky-letter-2"><rect x="440" y="510" width="180" height="140"/></clipPath><clipPath id="air-sky-letter-3"><rect x="620" y="510" width="160" height="140"/></clipPath><clipPath id="air-sky-letter-4"><rect x="780" y="510" width="170" height="140"/></clipPath><clipPath id="air-sky-letter-5"><rect x="950" y="510" width="160" height="140"/></clipPath><clipPath id="air-sky-subtitle"><rect x="0" y="680" width="1254" height="60"/></clipPath></defs><g clip-path="url(#air-sky-letter-0)"><rect width="1254" height="1254" fill="white" mask="url(#home-logo-alpha)" class="mark-letter" style="--i:0"/></g><g clip-path="url(#air-sky-letter-1)"><rect width="1254" height="1254" fill="white" mask="url(#home-logo-alpha)" class="mark-letter" style="--i:1"/></g><g clip-path="url(#air-sky-letter-2)"><rect width="1254" height="1254" fill="white" mask="url(#home-logo-alpha)" class="mark-letter" style="--i:2"/></g><g clip-path="url(#air-sky-letter-3)"><rect width="1254" height="1254" fill="white" mask="url(#home-logo-alpha)" class="mark-letter" style="--i:3"/></g><g clip-path="url(#air-sky-letter-4)"><rect width="1254" height="1254" fill="white" mask="url(#home-logo-alpha)" class="mark-letter" style="--i:4"/></g><g clip-path="url(#air-sky-letter-5)"><rect width="1254" height="1254" fill="white" mask="url(#home-logo-alpha)" class="mark-letter" style="--i:5"/></g></svg></h1><p class="intro">익숙한 풍경을,<br>새로운 시선으로.<small>우리가 바라본 세상을 드론으로 기록합니다.</small></p></div>
-<div class="drone-stage" aria-hidden="true"><img src="assets/drone.webp" alt="" width="640" height="329" fetchpriority="high"></div><p class="flight-caption" aria-hidden="true">A DIFFERENT PERSPECTIVE<br>AIR SKY / DRONE FILM</p>
-<div class="hero-bottom"><p>AIR SKY<span>DRONE VIDEO TEAM</span></p><a class="scroll-link" href="#introduction">소개 보기 <span aria-hidden="true">↓</span></a></div>
+<div class="hero-content"><p class="eyebrow">DRONE VIDEO TEAM</p><h1 id="hero-title" aria-label="AIR SKY"><svg class="hero-wordmark" viewBox="160 510 950 140" aria-hidden="true" preserveAspectRatio="xMidYMid meet"><defs><image id="air-sky-artwork" href="assets/air-sky.jpg" width="1254" height="1254"/><mask id="home-logo-alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="1254" height="1254"><use href="#air-sky-artwork"/></mask><clipPath id="air-sky-letter-0"><rect x="160" y="510" width="190" height="140"/></clipPath><clipPath id="air-sky-letter-1"><rect x="350" y="510" width="90" height="140"/></clipPath><clipPath id="air-sky-letter-2"><rect x="440" y="510" width="180" height="140"/></clipPath><clipPath id="air-sky-letter-3"><rect x="620" y="510" width="160" height="140"/></clipPath><clipPath id="air-sky-letter-4"><rect x="780" y="510" width="170" height="140"/></clipPath><clipPath id="air-sky-letter-5"><rect x="950" y="510" width="160" height="140"/></clipPath><clipPath id="air-sky-subtitle"><rect x="0" y="680" width="1254" height="60"/></clipPath></defs><g clip-path="url(#air-sky-letter-0)"><rect width="1254" height="1254" fill="white" mask="url(#home-logo-alpha)" class="mark-letter" style="--i:0"/></g><g clip-path="url(#air-sky-letter-1)"><rect width="1254" height="1254" fill="white" mask="url(#home-logo-alpha)" class="mark-letter" style="--i:1"/></g><g clip-path="url(#air-sky-letter-2)"><rect width="1254" height="1254" fill="white" mask="url(#home-logo-alpha)" class="mark-letter" style="--i:2"/></g><g clip-path="url(#air-sky-letter-3)"><rect width="1254" height="1254" fill="white" mask="url(#home-logo-alpha)" class="mark-letter" style="--i:3"/></g><g clip-path="url(#air-sky-letter-4)"><rect width="1254" height="1254" fill="white" mask="url(#home-logo-alpha)" class="mark-letter" style="--i:4"/></g><g clip-path="url(#air-sky-letter-5)"><rect width="1254" height="1254" fill="white" mask="url(#home-logo-alpha)" class="mark-letter" style="--i:5"/></g></svg></h1><p class="intro">익숙한 풍경을,<br>새로운 시선으로.</p><div class="hero-cta"><a class="hero-btn fill" href="https://www.youtube.com/channel/UC-NN308azXJp2trEyUmiNkw" target="_blank" rel="noopener">유튜브 보러가기</a><a class="hero-btn" href="#links">문의 · 협찬</a></div></div>
+<div class="drone-stage" aria-hidden="true"><img src="assets/drone.webp" alt="" width="640" height="329" fetchpriority="high"></div>
+<div class="hero-bottom"><a class="scroll-link" href="#sky-story" aria-label="아래로 스크롤"><svg class="chev" viewBox="0 0 24 28" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5l8 8 8-8"/><path d="M4 14l8 8 8-8"/></svg></a></div>
+</section>
+<section id="sky-story" aria-label="AIR SKY 소개">
+<div class="ss-pin">
+<div class="ss-intro"><div class="ss-in"><p class="ss-say"><span class="ln">안녕하세요! AIR SKY입니다.</span><span class="ln">저희는 DJI 드론을 사용하여 풍경을 찍고, 영상을 올리는 팀입니다.</span></p></div></div>
+<div class="ss-frame" aria-hidden="true">
+<div class="ss-world" style="--dusk:0;--night:0"><div class="ss-sky sk-day"></div><div class="ss-sky sk-dusk"></div><div class="ss-sky sk-night"></div><canvas class="ss-canvas"></canvas></div>
+<div class="ss-copy ss-guide"><p class="eyebrow">FOLLOW THE LIGHT</p><h2>천천히 내려가며<br>낮에서 밤으로 이어지는<br>하늘을 만나보세요.</h2><div class="scroll-link ss-cue"><svg class="chev" viewBox="0 0 24 28" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5l8 8 8-8"/><path d="M4 14l8 8 8-8"/></svg></div></div>
+<span class="ss-time">낮</span>
+</div>
+<div class="ss-copy ss-final" aria-live="polite"><h2>빛이 바뀌면,<br>장면도 달라집니다.</h2></div>
+</div>
 </section>
 <section id="introduction" class="embedded-about" aria-label="AIR SKY 소개">
-  <div class="intro-hero">
-    <h2 class="mark" aria-label="AIR SKY"><svg class="hero-wordmark" viewBox="0 0 1254 1254" aria-hidden="true" preserveAspectRatio="xMidYMid meet"><defs><image id="intro-air-sky-artwork" href="assets/air-sky.jpg" width="1254" height="1254"/><clipPath id="intro-air-sky-letter-0"><rect x="160" y="510" width="190" height="140"/></clipPath><clipPath id="intro-air-sky-letter-1"><rect x="350" y="510" width="90" height="140"/></clipPath><clipPath id="intro-air-sky-letter-2"><rect x="440" y="510" width="180" height="140"/></clipPath><clipPath id="intro-air-sky-letter-3"><rect x="620" y="510" width="160" height="140"/></clipPath><clipPath id="intro-air-sky-letter-4"><rect x="780" y="510" width="170" height="140"/></clipPath><clipPath id="intro-air-sky-letter-5"><rect x="950" y="510" width="160" height="140"/></clipPath><clipPath id="intro-air-sky-subtitle"><rect x="0" y="680" width="1254" height="60"/></clipPath></defs><g clip-path="url(#intro-air-sky-letter-0)"><use href="#intro-air-sky-artwork" class="mark-letter" style="--i:0"/></g><g clip-path="url(#intro-air-sky-letter-1)"><use href="#intro-air-sky-artwork" class="mark-letter" style="--i:1"/></g><g clip-path="url(#intro-air-sky-letter-2)"><use href="#intro-air-sky-artwork" class="mark-letter" style="--i:2"/></g><g clip-path="url(#intro-air-sky-letter-3)"><use href="#intro-air-sky-artwork" class="mark-letter" style="--i:3"/></g><g clip-path="url(#intro-air-sky-letter-4)"><use href="#intro-air-sky-artwork" class="mark-letter" style="--i:4"/></g><g clip-path="url(#intro-air-sky-letter-5)"><use href="#intro-air-sky-artwork" class="mark-letter" style="--i:5"/></g><g clip-path="url(#intro-air-sky-subtitle)"><use href="#intro-air-sky-artwork" class="mark-subtitle"/></g></svg></h2>
-    <p class="tag">DJI 드론으로 풍경을 찍고 영상을 올리는 팀이에요.</p>
-    <div class="cta"><a class="btn fill" href="https://www.youtube.com/channel/UC-NN308azXJp2trEyUmiNkw" target="_blank" rel="noopener">유튜브 보러가기</a><a class="btn" href="#links">문의 · 협찬</a></div>
-  </div>
 
-  <section id="about">
-    <i class="pass" aria-hidden="true"><img alt=""></i>
-    <p class="say" id="say"><span class="ln">안녕하세요! AIR SKY입니다.</span><span class="ln">저희는 DJI 드론을 사용하여 풍경을 찍고, 영상을 올리는 팀입니다.</span></p>
-  </section>
 
-<section class="intro-daylight" aria-labelledby="intro-light-title"><div class="daylight-sticky"><p class="eyebrow">FOLLOW THE LIGHT</p><h2 id="intro-light-title">빛이 바뀌면,<br>장면도 달라집니다.</h2><p class="daylight-description">천천히 내려가며 낮에서 밤으로 이어지는 하늘을 만나보세요.</p><div class="light-scene" aria-hidden="true"><div class="sky-layer sky-dusk"></div><div class="sky-layer sky-night"></div><div class="light-stars"></div><div class="light-sun"></div><div class="light-moon"></div><div class="light-ridge ridge-back"></div><div class="light-ridge ridge-front"></div><span class="light-time">낮</span></div><p class="scene-caption" aria-live="polite">아래로 스크롤하면 밤이 되고, 위로 올리면 다시 낮이 됩니다.</p></div></section>
-  <section id="fleet">
-    <i class="pass" aria-hidden="true"><img alt=""></i>
-    <h2>저희가 날리는 드론</h2>
-    <div class="craft"><span class="ph"><img src="assets/drone-neo2.webp" alt="DJI NEO 2" loading="lazy" decoding="async"></span><div><h3>NEO 2</h3><p>작고 가벼워서 가까이서 따라가며 찍기 좋아요.</p></div></div>
-    <div class="craft"><span class="ph"><img src="assets/drone.webp" alt="DJI LITO 1" loading="lazy" decoding="async"></span><div><h3>LITO 1</h3><p>249g급 4K 드론이에요. 장애물 감지가 있어서 좀 더 마음 편하게 날려요.</p></div></div>
-    <div class="craft"><span class="ph"><img src="assets/drone-avata360.webp" alt="DJI AVATA 360" loading="lazy" decoding="async"></span><div><h3>AVATA 360</h3><p>360° 영상을 찍는 드론이에요. 찍고 나서 화면 방향을 고를 수 있어요.</p></div></div>
-  </section>
+  <section id="fleet" class="pinsec" style="--len:400svh"><div class="pin"><h2>저희가 날리는 드론</h2><div class="fleet-track">
+    <div class="craft lg"><span class="ph"><img src="assets/drone-neo2.webp" alt="DJI NEO 2" loading="lazy" decoding="async"></span><div><h3>NEO 2</h3><p>작고 가벼워서 가까이서 따라가며 찍기 좋아요.</p></div></div>
+    <div class="craft lg"><span class="ph"><img src="assets/drone.webp" alt="DJI LITO 1" loading="lazy" decoding="async"></span><div><h3>LITO 1</h3><p>249g급 4K 드론이에요. 장애물 감지가 있어서 좀 더 마음 편하게 날려요.</p></div></div>
+    <div class="craft lg"><span class="ph"><img src="assets/drone-avata360.webp" alt="DJI AVATA 360" loading="lazy" decoding="async"></span><div><h3>AVATA 360</h3><p>360° 영상을 찍는 드론이에요. 찍고 나서 화면 방향을 고를 수 있어요.</p></div></div>
+  </div></div></section>
 
-  <section id="channel">
-    <i class="pass" aria-hidden="true"><img alt=""></i>
+  <section id="channel" class="pinsec" style="--len:220svh"><div class="pin"><div class="ss-wrap">
     <h2>지금까지</h2>
     <p class="big">2026년 8월에 시작해서<br>영상 <b data-n="5">0</b>개를 올렸고,<br>조회수는 <b data-n="1674">0</b>회,<br>구독자는 <b data-n="11">0</b>명이에요.</p>
-  </section>
+  </div></div></section>
 
-  <section id="links">
-    <i class="pass" aria-hidden="true"><img alt=""></i>
+  <section id="links" class="pinsec" style="--len:200svh"><div class="pin"><div class="ss-wrap">
     <h2>연락은 여기로</h2>
     <a class="go" href="https://www.youtube.com/channel/UC-NN308azXJp2trEyUmiNkw" target="_blank" rel="noopener"><strong>유튜브</strong><span>AIR SKY</span></a>
     <a class="go" href="https://www.instagram.com/team._skying_drone" target="_blank" rel="noopener"><strong>인스타그램</strong><span>AIR SKY</span></a>
@@ -74,19 +243,16 @@
     <a class="go" href="https://open.kakao.com/o/poToUPKi" target="_blank" rel="noopener"><strong>오픈채팅</strong><span>카카오톡 오픈채팅</span></a>
 
 
-  </section>
+  </div></div></section>
 </section>
 </main>
 <footer class="footer"><span>© 2026 AIR SKY</span><span>A DIFFERENT PERSPECTIVE.</span></footer>
-<div class="menu-panel" id="main-menu" hidden role="dialog" aria-modal="true" aria-label="사이트 메뉴"><a class="menu-suggestion" href="suggestions.html">건의사항 ↗</a><p class="menu-caption">AIR SKY</p><nav aria-label="주 메뉴"><a href="request.html">촬영 신청하기 <span aria-hidden="true">01</span></a><a href="crew.html">크루 소개 <span aria-hidden="true">02</span></a><a href="principles.html">촬영 원칙 <span aria-hidden="true">03</span></a></nav><a href="receipt.html" class="menu-status-link">접수 결과 확인 ↗</a><a class="menu-footer admin-link" href="admin.html">관리자 페이지 ↗</a></div>
+
 <script>
 (function(){
 if('IntersectionObserver' in window&&!matchMedia('(prefers-reduced-motion: reduce)').matches){var sections=document.querySelectorAll('.home-reveal'),observer=new IntersectionObserver(function(entries){entries.forEach(function(entry){if(entry.isIntersecting){entry.target.classList.add('visible');observer.unobserve(entry.target)}})},{threshold:.08});sections.forEach(function(section){section.classList.add('ready');observer.observe(section)})}
 var drone=document.querySelector('.drone-stage img'),fleet=[{src:'assets/drone-neo2.webp',width:286,height:114},{src:'assets/drone.webp',width:640,height:329},{src:'assets/drone-avata360.webp',width:274,height:115}],chosen=fleet[Math.floor(Math.random()*fleet.length)];drone.width=chosen.width;drone.height=chosen.height;drone.src=chosen.src;
-var button=document.querySelector('.menu-button'),panel=document.querySelector('.menu-panel'),content=document.querySelector('main'),footer=document.querySelector('footer'),brand=document.querySelector('.brand');
-function toggle(open){button.setAttribute('aria-expanded',String(open));button.setAttribute('aria-label',open?'메뉴 닫기':'메뉴 열기');panel.hidden=!open;document.body.classList.toggle('menu-open',open);content.inert=open;footer.inert=open;brand.inert=open;if(open)panel.querySelector('a').focus();else button.focus()}
-button.addEventListener('click',function(){toggle(button.getAttribute('aria-expanded')!=='true')});
-document.addEventListener('keydown',function(e){if(panel.hidden)return;if(e.key==='Escape'){e.preventDefault();toggle(false)}if(e.key==='Tab'){var items=[button].concat(Array.from(panel.querySelectorAll('a'))),first=items[0],last=items[items.length-1];if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus()}else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus()}}});
+
 })();
 </script>
 <script>
@@ -96,5 +262,196 @@ document.addEventListener('keydown',function(e){if(panel.hidden)return;if(e.key=
     "pluginKey": "d7b67a42-5920-4dd3-83e5-57b5aaa19031"
   });
 </script>
+<script>
+(function(){
+const section=document.querySelector('#fleet');if(!section)return;const track=section.querySelector('.fleet-track');let observer=null;
+function node(tag,text,cls){const e=document.createElement(tag);if(text!==undefined)e.textContent=text;if(cls)e.className=cls;return e}
+function render(keys,catalog){
+ observer?.disconnect();section.querySelectorAll('.craft,.fleet-message').forEach(e=>e.remove());
+ if(!keys.length){track.append(node('p','등록된 크루 기체가 아직 없습니다.','fleet-message'));return}
+ if('IntersectionObserver' in window&&!matchMedia('(prefers-reduced-motion: reduce)').matches)observer=new IntersectionObserver(entries=>entries.forEach(entry=>{if(entry.isIntersecting){entry.target.classList.add('in');observer.unobserve(entry.target)}}),{threshold:.25});
+ keys.forEach(key=>{const data=catalog[key],card=node('div',undefined,'craft lg'),frame=node('span',undefined,'ph'),image=node('img'),copy=node('div');card.dataset.droneId=key;image.src=data.image;image.alt=data.name;image.loading='lazy';image.decoding='async';image.style.objectFit=data.fit||'contain';frame.append(image);copy.append(node('h3',data.title),node('p',data.description));card.append(frame,copy);track.append(card);if(observer)observer.observe(card);else card.classList.add('in')});
+ const pass=section.querySelector('.pass img');if(pass)pass.src=catalog[keys[0]].image;
+ dispatchEvent(new Event('resize'));
+}
+async function load(){
+ try{const response=await fetch('/api/crew-roster'),data=await response.json();if(!response.ok||!Array.isArray(data.members)||!data.catalog)throw Error('FLEET_UNAVAILABLE');
+ const owned=[...new Set(data.members.flatMap(member=>member.equipment||[]))].filter(key=>Object.hasOwn(data.catalog,key));
+ render(owned,data.catalog);
+ }catch{section.querySelectorAll('.craft,.fleet-message').forEach(e=>e.remove());track.append(node('p',' 기체 정보를 불러오지 못했습니다. 새로고침 후 다시 확인해주세요.','fleet-message'));}
+}
+load();addEventListener('pageshow',event=>{if(event.persisted)load()});
+})();
+</script>
+<script>
+(function(){
+const roots=document.querySelectorAll('.embedded-about,.standalone-about');
+roots.forEach(root=>{
+ const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
+ const logo=root.querySelector('.mark');
+ if(logo){if(!('IntersectionObserver' in window)||reduced)logo.classList.add('logo-visible');else{const observer=new IntersectionObserver(entries=>{if(entries.some(e=>e.isIntersecting)){logo.classList.add('logo-visible');observer.disconnect()}},{threshold:.2});observer.observe(logo)}}
+ const say=root.querySelector('.say');if(say){say.querySelectorAll('.ln').forEach(line=>{line.replaceChildren(...line.textContent.split(' ').flatMap((word,i)=>{const span=document.createElement('span');span.className='w';span.textContent=word;return i?[document.createTextNode(' '),span]:[span]}))})}
+ const cards=root.querySelectorAll('.craft');const stats=root.querySelector('.big');
+ function count(el){if(reduced){el.textContent=Number(el.dataset.n).toLocaleString('ko-KR');return}const start=performance.now(),to=Number(el.dataset.n);function tick(now){const p=Math.min(1,(now-start)/1600);el.textContent=Math.round(to*(1-Math.pow(1-p,4))).toLocaleString('ko-KR');if(p<1)requestAnimationFrame(tick)}requestAnimationFrame(tick)}
+ if('IntersectionObserver' in window){const observer=new IntersectionObserver(entries=>entries.forEach(entry=>{if(!entry.isIntersecting)return;if(entry.target.classList.contains('craft'))entry.target.classList.add('in');else entry.target.querySelectorAll('[data-n]').forEach(count);observer.unobserve(entry.target)}),{threshold:.25});cards.forEach(card=>observer.observe(card));window.__countStats=()=>stats&&stats.querySelectorAll('[data-n]').forEach(count)}else{cards.forEach(card=>card.classList.add('in'));stats?.querySelectorAll('[data-n]').forEach(count)}
+ const images=[...cards].map(card=>card.querySelector('img').src);const pilot=root.classList.contains('standalone-about')?document.querySelector('.pilot'):null;if(pilot){pilot.querySelector('img').src=images[1];if(reduced)pilot.hidden=true}root.querySelectorAll('.pass').forEach((pass,i)=>{pass.querySelector('img').src=images[i%images.length];if(!reduced&&'IntersectionObserver' in window){new IntersectionObserver(entries=>{if(entries[0].isIntersecting)pass.classList.add('go');else pass.classList.remove('go')},{threshold:.3}).observe(pass.parentElement)}});
+ const daylight=root.querySelector('.intro-daylight'),sticky=daylight?.querySelector('.daylight-sticky'),scene=daylight?.querySelector('.light-scene');
+
+ const timeLabel=scene?.querySelector('.light-time');
+ let currentProgress=null,targetProgress=0,frame=0,lastFrame=0,start=0,travel=1,sunTravel=0,lastPaint=-1,lastPhase='';
+ const words=say?[...say.querySelectorAll('.w')]:[];let wordCount=-1;
+ function paint(p){
+ if(Math.abs(p-lastPaint)<.0005&&p!==0&&p!==1)return;lastPaint=p;
+ const dusk=Math.max(0,1-Math.abs(p-.5)*2),night=Math.max(0,(p-.5)*2);
+ scene.style.setProperty('--dusk',dusk.toFixed(4));scene.style.setProperty('--night',night.toFixed(4));scene.style.setProperty('--sun-offset',(p*sunTravel).toFixed(2)+'px');
+ const phase=p<.3?'day':p<.75?'sunset':'night';if(phase!==lastPhase){lastPhase=phase;scene.dataset.phase=phase;timeLabel.textContent=phase==='day'?'낮':phase==='sunset'?'해 질 무렵':'밤'}
+ }
+ function glide(now){
+ frame=0;const dt=lastFrame?Math.min(50,now-lastFrame):16;lastFrame=now;
+ currentProgress+=(targetProgress-currentProgress)*(1-Math.exp(-dt/110));
+ if(Math.abs(targetProgress-currentProgress)<.0008){currentProgress=targetProgress;lastFrame=0;paint(currentProgress);return}
+ paint(currentProgress);frame=requestAnimationFrame(glide);
+ }
+ function follow(p){targetProgress=p;if(reduced||currentProgress===null){currentProgress=p;paint(p);return}if(!frame&&Math.abs(p-currentProgress)>.0008)frame=requestAnimationFrame(glide)}
+ function measure(){if(sticky&&scene){
+ sticky.style.transform='';const padding=parseFloat(getComputedStyle(daylight).paddingTop),center=scene.offsetTop+scene.offsetHeight/2;
+ sticky.style.setProperty('--scene-center',center+'px');start=daylight.getBoundingClientRect().top+scrollY+padding+center-innerHeight/2;
+ travel=Math.max(innerHeight*.8,daylight.offsetHeight-sticky.offsetHeight-padding*2);sunTravel=scene.offsetHeight*1.25;
+ }}
+ function update(){
+ if(say){const r=say.getBoundingClientRect(),progress=Math.max(0,Math.min(1,(innerHeight*.85-r.top)/(r.height+innerHeight*.25))),next=reduced?words.length:Math.round(progress*words.length);if(next!==wordCount){words.forEach((word,i)=>word.classList.toggle('on',i<next));wordCount=next}}
+ if(pilot&&!reduced){const progress=scrollY/Math.max(1,document.documentElement.scrollHeight-innerHeight);pilot.classList.toggle('on',scrollY>innerHeight*.35);pilot.style.transform='translate('+(innerWidth/2+innerWidth*.3*Math.sin(progress*Math.PI*7))+'px,'+(innerHeight*.62+innerHeight*.12*Math.sin(progress*Math.PI*11+1))+'px)'}
+ if(!scene)return;const p=Math.max(0,Math.min(1,(scrollY-start)/travel));
+ follow(p);
+ }
+ let queued=false;addEventListener('scroll',()=>{if(queued)return;queued=true;requestAnimationFrame(()=>{queued=false;update()})},{passive:true});addEventListener('resize',()=>{measure();update()});document.fonts?.ready.then(()=>{measure();update()});root.querySelectorAll('img').forEach(image=>{if(!image.complete)image.addEventListener('load',()=>{measure();update()},{once:true})});measure();update();
+});
+// Retain the standalone introduction's section navigation.
+const nav=document.querySelector('.nav .links');if(nav){const links=[...nav.querySelectorAll('a[href^="#"]')],pill=document.createElement('i');pill.className='pill';nav.append(pill);function active(){let selected=-1;links.forEach((link,i)=>{if(document.querySelector(link.getAttribute('href')).getBoundingClientRect().top<innerHeight*.4)selected=i});links.forEach((link,i)=>link.classList.toggle('on',i===selected));if(selected<0){pill.style.opacity=0;return}const a=links[selected];pill.style.cssText=`left:${a.offsetLeft}px;top:${a.offsetTop}px;width:${a.offsetWidth}px;height:${a.offsetHeight}px;opacity:1`}addEventListener('scroll',active,{passive:true});addEventListener('resize',active);document.fonts?.ready.then(active);active()}
+})();
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+(function(){
+const sec=document.getElementById('sky-story');if(!sec)return;
+const $=q=>sec.querySelector(q),pin=$('.ss-pin'),intro=$('.ss-intro'),say=$('.ss-say'),frame=$('.ss-frame'),world=$('.ss-world'),guide=$('.ss-guide'),fin=$('.ss-final'),label=$('.ss-time'),canvas=$('.ss-canvas');
+const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
+const cl=(x,a=0,b=1)=>Math.min(b,Math.max(a,x)),e=(a,b,x)=>cl((x-a)/(b-a)),mix=(a,b,t)=>a+(b-a)*t,sm=t=>t*t*(3-2*t);
+say.querySelectorAll('.ln').forEach(l=>{l.replaceChildren(...l.textContent.split(' ').flatMap((w,i)=>{const s=document.createElement('span');s.className='w';s.textContent=w;return i?[document.createTextNode(' '),s]:[s]}))});
+const words=[...say.querySelectorAll('.w')];
+
+/* ---------- 3D scene ---------- */
+function make(){
+ if(!window.THREE)return null;let R;
+ try{R=new THREE.WebGLRenderer({canvas,antialias:true,alpha:true,powerPreference:'low-power'})}catch(x){return null}
+ R.setPixelRatio(Math.min(devicePixelRatio||1,1.5));
+ const S=new THREE.Scene(),fog=new THREE.Fog(0x7ca9c3,25,210);S.fog=fog;
+ const C=new THREE.PerspectiveCamera(48,1,.1,500);
+ const hemi=new THREE.HemisphereLight(0xbfdcff,0x1a2430,.9),sunL=new THREE.DirectionalLight(0xfff0d0,1.2),moonL=new THREE.DirectionalLight(0x8fb0e0,0),fill=new THREE.DirectionalLight(0xcfe3ff,.35);
+ fill.position.set(-30,25,60);S.add(hemi,sunL,moonL,fill);
+ [[-30,8,1.3,0x41596c],[-55,14,3.1,0x31495b],[-85,19,5.2,0x23364a],[-118,26,7.7,0x182736]].forEach(([z,amp,seed,col])=>{
+  const g=new THREE.PlaneGeometry(340,50,110,14);g.rotateX(-Math.PI/2);const p=g.attributes.position;
+  for(let i=0;i<p.count;i++){const x=p.getX(i),zl=p.getZ(i);
+   const n=Math.sin(x*.045+seed)*.5+Math.sin(x*.11+seed*2.3)*.3+Math.sin(x*.27+seed*4.1+zl*.2)*.2;
+   p.setY(i,Math.max(0,n+.5)*amp*Math.min(1,(25-Math.abs(zl))/12))}
+  g.computeVertexNormals();const m=new THREE.Mesh(g,new THREE.MeshStandardMaterial({color:col,flatShading:true,roughness:1,metalness:0}));m.position.set(0,-3,z);S.add(m)});
+ const glowTex=(()=>{const N=256,c=document.createElement('canvas');c.width=c.height=N;const x=c.getContext('2d'),im=x.createImageData(N,N),d=im.data;for(let j=0;j<N;j++)for(let i=0;i<N;i++){const r=Math.hypot(i-N/2+.5,j-N/2+.5)/(N/2),edge=r>=1?0:1-Math.pow(Math.min(1,Math.max(0,(r-.7)/.3)),2)*(3-2*Math.min(1,Math.max(0,(r-.7)/.3))),a=Math.exp(-r*r*5)*edge*255+(Math.random()-.5)*3,k=(j*N+i)*4;d[k]=d[k+1]=d[k+2]=255;d[k+3]=r>=1?0:Math.max(0,Math.min(255,a))}x.putImageData(im,0,0);const t=new THREE.CanvasTexture(c);t.generateMipmaps=false;t.minFilter=THREE.LinearFilter;t.magFilter=THREE.LinearFilter;return t})();
+ const moonTex=(()=>{const c=document.createElement('canvas');c.width=c.height=256;const x=c.getContext('2d');x.fillStyle='#e2ecf5';x.fillRect(0,0,256,256);for(let i=0;i<28;i++){x.fillStyle='rgba(115,135,160,'+(.12+Math.random()*.2)+')';x.beginPath();x.arc(Math.random()*256,Math.random()*256,6+Math.random()*24,0,7);x.fill()}return new THREE.CanvasTexture(c)})();
+ const glow=(col)=>{const s=new THREE.Sprite(new THREE.SpriteMaterial({map:glowTex,color:col,transparent:true,blending:THREE.AdditiveBlending,depthWrite:false,fog:false,dithering:true}));S.add(s);return s};
+ const sunMat=new THREE.MeshBasicMaterial({color:0xfff2d0,fog:false}),sun=new THREE.Mesh(new THREE.SphereGeometry(6,32,24),sunMat),sunG=glow(0xffe0aa);
+ const moon=new THREE.Mesh(new THREE.SphereGeometry(4.6,40,30),new THREE.MeshStandardMaterial({map:moonTex,emissive:0x9fb4cc,emissiveMap:moonTex,emissiveIntensity:.55,roughness:1,fog:false})),moonG=glow(0x9cc8ff);
+ S.add(sun,moon);
+ const N=650,sp=new Float32Array(N*3);for(let i=0;i<N;i++){const a=(Math.random()-.5)*2.1,h=.04+Math.random()*.95,r=330;sp[i*3]=r*Math.cos(h)*Math.sin(a);sp[i*3+1]=r*Math.sin(h);sp[i*3+2]=-r*Math.cos(h)*Math.cos(a)}
+ const sg=new THREE.BufferGeometry();sg.setAttribute('position',new THREE.BufferAttribute(sp,3));
+ const sm2=new THREE.PointsMaterial({color:0xffffff,size:1.7,sizeAttenuation:false,transparent:true,opacity:0,fog:false,depthWrite:false});S.add(new THREE.Points(sg,sm2));
+ const pos=(az,el,r)=>{const a=az*Math.PI/180,h=el*Math.PI/180;return new THREE.Vector3(r*Math.cos(h)*Math.sin(a),r*Math.sin(h),-r*Math.cos(h)*Math.cos(a))};
+ const cDay=new THREE.Color('#7ca9c3'),cDusk=new THREE.Color('#d38d5e'),cNight=new THREE.Color('#0b1626'),tmp=new THREE.Color(),sunWarm=new THREE.Color('#ff8f45'),gWarm=new THREE.Color('#ff8a40');
+ let px=0,py=0,tx=0,ty=0;
+ function resize(){const w=world.clientWidth,h=world.clientHeight;R.setSize(w,h,false);C.aspect=w/h;C.fov=w/h<1?66:48;C.updateProjectionMatrix()}
+ resize();
+ function render(s,p,t){
+  const dusk=sm(cl(1-Math.abs(s-.45)/.3)),night=sm(cl((s-.45)/.35));
+  const sEl=mix(26,-10,sm(e(0,.62,s))),mEl=mix(-12,30,sm(e(.45,1,s)));
+  sun.position.copy(pos(14,sEl,200));sunG.position.copy(sun.position);moon.position.copy(pos(-16,mEl,200));moonG.position.copy(moon.position);
+  sunMat.color.set(0xfff2d0).lerp(sunWarm,dusk);sunG.material.color.set(0xffe0aa).lerp(gWarm,dusk);sunG.scale.setScalar(mix(70,130,dusk)*(1-night*.6));
+  moonG.scale.setScalar(46);moonG.material.opacity=night*.8;moon.rotation.y=t*.00005;
+  sunL.position.copy(sun.position);sunL.intensity=cl((sEl+8)/20)*1.3;sunL.color.set(0xfff0d0).lerp(sunWarm,dusk);
+  moonL.position.copy(moon.position);moonL.intensity=night*.5;
+  fog.color.copy(cDay).lerp(cDusk,dusk).lerp(cNight,night);hemi.color.copy(fog.color).lerp(new THREE.Color(0xffffff),.25*(1-night));hemi.intensity=mix(.9,.28,night);fill.intensity=mix(.35,.12,night);
+  sm2.opacity=night*night;
+  px+=(tx-px)*.04;py+=(ty-py)*.04;const bob=reduced?0:Math.sin(t*.0004)*.15;
+  C.position.set(px*2.2,4+bob-py*.6,mix(16,3,e(.3,1,p)));C.lookAt(px*3,9.5,-100);
+  R.render(S,C)}
+ return{resize,render}}
+let three=null;try{three=make()}catch(x){three=null}
+
+/* ---------- scroll choreography ---------- */
+let done=false,seen=false,top=0,travel=1,cur=0,tgt=0,vis=false,raf=0,last=0,wc=-1,phase='',applied=-1;
+function measure(){top=sec.getBoundingClientRect().top+scrollY;travel=Math.max(1,sec.offsetHeight-innerHeight)}
+function apply(p,t){
+ const ti=e(.25,.32,p);intro.style.opacity=1-ti;intro.style.transform='scale('+(1-.08*ti)+')';intro.style.filter=ti?'blur('+ti*10+'px)':'';intro.style.visibility=ti>=1?'hidden':'';
+ const g=1-Math.pow(1-e(.3,.45,p),3),sx=innerWidth<700?20:34,sy=36;
+ frame.style.opacity=e(.27,.31,p);frame.style.clipPath='inset('+sy*(1-g)+'% '+sx*(1-g)+'% '+sy*(1-g)+'% '+sx*(1-g)+'% round '+22*(1-g)+'px)';
+ const s=e(.5,.88,p),b=e(.88,.97,p),dusk=sm(cl(1-Math.abs(s-.45)/.3)),night=sm(cl((s-.45)/.35));
+ world.style.setProperty('--dusk',dusk.toFixed(3));world.style.setProperty('--night',night.toFixed(3));
+ world.style.transform='scale('+(1.5-.5*g)+')';world.style.filter=b?'blur('+b*14+'px) brightness('+(1-.4*b)+')':'';
+ const gd=e(.46,.52,p)*(1-e(.56,.62,p));guide.style.opacity=gd;guide.style.transform='translateY('+(1-gd)*18+'px)';
+ const fi=e(.9,.99,p);fin.style.opacity=fi;fin.style.filter=fi<1?'blur('+(1-fi)*14+'px)':'';fin.style.transform='scale('+(.96+.04*fi)+')';
+ label.style.opacity=e(.5,.54,p)*(1-b);const ph=s<.25?'낮':s<.62?'해 질 무렵':'밤';if(ph!==phase){phase=ph;label.textContent=ph}
+ if(three&&p>.26)three.render(s,p,t||0)}
+function words_(){const wp=cl((scrollY-(top-innerHeight*.55))/(innerHeight*.55+travel*.2)),n=(reduced||done)?words.length:Math.round(wp*words.length);if(n!==wc){words.forEach((w,i)=>w.classList.toggle('on',i<n));wc=n}}
+function collapse(){seen=true;done=true;tgt=cur=1;const before=sec.offsetHeight;sec.classList.add('seen');const delta=before-sec.offsetHeight;measure();words_();window.scrollTo({top:Math.max(0,scrollY-delta),left:0,behavior:'instant'});three&&three.resize();applied=-1;apply(1,performance.now());dispatchEvent(new Event('resize'))}
+function tick(now){
+ if(!vis){raf=0;return}
+ const dt=last?Math.min(50,now-last):16;last=now;cur=reduced?tgt:cur+(tgt-cur)*(1-Math.exp(-dt/120));if(Math.abs(tgt-cur)<.0004)cur=tgt;
+ if(cur!==applied||(three&&cur>.26)){applied=cur;apply(cur,now)}
+ if(done&&!seen&&cur>=.999)collapse();
+ raf=requestAnimationFrame(tick)}
+function onScroll(){tgt=cl((scrollY-top)/travel);if(!seen&&tgt>=1)done=true;if(done)tgt=1;words_();if(done&&!seen&&(!vis||cur>=.999))collapse();if(vis&&!raf){last=0;raf=requestAnimationFrame(tick)}}
+new IntersectionObserver(es=>{vis=es[0].isIntersecting;if(vis&&!raf){last=0;raf=requestAnimationFrame(tick)}},{rootMargin:'120px'}).observe(sec);
+addEventListener('scroll',onScroll,{passive:true});
+function relayout(){measure();three&&three.resize();onScroll();applied=-1}
+addEventListener('resize',relayout);addEventListener('load',relayout);document.fonts&&document.fonts.ready.then(relayout);
+measure();onScroll();cur=tgt;apply(cur,0);
+})();
+</script>
+<script>
+(function(){
+const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches,cl=(x,a=0,b=1)=>Math.min(b,Math.max(a,x)),e=(a,b,x)=>cl((x-a)/(b-a)),mix=(a,b,t)=>a+(b-a)*t,ease=t=>t<.5?2*t*t:1-Math.pow(-2*t+2,2)/2;
+const fleet=document.getElementById('fleet'),track=fleet&&fleet.querySelector('.fleet-track'),ch=document.getElementById('channel'),lk=document.getElementById('links');
+const items=lk?[...lk.querySelectorAll('h2,.go')]:[];
+const padX=()=>Math.min(80,Math.max(24,innerWidth*.05));let fT=0,fL=1,tw=0,cT=0,lT=0,lL=1,cur=0,tgt=0,raf=0,last=0,counted=false;
+function measure(){
+ if(fleet){tw=track.scrollWidth;const dist=Math.max(0,tw-innerWidth+padX()*2);fleet.style.setProperty('--len',Math.round(innerHeight+Math.max(innerHeight*.9,dist*1.1))+'px');fT=fleet.getBoundingClientRect().top+scrollY;fL=Math.max(1,fleet.offsetHeight-innerHeight)}
+ if(ch)cT=ch.getBoundingClientRect().top+scrollY;
+ if(lk){lT=lk.getBoundingClientRect().top+scrollY;lL=Math.max(1,lk.offsetHeight-innerHeight)}}
+function place(p){const s=padX(),end=Math.min(s,innerWidth-s-tw),x=mix(s,end,ease(e(.04,.96,p)));track.style.transform='translate3d('+x.toFixed(1)+'px,0,0)'}
+function tick(now){const dt=last?Math.min(50,now-last):16;last=now;cur=reduced?tgt:cur+(tgt-cur)*(1-Math.exp(-dt/110));
+ if(Math.abs(tgt-cur)<.0004)cur=tgt;place(cur);if(cur!==tgt)raf=requestAnimationFrame(tick);else{raf=0;last=0}}
+function update(){
+ if(fleet){tgt=cl((scrollY-fT)/fL);if(!raf){raf=requestAnimationFrame(tick)}}
+ if(ch&&!counted&&scrollY>cT-innerHeight*.2&&window.__countStats){counted=true;window.__countStats()}
+ }
+function relayout(){measure();update()}
+addEventListener('scroll',update,{passive:true});addEventListener('resize',relayout);addEventListener('load',relayout);document.fonts&&document.fonts.ready.then(relayout);
+measure();cur=tgt=fleet?cl((scrollY-fT)/fL):0;if(track)place(cur);update();
+})();
+</script>
+<button class="menu-button lg" type="button" aria-label="메뉴 열기" aria-expanded="false" aria-controls="main-menu"><span></span><span></span></button>
+<div class="menu-panel" id="main-menu" hidden role="dialog" aria-modal="true" aria-label="사이트 메뉴">
+<div class="menu-scrim"></div>
+<div class="menu-card lg">
+<i class="menu-sheen" aria-hidden="true"></i>
+<p class="menu-caption mi" style="--i:0">AIR SKY</p>
+<nav class="menu-nav" aria-label="주 메뉴">
+<a class="mi" style="--i:0" href="/"><b>홈</b></a>
+<a class="mi" style="--i:1" href="crew.html"><b>크루 소개</b></a>
+<a class="mi" style="--i:2" href="principles.html"><b>촬영 원칙</b></a>
+<a class="mi" style="--i:3" href="request.html"><b>촬영 신청하기</b></a>
+</nav>
+<div class="menu-sub"><a class="mi" style="--i:4" href="suggestions.html">건의사항 <i aria-hidden="true">↗</i></a><a class="mi" style="--i:5" href="receipt.html">접수 결과 확인 <i aria-hidden="true">↗</i></a></div>
+</div>
+<a class="admin-fab" href="admin.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="11" width="16" height="10" rx="2.5"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>관리자</a>
+</div>
 </body>
 </html>

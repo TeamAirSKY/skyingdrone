@@ -1,0 +1,55 @@
+
+/* ===== Liquid glass ===== */
+.lg{position:relative;border:0;background:linear-gradient(135deg,rgba(255,255,255,.14),rgba(255,255,255,.035));-webkit-backdrop-filter:blur(7px) saturate(210%) brightness(1.18);backdrop-filter:blur(7px) saturate(210%) brightness(1.18);box-shadow:inset 3px 3px 4px -2px rgba(255,255,255,.5),inset -3px -3px 4px -2px rgba(255,255,255,.25),inset 0 0 26px rgba(255,255,255,.05),0 22px 44px -22px rgba(0,0,0,.85)}
+.lg::before{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;background:radial-gradient(120% 90% at 20% -20%,rgba(255,255,255,.34),transparent 55%)}
+.lg::after{content:"";position:absolute;inset:0;border-radius:inherit;padding:1.2px;pointer-events:none;background:linear-gradient(135deg,rgba(255,255,255,.8),rgba(255,255,255,.05) 36%,rgba(255,255,255,.05) 64%,rgba(255,255,255,.55));-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude}
+
+/* ===== Hamburger (round glass) ===== */
+.menu-button{position:fixed;z-index:30;top:calc(19px + env(safe-area-inset-top));right:clamp(24px,5vw,80px);display:grid;place-content:center;gap:6.5px;width:52px;height:52px;padding:0;border-radius:50%;cursor:pointer;transition:transform .5s cubic-bezier(.3,1.5,.4,1)}
+.menu-button:hover{transform:scale(1.07)}.menu-button:active{transform:scale(.9)}
+.menu-button span{position:relative;z-index:1;display:block;width:20px;height:1.5px;border-radius:2px;background:#fff;transition:transform .55s var(--ease)}
+.menu-open .menu-button span:first-of-type{transform:translateY(4px) rotate(45deg)}
+.menu-open .menu-button span:last-of-type{transform:translateY(-4px) rotate(-45deg)}
+
+/* ===== Menu panel ===== */
+.menu-panel{--bs:52px;--bt:19px;--br:clamp(24px,5vw,80px);--bx:calc(100% - var(--br) - var(--bs)/2);--by:calc(var(--bt) + env(safe-area-inset-top,0px) + var(--bs)/2);position:fixed;inset:0;z-index:9;pointer-events:none}
+.menu-panel[hidden]{display:none}
+.menu-panel.is-open{pointer-events:auto}
+/* dim layer: a circle ripples out from the button, and shrinks back into it on close */
+.menu-scrim{position:absolute;inset:0;background:rgba(5,6,7,.62);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);clip-path:circle(0px at var(--bx) var(--by));opacity:0;transition:clip-path .6s cubic-bezier(.65,0,.3,1) .12s,opacity .35s ease .25s}
+.is-open .menu-scrim{clip-path:circle(125vmax at var(--bx) var(--by));opacity:1;transition:clip-path .95s cubic-bezier(.3,.65,.2,1),opacity .3s ease}
+/* card: springs out of the button, tilts into place; closes by sucking back in */
+.menu-card{position:absolute;overflow:hidden;top:calc(var(--bt) + env(safe-area-inset-top,0px) + var(--bs) + 12px);right:var(--br);width:min(340px,calc(100vw - 32px));padding:20px 14px 14px;border-radius:32px;background:linear-gradient(135deg,rgba(255,255,255,.2),rgba(255,255,255,.07));-webkit-backdrop-filter:blur(9px) saturate(210%) brightness(1.15);backdrop-filter:blur(9px) saturate(210%) brightness(1.15);transform-origin:calc(100% - var(--bs)/2) calc(-12px - var(--bs)/2);transform:scale(.06) rotate(-9deg);opacity:0;visibility:hidden;transition:transform .5s cubic-bezier(.65,0,.35,1) .1s,opacity .22s ease .3s,visibility 0s .62s}
+.is-open .menu-card{transform:none;opacity:1;visibility:visible;transition:transform .95s cubic-bezier(.2,1.3,.3,1),opacity .2s ease,visibility 0s}
+.menu-card>*{position:relative}
+.menu-card>.menu-sheen{position:absolute;inset:0;pointer-events:none;background:linear-gradient(112deg,transparent 32%,rgba(255,255,255,.2) 50%,transparent 68%);transform:translateX(-130%)}
+.is-open .menu-sheen{transform:translateX(130%);transition:transform 1.1s .3s cubic-bezier(.3,.6,.2,1)}
+.menu-caption{margin:0 0 8px 16px;font:500 11px 'Archivo',sans-serif;letter-spacing:.22em;color:#aab3be}
+.menu-nav{display:flex;flex-direction:column;gap:0}
+.menu-nav a{position:relative;display:flex;justify-content:space-between;align-items:center;padding:17px 16px;border-radius:20px;font-size:19px;letter-spacing:-.03em}
+.menu-nav a b{font-weight:500}
+.menu-nav a::after{content:"→";font:500 16px 'Archivo',sans-serif;color:#d5dde6;opacity:0;transform:translateX(-10px);transition:opacity .25s,transform .4s var(--ease)}
+.menu-nav a:hover::after,.menu-nav a:focus-visible::after{opacity:1;transform:none}
+.menu-nav a:hover,.menu-nav a:focus-visible{background:rgba(255,255,255,.12)}
+/* dividers between the main buttons draw in from the left */
+.menu-nav a+a::before{content:"";position:absolute;left:16px;right:16px;top:0;height:1px;background:linear-gradient(90deg,rgba(255,255,255,.3),rgba(255,255,255,.07));transform:scaleX(0);transform-origin:left;transition:transform .2s}
+.is-open .menu-nav a+a::before{transform:none;transition:transform .8s calc(.4s + var(--i)*.08s) var(--ease)}
+/* secondary buttons: a bit more visible */
+.menu-sub{position:relative;display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:6px;padding:6px 2px 0}
+.menu-sub a{display:flex;align-items:center;justify-content:center;gap:5px;padding:8px 6px;border-radius:12px;font-size:12px;letter-spacing:-.02em;white-space:nowrap;color:#cdd5de;background:rgba(255,255,255,.06);border:0}
+.menu-sub a i{font-style:normal;opacity:.6}
+.menu-sub a:hover,.menu-sub a:focus-visible{background:rgba(255,255,255,.14);color:#fff}
+/* items: close fast in reverse order, open one by one after the glass lands */
+.menu-panel .mi{opacity:0;transform:translateY(14px) scale(.95);filter:blur(5px);transition:opacity .16s calc((5 - var(--i))*.02s),transform .22s calc((5 - var(--i))*.02s) ease,filter .16s calc((5 - var(--i))*.02s)}
+.menu-panel.is-open .mi{opacity:1;transform:none;filter:none;transition:opacity .5s calc(.28s + var(--i)*.07s) ease,transform .95s calc(.28s + var(--i)*.07s) cubic-bezier(.2,1.25,.3,1),filter .5s calc(.28s + var(--i)*.07s) ease,background .25s,color .25s,border-color .25s}
+/* admin button: bottom-left of the screen, only while the menu is open */
+.admin-fab{position:fixed;left:var(--br);bottom:calc(22px + env(safe-area-inset-bottom,0px));display:inline-flex;align-items:center;gap:8px;padding:10px 16px 10px 13px;border-radius:99px;font-size:12.5px;color:#a9b5c2;background:rgba(14,17,22,.62);border:1px solid rgba(255,255,255,.15);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);opacity:0;transform:translateY(18px);pointer-events:none;transition:opacity .16s,transform .22s ease}
+.admin-fab svg{width:14px;height:14px;flex:none}
+.is-open .admin-fab{opacity:1;transform:none;pointer-events:auto;transition:opacity .5s .6s ease,transform .9s .6s cubic-bezier(.2,1.25,.3,1),color .25s,border-color .25s,background .25s}
+.admin-fab:hover,.admin-fab:focus-visible{color:#fff;border-color:rgba(255,255,255,.42);background:rgba(255,255,255,.14)}
+@media(hover:none){.menu-nav a::after{opacity:.4;transform:none}}
+
+
+body.menu-open{overflow:hidden}.menu-button{z-index:1010;color:#fff}.menu-panel{z-index:1000;--ease:cubic-bezier(.16,1,.3,1);color:#f3f4f5;font-family:'Noto Sans KR',sans-serif}.menu-panel a{color:inherit;text-decoration:none}.menu-card{max-height:calc(100dvh - 160px);overflow-y:auto}.menu-button:focus-visible,.menu-panel a:focus-visible{outline:2px solid #fff;outline-offset:4px}
+@media(max-width:600px){.menu-button{top:calc(14px + env(safe-area-inset-top));width:46px;height:46px;gap:6px}.menu-panel{--bs:46px;--bt:14px}.menu-nav a{font-size:18px}}
+@media(prefers-reduced-motion:reduce){.menu-card,.is-open .menu-card,.menu-scrim,.is-open .menu-scrim{clip-path:none;transform:none;transition:opacity .2s}.menu-sheen{display:none}.menu-panel .mi,.menu-panel.is-open .mi{filter:none;transform:none;transition:opacity .2s}.admin-fab,.is-open .admin-fab{transform:none;transition:opacity .2s}}
