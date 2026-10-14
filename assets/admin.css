@@ -3,3 +3,5 @@
 #accounts-panel fieldset{border:1px solid #303c4b;border-radius:10px;padding:12px 18px;margin:18px 0}#accounts-panel legend{font-size:12px;color:#9caec2}#accounts-panel fieldset .consent{font-size:13px;margin:9px 0}#accounts-panel .admin-note-label input{display:block;width:100%;margin:8px 0 18px}#account-create-form{padding-bottom:16px}#accounts-panel #account-created-pin{display:block;font:700 30px monospace;letter-spacing:.2em;margin:12px 0}#accounts-panel h2{font-size:24px}
 
 .account-absolute{padding:20px;border:1px solid #52657a;border-radius:12px;background:#16212d;margin:16px 0 24px}.account-absolute .badge{display:inline-block;margin-left:12px;color:#cad8e8}.account-absolute .hint{margin-bottom:0}
+
+.account-pin-display{display:inline-block;margin:12px 16px;font-size:24px;font-weight:700;letter-spacing:.18em;font-variant-numeric:tabular-nums}
