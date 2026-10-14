@@ -5,10 +5,13 @@
 <script>
 (function(){
 if('scrollRestoration' in history)history.scrollRestoration='manual';
+if(location.hash){try{history.replaceState(null,'',location.pathname+location.search)}catch(e){}}
 let interacted=false;
-['wheel','touchstart','keydown'].forEach(type=>addEventListener(type,()=>{interacted=true},{passive:true,once:true}));
-function top(){if(location.hash||interacted)return;scrollTo({top:0,left:0,behavior:'instant'})}
-top();addEventListener('DOMContentLoaded',top,{once:true});addEventListener('pageshow',event=>{if(event.persisted)interacted=false;top()});
+['wheel','touchstart','keydown','mousedown'].forEach(type=>addEventListener(type,()=>{interacted=true},{passive:true,once:true}));
+function top(){if(interacted)return;const d=document.documentElement;d.style.scrollBehavior='auto';scrollTo(0,0);d.style.scrollBehavior=''}
+top();addEventListener('DOMContentLoaded',top,{once:true});
+addEventListener('load',()=>{top();setTimeout(top,100);setTimeout(top,400);setTimeout(top,1000)},{once:true});
+addEventListener('pageshow',event=>{if(event.persisted)interacted=false;top()});
 })();
 </script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -177,7 +180,7 @@ top();addEventListener('DOMContentLoaded',top,{once:true});addEventListener('pag
 .ss-wrap{width:min(100%,1040px);margin:0 auto;padding:0 24px}
 .ss-wrap h2{margin-bottom:40px}
 #fleet .pin h2{margin:0;padding:0 clamp(24px,5vw,80px)}
-.fleet-track{display:flex;gap:28px;width:max-content;margin-top:34px;will-change:transform;transform:translate3d(100vw,0,0)}
+.fleet-track{display:flex;gap:28px;width:max-content;margin-top:34px;will-change:transform}
 #fleet .fleet-track .craft{flex:none;flex-direction:column;align-items:stretch;justify-content:flex-start;gap:16px;width:clamp(270px,30vw,440px);padding:26px;border-radius:32px}
 #fleet .fleet-track .craft>*{position:relative;z-index:1}
 #fleet .fleet-track .craft .ph{width:100%;aspect-ratio:1.8}
@@ -186,6 +189,12 @@ top();addEventListener('DOMContentLoaded',top,{once:true});addEventListener('pag
 #fleet .fleet-track .craft p{max-width:none;font-size:15.5px}
 #links .reveal,#links h2{transition:opacity .5s,transform .7s var(--ease)}
 #links .go{transition:padding .5s var(--ease),color .3s,opacity .5s,transform .7s var(--ease)}
+html,body{overflow-anchor:none}
+#sky-story.seen{height:auto}
+#sky-story.seen .ss-pin{position:relative;top:auto;height:auto;overflow:visible}
+#sky-story.seen .ss-intro{position:relative;inset:auto;padding-top:clamp(110px,18svh,180px);padding-bottom:clamp(70px,12svh,120px);opacity:1!important;transform:none!important;filter:none!important;visibility:visible!important}
+#sky-story.seen .ss-frame{position:relative;inset:auto;height:100svh;opacity:1;clip-path:none}
+#sky-story.seen .ss-final{inset:auto 0 0 0;height:100svh}
 </style>
 </head>
 <body>
@@ -284,8 +293,7 @@ function render(keys,catalog){
 async function load(){
  try{const response=await fetch('/api/crew-roster'),data=await response.json();if(!response.ok||!Array.isArray(data.members)||!data.catalog)throw Error('FLEET_UNAVAILABLE');
  const owned=[...new Set(data.members.flatMap(member=>member.equipment||[]))].filter(key=>Object.hasOwn(data.catalog,key));
- for(let i=owned.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[owned[i],owned[j]]=[owned[j],owned[i]]}
- render(owned.slice(0,3),data.catalog);
+ render(owned,data.catalog);
  }catch{section.querySelectorAll('.craft,.fleet-message').forEach(e=>e.remove());track.append(node('p',' 기체 정보를 불러오지 못했습니다. 새로고침 후 다시 확인해주세요.','fleet-message'));}
 }
 load();addEventListener('pageshow',event=>{if(event.persisted)load()});
@@ -375,7 +383,7 @@ function make(){
  const pos=(az,el,r)=>{const a=az*Math.PI/180,h=el*Math.PI/180;return new THREE.Vector3(r*Math.cos(h)*Math.sin(a),r*Math.sin(h),-r*Math.cos(h)*Math.cos(a))};
  const cDay=new THREE.Color('#7ca9c3'),cDusk=new THREE.Color('#d38d5e'),cNight=new THREE.Color('#0b1626'),tmp=new THREE.Color(),sunWarm=new THREE.Color('#ff8f45'),gWarm=new THREE.Color('#ff8a40');
  let px=0,py=0,tx=0,ty=0;
- function resize(){const w=pin.clientWidth,h=pin.clientHeight;R.setSize(w,h,false);C.aspect=w/h;C.fov=w/h<1?66:48;C.updateProjectionMatrix()}
+ function resize(){const w=world.clientWidth,h=world.clientHeight;R.setSize(w,h,false);C.aspect=w/h;C.fov=w/h<1?66:48;C.updateProjectionMatrix()}
  resize();
  function render(s,p,t){
   const dusk=sm(cl(1-Math.abs(s-.45)/.3)),night=sm(cl((s-.45)/.35));
@@ -394,7 +402,7 @@ function make(){
 let three=null;try{three=make()}catch(x){three=null}
 
 /* ---------- scroll choreography ---------- */
-let done=false,top=0,travel=1,cur=0,tgt=0,vis=false,raf=0,last=0,wc=-1,phase='',applied=-1;
+let done=false,seen=false,top=0,travel=1,cur=0,tgt=0,vis=false,raf=0,last=0,wc=-1,phase='',applied=-1;
 function measure(){top=sec.getBoundingClientRect().top+scrollY;travel=Math.max(1,sec.offsetHeight-innerHeight)}
 function apply(p,t){
  const ti=e(.25,.32,p);intro.style.opacity=1-ti;intro.style.transform='scale('+(1-.08*ti)+')';intro.style.filter=ti?'blur('+ti*10+'px)':'';intro.style.visibility=ti>=1?'hidden':'';
@@ -408,12 +416,14 @@ function apply(p,t){
  label.style.opacity=e(.5,.54,p)*(1-b);const ph=s<.25?'낮':s<.62?'해 질 무렵':'밤';if(ph!==phase){phase=ph;label.textContent=ph}
  if(three&&p>.26)three.render(s,p,t||0)}
 function words_(){const wp=cl((scrollY-(top-innerHeight*.55))/(innerHeight*.55+travel*.2)),n=(reduced||done)?words.length:Math.round(wp*words.length);if(n!==wc){words.forEach((w,i)=>w.classList.toggle('on',i<n));wc=n}}
+function collapse(){seen=true;done=true;tgt=cur=1;const before=sec.offsetHeight;sec.classList.add('seen');const delta=before-sec.offsetHeight;measure();words_();window.scrollTo({top:Math.max(0,scrollY-delta),left:0,behavior:'instant'});three&&three.resize();applied=-1;apply(1,performance.now())}
 function tick(now){
  if(!vis){raf=0;return}
  const dt=last?Math.min(50,now-last):16;last=now;cur=reduced?tgt:cur+(tgt-cur)*(1-Math.exp(-dt/120));if(Math.abs(tgt-cur)<.0004)cur=tgt;
  if(cur!==applied||(three&&cur>.26)){applied=cur;apply(cur,now)}
+ if(done&&!seen&&cur>=.999)collapse();
  raf=requestAnimationFrame(tick)}
-function onScroll(){tgt=cl((scrollY-top)/travel);if(tgt>=.995)done=true;if(done)tgt=1;words_();if(vis&&!raf){last=0;raf=requestAnimationFrame(tick)}}
+function onScroll(){tgt=cl((scrollY-top)/travel);if(!seen&&tgt>=1)done=true;if(done)tgt=1;words_();if(done&&!seen&&(!vis||cur>=.999))collapse();if(vis&&!raf){last=0;raf=requestAnimationFrame(tick)}}
 new IntersectionObserver(es=>{vis=es[0].isIntersecting;if(vis&&!raf){last=0;raf=requestAnimationFrame(tick)}},{rootMargin:'120px'}).observe(sec);
 addEventListener('scroll',onScroll,{passive:true});
 function relayout(){measure();three&&three.resize();onScroll();applied=-1}
@@ -426,12 +436,12 @@ measure();onScroll();cur=tgt;apply(cur,0);
 const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches,cl=(x,a=0,b=1)=>Math.min(b,Math.max(a,x)),e=(a,b,x)=>cl((x-a)/(b-a)),mix=(a,b,t)=>a+(b-a)*t,ease=t=>t<.5?2*t*t:1-Math.pow(-2*t+2,2)/2;
 const fleet=document.getElementById('fleet'),track=fleet&&fleet.querySelector('.fleet-track'),ch=document.getElementById('channel'),lk=document.getElementById('links');
 const items=lk?[...lk.querySelectorAll('h2,.go')]:[];
-let fT=0,fL=1,tw=0,cT=0,lT=0,lL=1,cur=0,tgt=0,raf=0,last=0,counted=false;
+const padX=()=>Math.min(80,Math.max(24,innerWidth*.05));let fT=0,fL=1,tw=0,cT=0,lT=0,lL=1,cur=0,tgt=0,raf=0,last=0,counted=false;
 function measure(){
- if(fleet){fT=fleet.getBoundingClientRect().top+scrollY;fL=Math.max(1,fleet.offsetHeight-innerHeight);tw=track.scrollWidth}
+ if(fleet){tw=track.scrollWidth;const dist=Math.max(0,tw-innerWidth+padX()*2);fleet.style.setProperty('--len',Math.round(innerHeight+Math.max(innerHeight*.9,dist*1.1))+'px');fT=fleet.getBoundingClientRect().top+scrollY;fL=Math.max(1,fleet.offsetHeight-innerHeight)}
  if(ch)cT=ch.getBoundingClientRect().top+scrollY;
  if(lk){lT=lk.getBoundingClientRect().top+scrollY;lL=Math.max(1,lk.offsetHeight-innerHeight)}}
-function place(p){const x=mix(innerWidth*.62,innerWidth*.7-tw,ease(e(.04,.96,p)));track.style.transform='translate3d('+x.toFixed(1)+'px,0,0)'}
+function place(p){const s=padX(),end=Math.min(s,innerWidth-s-tw),x=mix(s,end,ease(e(.04,.96,p)));track.style.transform='translate3d('+x.toFixed(1)+'px,0,0)'}
 function tick(now){const dt=last?Math.min(50,now-last):16;last=now;cur=reduced?tgt:cur+(tgt-cur)*(1-Math.exp(-dt/110));
  if(Math.abs(tgt-cur)<.0004)cur=tgt;place(cur);if(cur!==tgt)raf=requestAnimationFrame(tick);else{raf=0;last=0}}
 function update(){
