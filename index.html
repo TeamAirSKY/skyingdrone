@@ -180,6 +180,7 @@ addEventListener('pageshow',event=>{if(event.persisted)interacted=false;top()});
 .ss-wrap{width:min(100%,1040px);margin:0 auto;padding:0 24px}
 .ss-wrap h2{margin-bottom:40px}
 #fleet .pin h2{margin:0;padding:0 clamp(24px,5vw,80px)}
+#fleet .fleet-guide{margin:12px 0 0;padding:0 clamp(24px,5vw,80px);color:#a3a7ac;font-size:clamp(13px,1.2vw,15px);line-height:1.7}
 .fleet-track{display:flex;gap:28px;width:max-content;margin-top:34px;will-change:transform}
 #fleet .fleet-track .craft{flex:none;flex-direction:column;align-items:stretch;justify-content:flex-start;gap:16px;width:clamp(270px,30vw,440px);padding:26px;border-radius:32px}
 #fleet .fleet-track .craft>*{position:relative;z-index:1}
@@ -224,7 +225,7 @@ html,body{overflow-anchor:none}
 <section id="introduction" class="embedded-about" aria-label="AIR SKY 소개">
 
 
-  <section id="fleet" class="pinsec" style="--len:400svh"><div class="pin"><h2>저희가 날리는 드론</h2><div class="fleet-track">
+  <section id="fleet" class="pinsec" style="--len:400svh"><div class="pin"><h2>저희가 날리는 드론</h2><p class="fleet-guide">아래로 내리면서 기체를 구경해보세요.</p><div class="fleet-track">
     <div class="craft lg"><span class="ph"><img src="assets/drone-neo2.webp" alt="DJI NEO 2" loading="lazy" decoding="async"></span><div><h3>NEO 2</h3><p>작고 가벼워서 가까이서 따라가며 찍기 좋아요.</p></div></div>
     <div class="craft lg"><span class="ph"><img src="assets/drone.webp" alt="DJI LITO 1" loading="lazy" decoding="async"></span><div><h3>LITO 1</h3><p>249g급 4K 드론이에요. 장애물 감지가 있어서 좀 더 마음 편하게 날려요.</p></div></div>
     <div class="craft lg"><span class="ph"><img src="assets/drone-avata360.webp" alt="DJI AVATA 360" loading="lazy" decoding="async"></span><div><h3>AVATA 360</h3><p>360° 영상을 찍는 드론이에요. 찍고 나서 화면 방향을 고를 수 있어요.</p></div></div>
