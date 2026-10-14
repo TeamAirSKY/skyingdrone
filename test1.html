@@ -115,8 +115,9 @@ top();addEventListener('DOMContentLoaded',top,{once:true});addEventListener('pag
 /* ===== Hero tidy ===== */
 .hero-bottom{border-top:0;margin-top:120px}
 .hero-btn:not(.fill){border-color:rgba(255,255,255,.38)}
-.drone-stage{top:50%}
-@media(max-width:900px){.drone-stage{top:56%}}
+.hero-wordmark{width:min(100%,740px)}
+.drone-stage{top:50%;width:min(31vw,420px)}
+@media(max-width:900px){.drone-stage{top:56%;width:34vw}}
 @media(max-width:600px){
 .menu-button{top:calc(14px + env(safe-area-inset-top));width:46px;height:46px;gap:6px}
 .menu-panel{--bs:46px;--bt:14px}
@@ -127,10 +128,11 @@ top();addEventListener('DOMContentLoaded',top,{once:true});addEventListener('pag
 .intro{margin-top:24px}
 .hero-cta{margin-top:24px}
 .hero-btn{padding:12px 22px;font-size:14px}
-.drone-stage{position:relative;top:auto;right:auto;bottom:auto;align-self:flex-end;width:min(72vw,300px);margin:46px 0 0}
+.drone-stage{position:relative;top:auto;right:auto;bottom:auto;align-self:flex-end;width:min(54vw,230px);margin:46px 0 0}
+.hero-wordmark{width:min(80%,320px)}
 .hero-bottom{margin-top:auto;padding-top:14px}
 }
-@media(max-width:600px) and (max-height:700px){.intro{font-size:19px}.drone-stage{width:min(58vw,240px);margin-top:30px}.hero{padding-top:104px}}
+@media(max-width:600px) and (max-height:700px){.intro{font-size:19px}.drone-stage{width:min(46vw,190px);margin-top:30px}.hero{padding-top:104px}}
 @media(prefers-reduced-motion:reduce){
 .scroll-link .chev path{animation:none;opacity:.85}
 .menu-button{animation:none}
