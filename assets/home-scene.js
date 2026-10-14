@@ -66,14 +66,12 @@ function apply(p,t){
  label.style.opacity=e(.5,.54,p)*(1-b);const ph=s<.25?'낮':s<.62?'해 질 무렵':'밤';if(ph!==phase){phase=ph;label.textContent=ph}
  if(three&&p>.26)three.render(s,p,t||0)}
 function words_(){const wp=cl((scrollY-(top-innerHeight*.55))/(innerHeight*.55+travel*.2)),n=(reduced||done)?words.length:Math.round(wp*words.length);if(n!==wc){words.forEach((w,i)=>w.classList.toggle('on',i<n));wc=n}}
-function collapse(){seen=true;done=true;tgt=cur=1;const before=sec.offsetHeight;sec.classList.add('seen');const delta=before-sec.offsetHeight;measure();words_();window.scrollTo({top:Math.max(0,scrollY-delta),left:0,behavior:'instant'});three&&three.resize();applied=-1;apply(1,performance.now());dispatchEvent(new Event('resize'))}
 function tick(now){
  if(!vis){raf=0;return}
  const dt=last?Math.min(50,now-last):16;last=now;cur=reduced?tgt:cur+(tgt-cur)*(1-Math.exp(-dt/120));if(Math.abs(tgt-cur)<.0004)cur=tgt;
  if(cur!==applied||(three&&cur>.26)){applied=cur;apply(cur,now)}
- if(done&&!seen&&cur>=.999)collapse();
  raf=requestAnimationFrame(tick)}
-function onScroll(){tgt=cl((scrollY-top)/travel);if(!seen&&tgt>=1)done=true;if(done)tgt=1;words_();if(done&&!seen&&(!vis||cur>=.999))collapse();if(vis&&!raf){last=0;raf=requestAnimationFrame(tick)}}
+function onScroll(){tgt=cl((scrollY-top)/travel);if(!seen&&tgt>=1)done=true;if(done)tgt=1;words_();if(vis&&!raf){last=0;raf=requestAnimationFrame(tick)}}
 new IntersectionObserver(es=>{vis=es[0].isIntersecting;if(vis&&!raf){last=0;raf=requestAnimationFrame(tick)}},{rootMargin:'120px'}).observe(sec);
 addEventListener('scroll',onScroll,{passive:true});
 function relayout(){measure();three&&three.resize();onScroll();applied=-1}
