@@ -170,6 +170,23 @@ top();addEventListener('DOMContentLoaded',top,{once:true});addEventListener('pag
 .ss-time{position:absolute;left:clamp(24px,5vw,80px);bottom:28px;font:500 12px 'Archivo','Noto Sans KR',sans-serif;letter-spacing:.2em;color:#dde6ef;opacity:0}
 @media(prefers-reduced-motion:reduce){.ss-say .w{transition:none}}
 </style>
+<style id="v4">
+.embedded-about{max-width:none;padding:0}
+.embedded-about .pinsec{padding:0;height:var(--len,200svh)}
+.pin{position:sticky;top:0;height:100svh;overflow:hidden;display:flex;flex-direction:column;justify-content:center}
+.ss-wrap{width:min(100%,1040px);margin:0 auto;padding:0 24px}
+.ss-wrap h2{margin-bottom:40px}
+#fleet .pin h2{margin:0;padding:0 clamp(24px,5vw,80px)}
+.fleet-track{display:flex;gap:28px;width:max-content;margin-top:34px;will-change:transform;transform:translate3d(100vw,0,0)}
+#fleet .fleet-track .craft{flex:none;flex-direction:column;align-items:stretch;justify-content:flex-start;gap:16px;width:clamp(270px,30vw,440px);padding:26px;border-radius:32px}
+#fleet .fleet-track .craft>*{position:relative;z-index:1}
+#fleet .fleet-track .craft .ph{width:100%;aspect-ratio:1.8}
+#fleet .fleet-track .craft .ph img{opacity:1;transform:none;transition:none}
+#fleet .fleet-track .craft h3{font-size:clamp(28px,3.4vw,44px);margin-bottom:8px}
+#fleet .fleet-track .craft p{max-width:none;font-size:15.5px}
+#links .reveal,#links h2{transition:opacity .5s,transform .7s var(--ease)}
+#links .go{transition:padding .5s var(--ease),color .3s,opacity .5s,transform .7s var(--ease)}
+</style>
 </head>
 <body>
 <header class="header"><a class="brand" href="/" aria-label="AIR SKY 홈"><img src="assets/air-sky-wordmark.svg" alt="AIR SKY" width="126" height="30"></a><button class="menu-button lg" type="button" aria-label="메뉴 열기" aria-expanded="false" aria-controls="main-menu"><span></span><span></span></button></header>
@@ -194,22 +211,18 @@ top();addEventListener('DOMContentLoaded',top,{once:true});addEventListener('pag
 <section id="introduction" class="embedded-about" aria-label="AIR SKY 소개">
 
 
-  <section id="fleet">
-    <i class="pass" aria-hidden="true"><img alt=""></i>
-    <h2>저희가 날리는 드론</h2>
-    <div class="craft"><span class="ph"><img src="assets/drone-neo2.webp" alt="DJI NEO 2" loading="lazy" decoding="async"></span><div><h3>NEO 2</h3><p>작고 가벼워서 가까이서 따라가며 찍기 좋아요.</p></div></div>
-    <div class="craft"><span class="ph"><img src="assets/drone.webp" alt="DJI LITO 1" loading="lazy" decoding="async"></span><div><h3>LITO 1</h3><p>249g급 4K 드론이에요. 장애물 감지가 있어서 좀 더 마음 편하게 날려요.</p></div></div>
-    <div class="craft"><span class="ph"><img src="assets/drone-avata360.webp" alt="DJI AVATA 360" loading="lazy" decoding="async"></span><div><h3>AVATA 360</h3><p>360° 영상을 찍는 드론이에요. 찍고 나서 화면 방향을 고를 수 있어요.</p></div></div>
-  </section>
+  <section id="fleet" class="pinsec" style="--len:400svh"><div class="pin"><h2>저희가 날리는 드론</h2><div class="fleet-track">
+    <div class="craft lg"><span class="ph"><img src="assets/drone-neo2.webp" alt="DJI NEO 2" loading="lazy" decoding="async"></span><div><h3>NEO 2</h3><p>작고 가벼워서 가까이서 따라가며 찍기 좋아요.</p></div></div>
+    <div class="craft lg"><span class="ph"><img src="assets/drone.webp" alt="DJI LITO 1" loading="lazy" decoding="async"></span><div><h3>LITO 1</h3><p>249g급 4K 드론이에요. 장애물 감지가 있어서 좀 더 마음 편하게 날려요.</p></div></div>
+    <div class="craft lg"><span class="ph"><img src="assets/drone-avata360.webp" alt="DJI AVATA 360" loading="lazy" decoding="async"></span><div><h3>AVATA 360</h3><p>360° 영상을 찍는 드론이에요. 찍고 나서 화면 방향을 고를 수 있어요.</p></div></div>
+  </div></div></section>
 
-  <section id="channel">
-    <i class="pass" aria-hidden="true"><img alt=""></i>
+  <section id="channel" class="pinsec" style="--len:220svh"><div class="pin"><div class="ss-wrap">
     <h2>지금까지</h2>
     <p class="big">2026년 8월에 시작해서<br>영상 <b data-n="5">0</b>개를 올렸고,<br>조회수는 <b data-n="1674">0</b>회,<br>구독자는 <b data-n="11">0</b>명이에요.</p>
-  </section>
+  </div></div></section>
 
-  <section id="links">
-    <i class="pass" aria-hidden="true"><img alt=""></i>
+  <section id="links" class="pinsec" style="--len:200svh"><div class="pin"><div class="ss-wrap">
     <h2>연락은 여기로</h2>
     <a class="go" href="https://www.youtube.com/@SKYING_DRONE" target="_blank" rel="noopener"><strong>유튜브</strong><span>AIR SKY</span></a>
     <a class="go" href="https://www.instagram.com/team._skying_drone" target="_blank" rel="noopener"><strong>인스타그램</strong><span>AIR SKY</span></a>
@@ -217,7 +230,7 @@ top();addEventListener('DOMContentLoaded',top,{once:true});addEventListener('pag
     <a class="go" href="https://open.kakao.com/o/poToUPKi" target="_blank" rel="noopener"><strong>오픈채팅</strong><span>카카오톡 오픈채팅</span></a>
 
 
-  </section>
+  </div></div></section>
 </section>
 </main>
 <footer class="footer"><span>© 2026 AIR SKY</span><span>A DIFFERENT PERSPECTIVE.</span></footer>
@@ -258,13 +271,13 @@ document.addEventListener('keydown',function(e){if(!isOpen())return;if(e.key==='
 </script>
 <script>
 (function(){
-const section=document.querySelector('#fleet');if(!section)return;let observer=null;
+const section=document.querySelector('#fleet');if(!section)return;const track=section.querySelector('.fleet-track');let observer=null;
 function node(tag,text,cls){const e=document.createElement(tag);if(text!==undefined)e.textContent=text;if(cls)e.className=cls;return e}
 function render(keys,catalog){
  observer?.disconnect();section.querySelectorAll('.craft,.fleet-message').forEach(e=>e.remove());
- if(!keys.length){section.append(node('p','등록된 크루 기체가 아직 없습니다.','fleet-message'));return}
+ if(!keys.length){track.append(node('p','등록된 크루 기체가 아직 없습니다.','fleet-message'));return}
  if('IntersectionObserver' in window&&!matchMedia('(prefers-reduced-motion: reduce)').matches)observer=new IntersectionObserver(entries=>entries.forEach(entry=>{if(entry.isIntersecting){entry.target.classList.add('in');observer.unobserve(entry.target)}}),{threshold:.25});
- keys.forEach(key=>{const data=catalog[key],card=node('div',undefined,'craft'),frame=node('span',undefined,'ph'),image=node('img'),copy=node('div');card.dataset.droneId=key;image.src=data.image;image.alt=data.name;image.loading='lazy';image.decoding='async';image.style.objectFit=data.fit||'contain';frame.append(image);copy.append(node('h3',data.title),node('p',data.description));card.append(frame,copy);section.append(card);if(observer)observer.observe(card);else card.classList.add('in')});
+ keys.forEach(key=>{const data=catalog[key],card=node('div',undefined,'craft lg'),frame=node('span',undefined,'ph'),image=node('img'),copy=node('div');card.dataset.droneId=key;image.src=data.image;image.alt=data.name;image.loading='lazy';image.decoding='async';image.style.objectFit=data.fit||'contain';frame.append(image);copy.append(node('h3',data.title),node('p',data.description));card.append(frame,copy);track.append(card);if(observer)observer.observe(card);else card.classList.add('in')});
  const pass=section.querySelector('.pass img');if(pass)pass.src=catalog[keys[0]].image;
  dispatchEvent(new Event('resize'));
 }
@@ -273,7 +286,7 @@ async function load(){
  const owned=[...new Set(data.members.flatMap(member=>member.equipment||[]))].filter(key=>Object.hasOwn(data.catalog,key));
  for(let i=owned.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[owned[i],owned[j]]=[owned[j],owned[i]]}
  render(owned.slice(0,3),data.catalog);
- }catch{section.querySelectorAll('.craft,.fleet-message').forEach(e=>e.remove());section.append(node('p',' 기체 정보를 불러오지 못했습니다. 새로고침 후 다시 확인해주세요.','fleet-message'));}
+ }catch{section.querySelectorAll('.craft,.fleet-message').forEach(e=>e.remove());track.append(node('p',' 기체 정보를 불러오지 못했습니다. 새로고침 후 다시 확인해주세요.','fleet-message'));}
 }
 load();addEventListener('pageshow',event=>{if(event.persisted)load()});
 })();
@@ -288,7 +301,7 @@ roots.forEach(root=>{
  const say=root.querySelector('.say');if(say){say.querySelectorAll('.ln').forEach(line=>{line.replaceChildren(...line.textContent.split(' ').flatMap((word,i)=>{const span=document.createElement('span');span.className='w';span.textContent=word;return i?[document.createTextNode(' '),span]:[span]}))})}
  const cards=root.querySelectorAll('.craft');const stats=root.querySelector('.big');
  function count(el){if(reduced){el.textContent=Number(el.dataset.n).toLocaleString('ko-KR');return}const start=performance.now(),to=Number(el.dataset.n);function tick(now){const p=Math.min(1,(now-start)/1600);el.textContent=Math.round(to*(1-Math.pow(1-p,4))).toLocaleString('ko-KR');if(p<1)requestAnimationFrame(tick)}requestAnimationFrame(tick)}
- if('IntersectionObserver' in window){const observer=new IntersectionObserver(entries=>entries.forEach(entry=>{if(!entry.isIntersecting)return;if(entry.target.classList.contains('craft'))entry.target.classList.add('in');else entry.target.querySelectorAll('[data-n]').forEach(count);observer.unobserve(entry.target)}),{threshold:.25});cards.forEach(card=>observer.observe(card));if(stats)observer.observe(stats)}else{cards.forEach(card=>card.classList.add('in'));stats?.querySelectorAll('[data-n]').forEach(count)}
+ if('IntersectionObserver' in window){const observer=new IntersectionObserver(entries=>entries.forEach(entry=>{if(!entry.isIntersecting)return;if(entry.target.classList.contains('craft'))entry.target.classList.add('in');else entry.target.querySelectorAll('[data-n]').forEach(count);observer.unobserve(entry.target)}),{threshold:.25});cards.forEach(card=>observer.observe(card));window.__countStats=()=>stats&&stats.querySelectorAll('[data-n]').forEach(count)}else{cards.forEach(card=>card.classList.add('in'));stats?.querySelectorAll('[data-n]').forEach(count)}
  const images=[...cards].map(card=>card.querySelector('img').src);const pilot=root.classList.contains('standalone-about')?document.querySelector('.pilot'):null;if(pilot){pilot.querySelector('img').src=images[1];if(reduced)pilot.hidden=true}root.querySelectorAll('.pass').forEach((pass,i)=>{pass.querySelector('img').src=images[i%images.length];if(!reduced&&'IntersectionObserver' in window){new IntersectionObserver(entries=>{if(entries[0].isIntersecting)pass.classList.add('go');else pass.classList.remove('go')},{threshold:.3}).observe(pass.parentElement)}});
  const daylight=root.querySelector('.intro-daylight'),sticky=daylight?.querySelector('.daylight-sticky'),scene=daylight?.querySelector('.light-scene');
 
@@ -362,7 +375,6 @@ function make(){
  const pos=(az,el,r)=>{const a=az*Math.PI/180,h=el*Math.PI/180;return new THREE.Vector3(r*Math.cos(h)*Math.sin(a),r*Math.sin(h),-r*Math.cos(h)*Math.cos(a))};
  const cDay=new THREE.Color('#7ca9c3'),cDusk=new THREE.Color('#d38d5e'),cNight=new THREE.Color('#0b1626'),tmp=new THREE.Color(),sunWarm=new THREE.Color('#ff8f45'),gWarm=new THREE.Color('#ff8a40');
  let px=0,py=0,tx=0,ty=0;
- addEventListener('pointermove',ev=>{tx=ev.clientX/innerWidth-.5;ty=ev.clientY/innerHeight-.5},{passive:true});
  function resize(){const w=pin.clientWidth,h=pin.clientHeight;R.setSize(w,h,false);C.aspect=w/h;C.fov=w/h<1?66:48;C.updateProjectionMatrix()}
  resize();
  function render(s,p,t){
@@ -382,7 +394,7 @@ function make(){
 let three=null;try{three=make()}catch(x){three=null}
 
 /* ---------- scroll choreography ---------- */
-let top=0,travel=1,cur=0,tgt=0,vis=false,raf=0,last=0,wc=-1,phase='',applied=-1;
+let done=false,top=0,travel=1,cur=0,tgt=0,vis=false,raf=0,last=0,wc=-1,phase='',applied=-1;
 function measure(){top=sec.getBoundingClientRect().top+scrollY;travel=Math.max(1,sec.offsetHeight-innerHeight)}
 function apply(p,t){
  const ti=e(.25,.32,p);intro.style.opacity=1-ti;intro.style.transform='scale('+(1-.08*ti)+')';intro.style.filter=ti?'blur('+ti*10+'px)':'';intro.style.visibility=ti>=1?'hidden':'';
@@ -395,18 +407,40 @@ function apply(p,t){
  const fi=e(.9,.99,p);fin.style.opacity=fi;fin.style.filter=fi<1?'blur('+(1-fi)*14+'px)':'';fin.style.transform='scale('+(.96+.04*fi)+')';
  label.style.opacity=e(.5,.54,p)*(1-b);const ph=s<.25?'낮':s<.62?'해 질 무렵':'밤';if(ph!==phase){phase=ph;label.textContent=ph}
  if(three&&p>.26)three.render(s,p,t||0)}
-function words_(){const wp=cl((scrollY-(top-innerHeight*.55))/(innerHeight*.55+travel*.2)),n=reduced?words.length:Math.round(wp*words.length);if(n!==wc){words.forEach((w,i)=>w.classList.toggle('on',i<n));wc=n}}
+function words_(){const wp=cl((scrollY-(top-innerHeight*.55))/(innerHeight*.55+travel*.2)),n=(reduced||done)?words.length:Math.round(wp*words.length);if(n!==wc){words.forEach((w,i)=>w.classList.toggle('on',i<n));wc=n}}
 function tick(now){
  if(!vis){raf=0;return}
  const dt=last?Math.min(50,now-last):16;last=now;cur=reduced?tgt:cur+(tgt-cur)*(1-Math.exp(-dt/120));if(Math.abs(tgt-cur)<.0004)cur=tgt;
  if(cur!==applied||(three&&cur>.26)){applied=cur;apply(cur,now)}
  raf=requestAnimationFrame(tick)}
-function onScroll(){tgt=cl((scrollY-top)/travel);words_();if(vis&&!raf){last=0;raf=requestAnimationFrame(tick)}}
+function onScroll(){tgt=cl((scrollY-top)/travel);if(tgt>=.995)done=true;if(done)tgt=1;words_();if(vis&&!raf){last=0;raf=requestAnimationFrame(tick)}}
 new IntersectionObserver(es=>{vis=es[0].isIntersecting;if(vis&&!raf){last=0;raf=requestAnimationFrame(tick)}},{rootMargin:'120px'}).observe(sec);
 addEventListener('scroll',onScroll,{passive:true});
 function relayout(){measure();three&&three.resize();onScroll();applied=-1}
 addEventListener('resize',relayout);addEventListener('load',relayout);document.fonts&&document.fonts.ready.then(relayout);
-measure();cur=tgt=cl((scrollY-top)/travel);words_();apply(cur,0);
+measure();onScroll();cur=tgt;apply(cur,0);
+})();
+</script>
+<script>
+(function(){
+const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches,cl=(x,a=0,b=1)=>Math.min(b,Math.max(a,x)),e=(a,b,x)=>cl((x-a)/(b-a)),mix=(a,b,t)=>a+(b-a)*t,ease=t=>t<.5?2*t*t:1-Math.pow(-2*t+2,2)/2;
+const fleet=document.getElementById('fleet'),track=fleet&&fleet.querySelector('.fleet-track'),ch=document.getElementById('channel'),lk=document.getElementById('links');
+const items=lk?[...lk.querySelectorAll('h2,.go')]:[];
+let fT=0,fL=1,tw=0,cT=0,lT=0,lL=1,cur=0,tgt=0,raf=0,last=0,counted=false;
+function measure(){
+ if(fleet){fT=fleet.getBoundingClientRect().top+scrollY;fL=Math.max(1,fleet.offsetHeight-innerHeight);tw=track.scrollWidth}
+ if(ch)cT=ch.getBoundingClientRect().top+scrollY;
+ if(lk){lT=lk.getBoundingClientRect().top+scrollY;lL=Math.max(1,lk.offsetHeight-innerHeight)}}
+function place(p){const x=mix(innerWidth*.62,innerWidth*.7-tw,ease(e(.04,.96,p)));track.style.transform='translate3d('+x.toFixed(1)+'px,0,0)'}
+function tick(now){const dt=last?Math.min(50,now-last):16;last=now;cur=reduced?tgt:cur+(tgt-cur)*(1-Math.exp(-dt/110));
+ if(Math.abs(tgt-cur)<.0004)cur=tgt;place(cur);if(cur!==tgt)raf=requestAnimationFrame(tick);else{raf=0;last=0}}
+function update(){
+ if(fleet){tgt=cl((scrollY-fT)/fL);if(!raf){raf=requestAnimationFrame(tick)}}
+ if(ch&&!counted&&scrollY>cT-innerHeight*.2&&window.__countStats){counted=true;window.__countStats()}
+ if(lk){const lp=(scrollY-(lT-innerHeight*.4))/(lL*.6+innerHeight*.4);items.forEach((el,i)=>{const o=e(i*.08,.12+i*.08,lp);el.style.opacity=o;el.style.transform='translateY('+(1-o)*26+'px)'})}}
+function relayout(){measure();update()}
+addEventListener('scroll',update,{passive:true});addEventListener('resize',relayout);addEventListener('load',relayout);document.fonts&&document.fonts.ready.then(relayout);
+measure();cur=tgt=fleet?cl((scrollY-fT)/fL):0;if(track)place(cur);update();
 })();
 </script>
 </body>
