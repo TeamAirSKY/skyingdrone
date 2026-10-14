@@ -1,5 +1,6 @@
 const s=require('../lib/server'),settings=require('../lib/site-settings');
 module.exports=async(req,res)=>{
+ if(process.env.AIRSKY_MIGRATION_READ_ONLY==='1'&&req.method!=='GET')return s.send(res,503,{error:'서버 이전 중입니다. 잠시 후 다시 시도해주세요.'});
  if(!['GET','PATCH'].includes(req.method))return s.send(res,405,{error:'METHOD_NOT_ALLOWED'});
  if(req.method==='PATCH'&&!s.sameOrigin(req))return s.send(res,403,{error:'요청 출처를 확인할 수 없습니다.'});
  if(!await require('../lib/admin-access').requireAccess(req,res,'settings'))return;
