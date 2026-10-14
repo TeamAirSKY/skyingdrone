@@ -48,5 +48,17 @@
     "title": "MINI 5 PRO",
     "image": "assets/drone-mini5pro.png",
     "description": "작은 기체로 일상의 풍경을 섬세하게 기록해요."
+  },
+  "avata1": {
+    "name": "DJI Avata 1",
+    "title": "AVATA 1",
+    "image": "assets/drone-avata1.png",
+    "description": "FPV 비행으로 풍경 속 움직임을 담는 드론이에요."
+  },
+  "mini3": {
+    "name": "DJI Mini 3",
+    "title": "MINI 3",
+    "image": "assets/drone-mini3.png",
+    "description": "작고 가벼운 기체로 일상의 풍경을 담아요."
   }
 }

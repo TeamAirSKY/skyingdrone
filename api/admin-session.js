@@ -17,6 +17,6 @@ module.exports=async(req,res)=>{
  let user=null;if(s.validPin(data?.pin)){if(s.safeEqual(data.pin,process.env.ADMIN_PIN))user={id:'owner',version:0};else{const users=(await access.read()).users;user=users.find(x=>x.active&&s.safeEqual(x.pinHash,access.hash(data.pin)))}}
  if(!user){await audit.append(req,res,'login_failed');return s.send(res,401,{error:'비밀번호가 맞지 않습니다.'})}
  // Authentication is not granted if its access record cannot be saved.
- req.adminIdentity=user.id==='owner'?{id:'owner',name:'총괄'}:user;await audit.append(req,res,'login_success');audit.appendCookie(res,s.cookie(s.session(user)));const identity={id:user.id,name:user.id==='owner'?'총괄':user.name,owner:user.id==='owner',permissions:user.id==='owner'?Object.keys(access.permissions):user.permissions};return s.send(res,200,{ok:true,user:identity});
+ req.adminIdentity=user.id==='owner'?{id:'owner',name:'ANT'}:user;await audit.append(req,res,'login_success');audit.appendCookie(res,s.cookie(s.session(user)));const identity={id:user.id,name:user.id==='owner'?'ANT':user.name,owner:user.id==='owner',permissions:user.id==='owner'?Object.keys(access.permissions):user.permissions};return s.send(res,200,{ok:true,user:identity});
  }catch{return s.send(res,503,{error:'접속 기록을 저장할 수 없어 현재 로그인할 수 없습니다. 잠시 후 다시 시도해주세요.'})}
 };
