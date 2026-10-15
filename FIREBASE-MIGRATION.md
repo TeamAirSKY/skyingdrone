@@ -80,3 +80,13 @@ npm exec --yes --package=firebase-tools -- firebase emulators:exec --project dem
 ```
 
 에뮬레이터 테스트는 `demo-airsky`만 사용하며 실제 회원 데이터는 읽거나 쓰지 않습니다.
+
+## 긴급 새 데이터 복구 (기존 Blob 보존)
+
+사용자가 기존 데이터 없이 새로 시작하도록 승인한 경우에만 사용합니다.
+`AIRSKY_STORAGE_BACKEND=firestore`와 `AIRSKY_FIRESTORE_FRESH_START=1`을 Production에 설정하고 재배포합니다.
+첫 저장소 접근 시 트랜잭션으로 빈 데이터베이스를 확인한 뒤 기본 크루 소개와 빈 개인 관리자 목록을 생성합니다.
+기존 `ADMIN_PIN`의 마스터 관리자 로그인을 유지하며 개인 계정은 관리자가 다시 등록합니다.
+이미 데이터 또는 미완료 이전 표시가 있는 대상은 초기화하지 않습니다. 검증된 대상은 재시작해도 기존 데이터를 보존합니다.
+복구 후 `AIRSKY_FIRESTORE_FRESH_START`를 제거하고 다시 배포합니다.
+기존 Blob 원본을 삭제하지 마세요. 추후 가져올 때에는 새 Firestore 데이터를 덮어쓰지 않도록 별도 병합이 필요합니다.
