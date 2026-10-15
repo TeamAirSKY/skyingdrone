@@ -10,7 +10,7 @@ window.passkeyAction=async()=>{
  if(busy)return;
  busy=true;const button=document.querySelector('.foot'),list=document.querySelector('#hist ul');
  button.disabled=admin;button.setAttribute('aria-busy','true');
- if(!admin){list.replaceChildren();const loading=document.createElement('li');loading.textContent='인증 내역을 불러오는 중…';list.append(loading)}
+ if(!admin){list.replaceChildren();const loading=document.createElement('li'),spinner=document.createElement('i'),label=document.createElement('span');loading.className='history-loading';loading.setAttribute('role','status');spinner.className='history-spinner';spinner.setAttribute('aria-hidden','true');label.textContent='인증 내역을 불러오는 중…';loading.append(spinner,label);list.append(loading)}
  try{
   if(admin){if(!verified){await api('verify');verified=true}document.querySelector('#auth-complete').showModal()}
   else{
