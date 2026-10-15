@@ -64,7 +64,7 @@ test('certificate derives roster department and owner label per PIN; history rem
  const users=[{id:'one',name:'첫 회원',pinHash:access.hash('123123'),active:true,version:1,permissions:['crew']},{id:'two',name:'둘째 회원',pinHash:access.hash('456456'),active:true,version:1,permissions:['filming']}];
  db.set('airsky:admin:accounts',JSON.stringify({revision:1,users}));db.set('airsky:crew:roster',JSON.stringify({revision:1,members:[{name:'첫 회원',owner:true,department:'editing'},{name:'둘째 회원',owner:false,department:'filming'}]}));
  let cookie='';const call=async(step,extra={})=>{const r=res();await sessionHandler(req('POST',{action:'certificate',step,...extra},cookie),r);for(const value of r.headers['Set-Cookie']||[]){if(value.startsWith('air_sky_certificate='))cookie=value.split(';')[0]}return r};
- await call('begin');let r=await call('unlock',{pin:'123123',admin:true});assert.equal(r.data.certificate.role,'OWNER-편집팀');await call('verify');
+ await call('begin');let r=await call('unlock',{pin:'123123',admin:true});assert.equal(r.data.certificate.role,'OWNER');await call('verify');
  r=await call('unlock',{pin:'456456',admin:false});assert.equal(r.data.certificate.role,'촬영팀');r=await call('history');assert.equal(r.data.logs.length,0);
  await call('begin');await call('unlock',{pin:'456456',admin:true});await call('verify');users[1].active=false;db.set('airsky:admin:accounts',JSON.stringify({revision:2,users}));r=await call('complete');assert.equal(r.code,401);
  r=res();await sessionHandler({...req('POST',{action:'certificate',step:'begin'}),headers:{host:'air.example',origin:'https://evil.example'}},r);assert.equal(r.code,403);
@@ -91,4 +91,9 @@ test('PIN change fails closed during migration and storage errors',async()=>{
  db.clear();let r=res();await sessionHandler(req('POST',{action:'certificate',step:'unlock',pin:process.env.ADMIN_PIN}),r);const cookie=r.headers['Set-Cookie'].find(x=>x.startsWith('air_sky_certificate=')).split(';')[0],body={action:'certificate',step:'change-pin',currentPin:process.env.ADMIN_PIN,newPin:'006666',confirmPin:'006666'};
  process.env.AIRSKY_MIGRATION_READ_ONLY='1';try{r=res();await sessionHandler(req('POST',body,cookie),r);assert.equal(r.code,503);assert(!db.has('airsky:admin:accounts'))}finally{delete process.env.AIRSKY_MIGRATION_READ_ONLY}
  const saved=global.fetch;global.fetch=async(url,options)=>{if(JSON.parse(options.body)[0]==='SET')throw Error('write failed');return saved(url,options)};try{r=res();await sessionHandler(req('POST',body,cookie),r);assert.equal(r.code,503);assert.equal(r.data.ok,undefined)}finally{global.fetch=saved}
+});
+test('certificate roster matching ignores case; owners have no team, co-owners keep team, introduction resolves team',async()=>{
+ db.clear();const access=require('../lib/admin-access');const users=[{id:'se7-account',name:'se7',version:1,active:true,permissions:['crew'],pinHash:access.hash('001111')},{id:'avata-account',name:'avata',version:1,active:true,permissions:['crew'],pinHash:access.hash('002222')},{id:'lkv-account',name:'L.KV팀장',version:1,active:true,permissions:['crew'],pinHash:access.hash('003333')}];
+ db.set('airsky:admin:accounts',JSON.stringify({revision:1,users}));db.set('airsky:crew:roster',JSON.stringify({members:[{id:'se7',name:'Se7',owner:true,department:'editing',bio:'Se7입니다.'},{id:'avata',name:'AVATA',coOwner:true,department:'filming',bio:'부오너입니다.'},{id:'lkv',name:'L.KV팀장',department:'planning',bio:'촬영팀 L.kV 팀장입니다.'}]}));
+ for(const [pin,role] of [['001111','OWNER'],['002222','CO-OWNER-촬영팀'],['003333','촬영팀']]){const r=res();await sessionHandler(req('POST',{action:'certificate',step:'unlock',pin}),r);assert.equal(r.code,200);assert.equal(r.data.certificate.role,role)}
 });
