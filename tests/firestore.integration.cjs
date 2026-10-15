@@ -26,6 +26,10 @@ test('backup imports and verifies every value without altering audit signatures 
  const body={value:JSON.stringify({signature:'unchanged',event:'certificate_success',actor:{id:'member'}}),expiresAt:null};const entry={pathname:'airsky/audit/8000000000000-11111111-1111-1111-1111-111111111111.json',body,checksum:checksum(body)},entries=[entry],backup={schema:1,entries,digest:checksum(entries)};
  validate(backup);assert.match(destination(entry).path,/entries/);const file=path.join(os.tmpdir(),'airsky-firestore-test-'+crypto.randomUUID()+'.json');await fs.writeFile(file,JSON.stringify(backup),{mode:0o600});try{await importBackup(file,{write:true});assert.equal((await db.doc('airsky_meta/migration').get()).data().status,'verified');assert.deepEqual(await createStorage(db).command(['LRANGE','airsky:admin:audit',0,49]),[body.value]);await assert.rejects(importBackup(file,{write:true}),/ALREADY_VERIFIED/)}finally{await fs.unlink(file)}
 });
+test('Firebase health check reads only migration readiness and exposes no private data',async()=>{
+ const handler=require('../api/firebase-health'),r={setHeader(){},status(code){this.code=code;return this},json(data){this.data=data;return this}};
+ await handler({method:'GET'},r);assert.equal(r.code,200);assert.deepEqual(r.data,{ok:true,firebase:true,migrationReady:true});
+});
 test('real admin handlers use Firestore for account creation, certificate authentication, PIN change and session revocation',async()=>{
  process.env.AIRSKY_STORAGE_BACKEND='firestore';process.env.ADMIN_PIN='123789';process.env.ADMIN_SESSION_SECRET=crypto.randomBytes(32).toString('hex');
  const s=require('../lib/server'),handler=require('../api/admin-session');
