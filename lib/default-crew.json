@@ -57,5 +57,17 @@
       "neo2"
     ],
     "active": true
+  },
+  {
+    "id": "junbin",
+    "name": "이준빈",
+    "bio": "",
+    "photo": "assets/crew-junbin.jpg",
+    "owner": false,
+    "coOwner": false,
+    "department": "filming",
+    "leader": false,
+    "equipment": [],
+    "active": true
   }
 ]

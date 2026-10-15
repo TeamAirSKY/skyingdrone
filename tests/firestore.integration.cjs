@@ -55,3 +55,13 @@ test('real admin handlers use Firestore for account creation, certificate authen
  const logs=await require('../lib/admin-audit').read(0);assert(logs.logs.some(x=>x.actor?.id===memberId&&x.event==='certificate_success'&&x.verified));
  delete process.env.AIRSKY_STORAGE_BACKEND;
 });
+test('Junbin repair adds one filming member, preserves others and respects later removal',async()=>{
+ const {apply}=require('../lib/restore-junbin');await db.doc('airsky_meta/restore-junbin-20261015').delete();
+ const original={id:'another',name:'keep',department:'editing'};
+ await store.command(['SET','airsky:crew:roster',JSON.stringify({revision:7,members:[original]})]);
+ await Promise.all([apply(db),apply(db)]);
+ let roster=JSON.parse(await store.command(['GET','airsky:crew:roster']));
+ assert.equal(roster.revision,8);assert.deepEqual(roster.members[0],original);assert.equal(roster.members.length,2);assert.equal(roster.members[1].name,'이준빈');assert.equal(roster.members[1].department,'filming');
+ await store.command(['SET','airsky:crew:roster',JSON.stringify({revision:9,members:[original]})]);
+ await apply(db);assert.equal(JSON.parse(await store.command(['GET','airsky:crew:roster'])).members.length,1);
+});
