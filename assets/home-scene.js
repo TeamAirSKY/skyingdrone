@@ -52,7 +52,7 @@ function make(){
 let three=null;try{three=make()}catch(x){three=null}
 
 /* ---------- scroll choreography ---------- */
-let done=false,seen=false,top=0,travel=1,cur=0,tgt=0,vis=false,raf=0,last=0,wc=-1,phase='',applied=-1;
+let done=false,seen=false,top=0,travel=1,cur=0,tgt=0,vis=false,raf=0,last=0,wc=-1,phase='',applied=-1,lastScrollY=scrollY,maxProgress=0;
 function measure(){top=sec.getBoundingClientRect().top+scrollY;travel=Math.max(1,sec.offsetHeight-innerHeight)}
 function apply(p,t){
  const ti=e(.25,.32,p);intro.style.opacity=1-ti;intro.style.transform='scale('+(1-.08*ti)+')';intro.style.filter='none';intro.style.visibility=ti>=1?'hidden':'';
@@ -66,12 +66,12 @@ function apply(p,t){
  label.style.opacity=e(.5,.54,p)*(1-b);const ph=s<.25?'낮':s<.62?'해 질 무렵':'밤';if(ph!==phase){phase=ph;label.textContent=ph}
  if(three&&p>.26)three.render(s,p,t||0)}
 function words_(){const wp=cl((scrollY-(top-innerHeight*.55))/(innerHeight*.55+travel*.2)),n=(reduced||done)?words.length:Math.round(wp*words.length);if(n!==wc){words.forEach((w,i)=>w.classList.toggle('on',i<n));wc=n}}
-function finishOffscreen(){
- if(seen||!done||sec.getBoundingClientRect().bottom>0)return;
+function finishOffscreen(returning=false){
+ if(seen||!returning&&(!done||sec.getBoundingClientRect().bottom>0))return;
  // Change layout only after the scene leaves the viewport; preserve the next section's position.
- const next=sec.nextElementSibling,before=next.getBoundingClientRect().top;
- seen=true;tgt=cur=1;sec.classList.add('seen');
- const delta=next.getBoundingClientRect().top-before;
+ const anchor=returning?frame:sec.nextElementSibling,before=anchor.getBoundingClientRect().top;
+ seen=true;done=true;tgt=cur=1;sec.classList.add('seen');
+ const delta=anchor.getBoundingClientRect().top-before;
  window.scrollTo({top:scrollY+delta,left:0,behavior:'instant'});
  measure();words_();three&&three.resize();applied=-1;apply(1,performance.now());dispatchEvent(new Event('resize'));
 }
@@ -80,7 +80,7 @@ function tick(now){
  const dt=last?Math.min(50,now-last):16;last=now;cur=reduced?tgt:cur+(tgt-cur)*(1-Math.exp(-dt/120));if(Math.abs(tgt-cur)<.0004)cur=tgt;
  if(cur!==applied||(three&&cur>.26)){applied=cur;apply(cur,now)}
  raf=requestAnimationFrame(tick)}
-function onScroll(){tgt=cl((scrollY-top)/travel);if(!seen&&tgt>=1)done=true;if(done)tgt=1;words_();finishOffscreen();if(vis&&!raf){last=0;raf=requestAnimationFrame(tick)}}
+function onScroll(){const returning=scrollY<lastScrollY-1;lastScrollY=scrollY;tgt=cl((scrollY-top)/travel);maxProgress=Math.max(maxProgress,tgt);if(!seen&&returning&&(done||maxProgress>=.9))finishOffscreen(true);if(!seen&&tgt>=1)done=true;if(done)tgt=1;words_();finishOffscreen();if(vis&&!raf){last=0;raf=requestAnimationFrame(tick)}}
 new IntersectionObserver(es=>{vis=es[0].isIntersecting;if(vis&&!raf){last=0;raf=requestAnimationFrame(tick)}},{rootMargin:'120px'}).observe(sec);
 addEventListener('scroll',onScroll,{passive:true});
 function relayout(){measure();three&&three.resize();onScroll();applied=-1}
