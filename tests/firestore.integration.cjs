@@ -6,6 +6,20 @@ const {createStorage,database}=require('../lib/firestore-storage'),db=database()
 before(async()=>{await db.recursiveDelete(db.collection('airsky_records'));await db.recursiveDelete(db.collection('airsky_lists'));await db.doc('airsky_meta/migration').delete()});
 after(async()=>db.terminate());
 test('an empty or unverified destination fails closed',async()=>{await assert.rejects(createStorage(db).command(['GET','airsky:admin:accounts']),/MIGRATION_NOT_VERIFIED/)});
+test('fresh start seeds only an empty destination, is concurrent-safe and never resets live data',async()=>{
+ const {initializeFresh}=require('../lib/firestore-storage');
+ await store.command(['SET','airsky:existing','keep']);
+ await assert.rejects(initializeFresh(db),/DESTINATION_NOT_EMPTY/);
+ assert.equal(await store.command(['GET','airsky:existing']),'keep');
+ await db.recursiveDelete(db.collection('airsky_records'));
+ const fresh=createStorage(db,{freshStart:true});
+ await Promise.all([fresh.command(['GET','airsky:admin:accounts']),initializeFresh(db)]);
+ assert.deepEqual(JSON.parse(await fresh.command(['GET','airsky:admin:accounts'])),{revision:0,users:[]});
+ const roster=JSON.parse(await fresh.command(['GET','airsky:crew:roster']));assert(roster.members.some(x=>x.name==='Se7'&&x.owner));
+ await fresh.upsert('airsky:admin:accounts',{},()=>({revision:9,users:[{name:'preserve'}]}));
+ await initializeFresh(db);assert.equal(JSON.parse(await fresh.command(['GET','airsky:admin:accounts'])).revision,9);
+ await db.recursiveDelete(db.collection('airsky_records'));await db.doc('airsky_meta/migration').delete();
+});
 test('transactional counters and revision checks prevent concurrent lost changes',async()=>{
  const results=await Promise.all(Array.from({length:8},()=>store.command(['INCR','airsky:rate:test'])));assert.deepEqual(results.sort((a,b)=>a-b),[1,2,3,4,5,6,7,8]);
  const writes=await Promise.allSettled([0,1].map(()=>store.upsert('airsky:site:settings',{revision:0},old=>{if(old.revision!==0)throw Error('RECORD_CONFLICT');return {revision:1}})));assert.equal(writes.filter(x=>x.status==='fulfilled').length,1);
