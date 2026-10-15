@@ -1,3 +1,8 @@
 node_modules/
 .env*
 .vercel/
+
+# Private migration material and local emulator output
+backups/
+*-debug.log
+service-account*.json

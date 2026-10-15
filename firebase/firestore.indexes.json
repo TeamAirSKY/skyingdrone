@@ -1,0 +1,7 @@
+{
+  "indexes": [],
+  "fieldOverrides": [
+    {"collectionGroup":"airsky_records","fieldPath":"value","indexes":[]},
+    {"collectionGroup":"entries","fieldPath":"value","indexes":[]}
+  ]
+}
