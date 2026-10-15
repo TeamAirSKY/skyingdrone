@@ -64,8 +64,8 @@ test('certificate derives roster department and owner label per PIN; history rem
  const users=[{id:'one',name:'첫 회원',pinHash:access.hash('123123'),active:true,version:1,permissions:['crew']},{id:'two',name:'둘째 회원',pinHash:access.hash('456456'),active:true,version:1,permissions:['filming']}];
  db.set('airsky:admin:accounts',JSON.stringify({revision:1,users}));db.set('airsky:crew:roster',JSON.stringify({revision:1,members:[{name:'첫 회원',owner:true,department:'editing'},{name:'둘째 회원',owner:false,department:'filming'}]}));
  let cookie='';const call=async(step,extra={})=>{const r=res();await sessionHandler(req('POST',{action:'certificate',step,...extra},cookie),r);for(const value of r.headers['Set-Cookie']||[]){if(value.startsWith('air_sky_certificate='))cookie=value.split(';')[0]}return r};
- await call('begin');let r=await call('unlock',{pin:'123123',admin:true});assert.equal(r.data.certificate.role,'OWNER-편집부');await call('verify');
- r=await call('unlock',{pin:'456456',admin:false});assert.equal(r.data.certificate.role,'촬영부');r=await call('history');assert.equal(r.data.logs.length,0);
+ await call('begin');let r=await call('unlock',{pin:'123123',admin:true});assert.equal(r.data.certificate.role,'OWNER-편집팀');await call('verify');
+ r=await call('unlock',{pin:'456456',admin:false});assert.equal(r.data.certificate.role,'촬영팀');r=await call('history');assert.equal(r.data.logs.length,0);
  await call('begin');await call('unlock',{pin:'456456',admin:true});await call('verify');users[1].active=false;db.set('airsky:admin:accounts',JSON.stringify({revision:2,users}));r=await call('complete');assert.equal(r.code,401);
  r=res();await sessionHandler({...req('POST',{action:'certificate',step:'begin'}),headers:{host:'air.example',origin:'https://evil.example'}},r);assert.equal(r.code,403);
 });

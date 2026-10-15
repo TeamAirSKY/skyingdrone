@@ -27,7 +27,7 @@ const server=http.createServer(async(req,res)=>{res.status=n=>{res.statusCode=n;
  page.on('pageerror',e=>errors.push(e.message));await page.goto(url+'/passkey.html?from=admin');
  await page.evaluate(async()=>{await fetch('/api/admin-session',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'certificate',step:'begin'})})});
  for(const digit of old){const key=page.locator('#lk button[data-v="'+digit+'"]');if(mode==='touch')await key.tap();else await key.click()}
- await page.locator('#lock.gone').waitFor({state:'attached'});assert.equal(await page.locator('.info h2').textContent(),mode==='mouse'?'ANT':'회원');await page.locator('#mini').click();
+ await page.locator('#lock.gone').waitFor({state:'attached'});assert.equal(await page.locator('.info h2').textContent(),mode==='mouse'?'ANT':'회원');await page.locator('#mini').click();await page.locator('#ov.open').waitFor({state:'visible'});assert.equal(await page.locator('#auth-status').textContent(),'');
  if(mode==='touch')await page.locator('#manage-certificate').tap();else await page.locator('#manage-certificate').click();
  await page.locator('#certificate-management').waitFor({state:'visible'});assert.equal(await page.locator('#certificate-management input').count(),3);assert.equal(await page.locator('#certificate-management a').count(),0);
  await page.locator('#certificate-current-pin').fill(old);await page.locator('#certificate-new-pin').fill(next);await page.locator('#certificate-confirm-pin').fill('009999');await page.locator('#save-certificate-pin').click();await page.getByText('새 비밀번호와 확인이 같지 않습니다.',{exact:true}).waitFor();

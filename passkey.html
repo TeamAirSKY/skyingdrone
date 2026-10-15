@@ -287,6 +287,7 @@ function keys(){const r=mini.getBoundingClientRect(),c=cardEl.getBoundingClientR
 async function openPass(){
  if(!window.__ok){let ok=true;try{if(window.DeviceOrientationEvent&&DeviceOrientationEvent.requestPermission)ok=(await DeviceOrientationEvent.requestPermission())==='granted'}catch(e){ok=false}
  if(!ok){document.getElementById('warn').classList.add('on');return}window.__ok=true}
+ document.getElementById('auth-status').textContent='';mini.classList.remove('attention');
  ov.classList.add('show');ov.offsetHeight;
  const k=keys();
  cardEl.animate(k,{duration:900,easing:'cubic-bezier(.3,.8,.25,1)',fill:'backwards'});
