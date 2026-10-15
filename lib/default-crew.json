@@ -61,13 +61,17 @@
   {
     "id": "junbin",
     "name": "이준빈",
-    "bio": "",
+    "bio": "안녕하세요 저는 이준빈입니다\n촬영팀 안에서 열심히 촬영하겠습니다!!",
     "photo": "assets/crew-junbin.jpg",
     "owner": false,
     "coOwner": false,
     "department": "filming",
     "leader": false,
-    "equipment": [],
+    "equipment": [
+      "neo1",
+      "neo2",
+      "avata2"
+    ],
     "active": true
   }
 ]

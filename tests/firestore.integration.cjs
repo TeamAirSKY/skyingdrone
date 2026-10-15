@@ -56,7 +56,7 @@ test('real admin handlers use Firestore for account creation, certificate authen
  delete process.env.AIRSKY_STORAGE_BACKEND;
 });
 test('Junbin repair adds one filming member, preserves others and respects later removal',async()=>{
- const {apply}=require('../lib/restore-junbin');await db.doc('airsky_meta/restore-junbin-20261015').delete();
+ const {apply}=require('../lib/restore-junbin');await db.doc('airsky_meta/restore-junbin-details-20261015').delete();
  const original={id:'another',name:'keep',department:'editing'};
  await store.command(['SET','airsky:crew:roster',JSON.stringify({revision:7,members:[original]})]);
  await Promise.all([apply(db),apply(db)]);
@@ -65,3 +65,5 @@ test('Junbin repair adds one filming member, preserves others and respects later
  await store.command(['SET','airsky:crew:roster',JSON.stringify({revision:9,members:[original]})]);
  await apply(db);assert.equal(JSON.parse(await store.command(['GET','airsky:crew:roster'])).members.length,1);
 });
+
+test('Junbin details repair updates only requested fields once',async()=>{const {apply}=require('../lib/restore-junbin');await db.doc('airsky_meta/restore-junbin-details-20261015').delete();const original={id:'junbin',name:'이준빈',bio:'',equipment:[],photo:'assets/crew-junbin.jpg',department:'filming',active:true},other={id:'ant',name:'ANT'};await store.command(['SET','airsky:crew:roster',JSON.stringify({revision:3,members:[original,other]})]);await apply(db);let data=JSON.parse(await store.command(['GET','airsky:crew:roster']));assert.equal(data.revision,4);assert.deepEqual(data.members[1],other);assert.deepEqual(data.members[0].equipment,['neo1','neo2','avata2']);assert(data.members[0].bio.includes('이준빈'));assert.equal(data.members[0].photo,original.photo);await apply(db);assert.equal(JSON.parse(await store.command(['GET','airsky:crew:roster'])).revision,4)});
