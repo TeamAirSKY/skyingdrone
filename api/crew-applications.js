@@ -25,6 +25,7 @@ module.exports=async(req,res)=>{
  if(req.method==='DELETE')return await require('../lib/record-management').remove(req,res,'application');
   if(req.method==='POST'){
  const settings=await require('../lib/site-settings').read();if(!settings.crewOpen)return s.send(res,403,{error:settings.crewMessage});
+ const department=s.body(req)?.department||'undecided',teamField=require('../lib/site-settings').teamFields[department];if(teamField&&settings[teamField]===false)return s.send(res,403,{error:'선택한 팀은 현재 모집하지 않습니다. 다른 팀을 선택해주세요.'});
    const data=s.body(req);if(data?.website)return s.send(res,400,{error:'지원 내용을 확인해주세요.'});
    const result=validate(data);if(result.error)return s.send(res,400,{error:result.error});
    if(await s.limited(req,'crew-apply',5,3600))return s.send(res,429,{error:'지원 요청이 많습니다. 잠시 후 다시 시도해주세요.'});

@@ -1,7 +1,7 @@
 (function(){
 let settings=null,savedRoster=null,roster=null,settingsBusy=false,rosterBusy=false,loaded=false,loading=null,generation=0;
 const root=document.querySelector('#operations-panel'),settingsMessage=document.querySelector('#settings-message'),crewMessage=document.querySelector('#crew-message');
-const fields={filmingOpen:document.querySelector('#settings-filming-open'),crewOpen:document.querySelector('#settings-crew-open'),filmingMessage:document.querySelector('#settings-filming-message'),crewMessage:document.querySelector('#settings-crew-message')};
+const fields={crewFilmingOpen:document.querySelector('#settings-team-filming'),crewPlanningOpen:document.querySelector('#settings-team-planning'),crewEditingOpen:document.querySelector('#settings-team-editing'),crewUndecidedOpen:document.querySelector('#settings-team-undecided'),filmingOpen:document.querySelector('#settings-filming-open'),crewOpen:document.querySelector('#settings-crew-open'),filmingMessage:document.querySelector('#settings-filming-message'),crewMessage:document.querySelector('#settings-crew-message')};
 function node(tag,text,cls){const e=document.createElement(tag);if(text!==undefined)e.textContent=text;if(cls)e.className=cls;return e}
 function settingsValue(){return Object.fromEntries(Object.entries(fields).map(([key,e])=>[key,e.type==='checkbox'?e.checked:e.value]))}
 function settingsDirty(){return Boolean(settings)&&Object.entries(settingsValue()).some(([key,value])=>settings[key]!==value)}
