@@ -52,9 +52,13 @@
     "department": "planning",
     "leader": true,
     "equipment": [
-      "mavic4pro",
+      "neo1",
+      "neo2",
+      "avata1",
       "avata2",
-      "neo2"
+      "mini3",
+      "mini5pro",
+      "mavic4pro"
     ],
     "active": true
   },
