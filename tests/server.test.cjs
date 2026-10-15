@@ -69,3 +69,26 @@ test('certificate derives roster department and owner label per PIN; history rem
  await call('begin');await call('unlock',{pin:'456456',admin:true});await call('verify');users[1].active=false;db.set('airsky:admin:accounts',JSON.stringify({revision:2,users}));r=await call('complete');assert.equal(r.code,401);
  r=res();await sessionHandler({...req('POST',{action:'certificate',step:'begin'}),headers:{host:'air.example',origin:'https://evil.example'}},r);assert.equal(r.code,403);
 });
+test('members change only their own certificate PIN; current PIN and confirmation are required and old sessions expire',async()=>{
+ db.clear();const access=require('../lib/admin-access'),old='001111',next='002222';
+ db.set('airsky:admin:accounts',JSON.stringify({revision:0,users:[{id:'member',name:'회원',version:1,active:true,permissions:['crew'],pinHash:access.hash(old)},{id:'other',name:'다른 회원',version:1,active:true,permissions:['filming'],pinHash:access.hash('003333')}]}));
+ let cookie='';const call=async(step,extra={})=>{const r=res();await sessionHandler(req('POST',{action:'certificate',step,...extra},cookie),r);for(const value of r.headers['Set-Cookie']||[])if(value.startsWith('air_sky_certificate='))cookie=value.split(';')[0];return r};
+ let r=await call('change-pin',{currentPin:old,newPin:next,confirmPin:next});assert.equal(r.code,401);
+ await call('begin');await call('unlock',{pin:old,admin:true});const oldSession='air_sky_admin='+s.session({id:'member',version:1});
+ for(const [currentPin,newPin,confirmPin] of [['999999',next,next],[old,next,'004444'],[old,'123','123'],[old,old,old],[old,'003333','003333']]){r=await call('change-pin',{currentPin,newPin,confirmPin});assert.equal(r.code,400)}
+ r=await call('change-pin',{currentPin:old,newPin:next,confirmPin:next,id:'other',owner:true});assert.equal(r.code,200);assert.equal(await access.identity(req('GET',null,oldSession)),null);assert.equal(await access.authenticate(old),null);assert.equal((await access.authenticate(next)).id,'member');assert.equal((await access.authenticate('003333')).id,'other');
+ const stored=JSON.parse(db.get('airsky:admin:accounts'));assert.equal(stored.revision,1);assert.equal(stored.users[0].version,2);assert(!JSON.stringify(stored).includes(next));assert.equal(stored.users[1].version,1);
+ r=res();await sessionHandler(req('POST',{action:'reveal',id:'member'},'air_sky_admin='+s.session()),r);assert.equal(r.data.pin,next);
+ r=await call('verify');assert.equal(r.code,200);r=await call('complete');assert.equal(r.code,200);assert.equal(r.data.user.version,2);assert.equal(r.data.user.owner,false);assert.deepEqual(r.data.user.permissions,['crew']);
+});
+test('master owner can change own certificate PIN and later account edits preserve it',async()=>{
+ db.clear();const access=require('../lib/admin-access');let cookie='';const call=async(step,extra={})=>{const r=res();await sessionHandler(req('POST',{action:'certificate',step,...extra},cookie),r);for(const value of r.headers['Set-Cookie']||[])if(value.startsWith('air_sky_certificate='))cookie=value.split(';')[0];return r};
+ await call('unlock',{pin:process.env.ADMIN_PIN});let r=await call('change-pin',{currentPin:process.env.ADMIN_PIN,newPin:'004444',confirmPin:'004444'});assert.equal(r.code,200);assert.equal(await access.authenticate(process.env.ADMIN_PIN),null);assert.equal((await access.authenticate('004444')).id,'owner');assert.equal(await access.identity(req('GET',null,'air_sky_admin='+s.session())),null);
+ const fresh='air_sky_admin='+s.session({id:'owner',version:1});r=res();await sessionHandler(req('POST',{action:'create',revision:1,name:'새 회원',permissions:['crew'],pin:'005555'},fresh),r);assert.equal(r.code,200);assert(JSON.parse(db.get('airsky:admin:accounts')).ownerCredential);assert.equal((await access.authenticate('004444')).version,1);assert(!JSON.stringify(r.data).includes('ownerCredential'));
+ r=res();await sessionHandler(req('POST',{action:'create',revision:2,name:'중복',permissions:['crew'],pin:'004444'},fresh),r);assert.equal(r.code,400);
+});
+test('PIN change fails closed during migration and storage errors',async()=>{
+ db.clear();let r=res();await sessionHandler(req('POST',{action:'certificate',step:'unlock',pin:process.env.ADMIN_PIN}),r);const cookie=r.headers['Set-Cookie'].find(x=>x.startsWith('air_sky_certificate=')).split(';')[0],body={action:'certificate',step:'change-pin',currentPin:process.env.ADMIN_PIN,newPin:'006666',confirmPin:'006666'};
+ process.env.AIRSKY_MIGRATION_READ_ONLY='1';try{r=res();await sessionHandler(req('POST',body,cookie),r);assert.equal(r.code,503);assert(!db.has('airsky:admin:accounts'))}finally{delete process.env.AIRSKY_MIGRATION_READ_ONLY}
+ const saved=global.fetch;global.fetch=async(url,options)=>{if(JSON.parse(options.body)[0]==='SET')throw Error('write failed');return saved(url,options)};try{r=res();await sessionHandler(req('POST',body,cookie),r);assert.equal(r.code,503);assert.equal(r.data.ok,undefined)}finally{global.fetch=saved}
+});

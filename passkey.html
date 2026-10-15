@@ -19,7 +19,7 @@ background:radial-gradient(circle at 80% 125%,#02021a 0 14%,#5146d0 17%,#171255 
 background:radial-gradient(ellipse at 95% 100%,#2c2c9a88,transparent 55%),radial-gradient(ellipse at 0% 25%,#3d1a6a66,transparent 55%),#090818}
 #ov.show{visibility:visible}
 .bar{display:flex;align-items:center;justify-content:space-between;height:56px;padding:0 22px;margin-top:10px;font-weight:600;font-size:17px}
-.bar button{background:none;border:0;color:#fff;font-size:28px;width:44px;text-align:left;padding:0}.bar span.m{font-size:15px;width:44px;text-align:right;font-weight:500}
+.bar button{background:none;border:0;color:#fff;font-size:28px;width:44px;text-align:left;padding:0}.bar .m{font-size:15px;width:44px;text-align:right;font-weight:500}
 .stage{height:calc(100% - 160px);display:flex;align-items:center;justify-content:center;perspective:1000px}
 #card{--cw:min(78vw,calc((100svh - 200px)*.63),340px);width:var(--cw);aspect-ratio:.63;transform-origin:50% 100%;transform:rotateX(-85deg) scaleY(.2);opacity:0;transform-style:preserve-3d;
 transition:transform .9s cubic-bezier(.2,.9,.2,1) .25s,opacity .4s .25s}
@@ -129,11 +129,11 @@ body{background:#f2f4fb;color:#1b2140}
 #card{transform-origin:50% 50%;transform:none;opacity:1;transition:none}
 .mini{transition:opacity .3s}.foot{transition:opacity .2s;cursor:pointer}
 html,body{background:radial-gradient(60vw 45vh at 15% 25%,#cfe0ff,transparent),radial-gradient(60vw 45vh at 90% 70%,#e6d8ff,transparent),linear-gradient(#f5f7fd,#e8ecf9)}
-.mini,.foot,.bar button,.bar span.m{-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);border:1px solid #ffffffd9;box-shadow:inset 2px 2px 3px #fff,inset -1px -2px 3px #7896ff40,0 12px 30px #3c50aa33}
+.mini,.foot,.bar button,.bar .m{-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);border:1px solid #ffffffd9;box-shadow:inset 2px 2px 3px #fff,inset -1px -2px 3px #7896ff40,0 12px 30px #3c50aa33}
 .mini{background:linear-gradient(145deg,#ffffffc2,#ffffff52)!important}
-.foot,.bar button,.bar span.m{background:linear-gradient(145deg,#ffffffcc,#ffffff4d)}
+.foot,.bar button,.bar .m{background:linear-gradient(145deg,#ffffffcc,#ffffff4d)}
 .bar button{width:44px;height:44px;border-radius:50%;text-align:center;line-height:38px;padding:0}
-.bar span.m{width:auto;padding:9px 16px;border-radius:22px;font-size:14px;color:#3a4478}
+.bar .m{width:auto;padding:9px 16px;border-radius:22px;font-size:14px;color:#3a4478}
 #hist{display:none;position:fixed;z-index:8;overflow:hidden;background:linear-gradient(145deg,#ffffffe8,#f1f4ffb8);-webkit-backdrop-filter:blur(28px) saturate(1.8);backdrop-filter:blur(28px) saturate(1.8);border:1px solid #fff;box-shadow:inset 2px 2px 3px #fff,inset -1px -2px 3px #7896ff40,0 24px 60px #3c50aa40}
 .hc{opacity:0;transition:opacity .3s;padding:22px}#hist.in .hc{opacity:1}
 .hh{display:flex;justify-content:space-between;align-items:center;font-size:20px;margin-bottom:14px;color:#1b2347}
@@ -149,10 +149,10 @@ html,body{background:radial-gradient(60vw 45vh at 15% 25%,#1d3a8a99,transparent)
 #ov{background:radial-gradient(60% 40% at 18% 28%,#1d3a8a99,transparent),radial-gradient(55% 40% at 88% 72%,#4a2a8a88,transparent),linear-gradient(#0b0c18,#06060d)}
 .hint{color:#8a90b0}
 .mini{background:linear-gradient(145deg,#ffffff26,#ffffff0a)!important}
-.mini,.foot,.bar button,.bar span.m{border-color:#ffffff40;box-shadow:inset 1.5px 1.5px 2px #ffffff55,inset -1px -2px 3px #6a8cff30,0 12px 30px #0009}
+.mini,.foot,.bar button,.bar .m{border-color:#ffffff40;box-shadow:inset 1.5px 1.5px 2px #ffffff55,inset -1px -2px 3px #6a8cff30,0 12px 30px #0009}
 .mini small{color:#a9b0dc}.mini .a{color:#8aa4ff26}.ic{background:#2a3a7a;color:#9ab8ff}
-.foot,.bar button,.bar span.m{background:linear-gradient(145deg,#ffffff2e,#ffffff0d)}
-.bar button{color:#f2f4ff}.bar span.m{color:#cfd6ff}.foot{color:#dfe4ff}
+.foot,.bar button,.bar .m{background:linear-gradient(145deg,#ffffff2e,#ffffff0d)}
+.bar button{color:#f2f4ff}.bar .m{color:#cfd6ff}.foot{color:#dfe4ff}
 .glass{background:linear-gradient(145deg,#ffffff26,#ffffff06 45%,#ffffff14);box-shadow:inset 2px 2px 3px #ffffff80,inset -2px -2px 4px #78a0ff40,inset 0 0 34px #6a8cff26}
 .glass::before{background:conic-gradient(from 200deg,#ffffffcc,#8f8cff55 25%,#7ab8ff88 50%,#ffffffcc 75%,#8f8cff55)}
 .back{background:linear-gradient(145deg,#2a3a7a66,#141a4a55);border-color:#ffffff55;box-shadow:0 36px 50px #000b}
@@ -242,12 +242,14 @@ background:radial-gradient(circle at 30% 24%,#ffffffb0,#ffffff26 40%,#8ab4ff1f 7
 #rot i{font-size:46px;animation:r 2s infinite}@keyframes r{50%{transform:rotate(-90deg)}}
 
 .mini.attention{outline:3px solid #8fb5ff;animation:attention 1.4s ease-in-out infinite}@keyframes attention{50%{box-shadow:0 0 35px #6b95ff88}}#auth-status{position:relative;z-index:6;margin:12px 24px;color:#c6d6ff}#auth-complete{background:#171b32;color:#fff;border:1px solid #7e97dd;border-radius:22px;padding:28px;max-width:90vw}#auth-complete::backdrop{background:#0009}#auth-complete button{padding:14px;border-radius:12px;cursor:pointer}#hist .hc{max-height:100%;overflow:auto}.foot{border:1px solid #ffffff40;width:calc(100% - 36px)}
+#certificate-management{background:#171b32;color:#eef2ff;border:1px solid #7e97dd;border-radius:24px;padding:24px;width:min(90vw,380px)}#certificate-management::backdrop{background:#0009}#certificate-management h2{margin-top:0}#certificate-management dt{color:#a9b9e8;font-size:13px;margin-top:16px}#certificate-management dd{margin:6px 0 20px;overflow-wrap:anywhere}#certificate-management button,#certificate-management a{display:block;width:100%;border:1px solid #7e97dd;border-radius:12px;background:#28345e;color:#fff;padding:12px;text-align:center;font:inherit;text-decoration:none;cursor:pointer;margin-top:12px}.bar .m{height:auto;line-height:normal;text-align:center;font-family:inherit}
+#certificate-management{max-height:calc(100dvh - 32px);overflow:auto}#certificate-management label{display:block;text-align:left;color:#c5d1f5;margin:16px 0 8px}#certificate-management input{width:100%;box-sizing:border-box;background:#0c1023;color:#fff;border:1px solid #6478a8;border-radius:10px;padding:12px;font:inherit;letter-spacing:.25em;user-select:text;-webkit-user-select:text}#certificate-management button:disabled{opacity:.5;cursor:wait}
 </style></head><body>
 <h1>내 지갑</h1>
 <div class="mini" id="mini" role="button" tabindex="0" aria-label="에어스카이 멤버카드 열기"><div class="row"><div class="ic">✦</div>에어스카이 멤버카드</div><small>드론 영상팀 · 탭해서 열기</small><div class="a">AIRSKY</div></div>
 <div class="hint">카드를 누르면 패스가 열려요</div>
-<p id="auth-status" role="status" aria-live="polite"></p><dialog id="auth-complete"><h2>인증이 완료되었습니다.</h2><button type="button" id="go-admin">관리자 페이지로 이동하기</button><p id="complete-error" role="status"></p></dialog><div id="ov">
- <div class="bar"><button id="back">‹</button><span>에어스카이 인증서</span><span class="m">관리</span></div>
+<p id="auth-status" role="status" aria-live="polite"></p><dialog id="auth-complete"><h2>인증이 완료되었습니다.</h2><button type="button" id="go-admin">관리자 페이지로 이동하기</button><p id="complete-error" role="status"></p></dialog><dialog id="certificate-management" aria-labelledby="certificate-management-title"><h2 id="certificate-management-title">비밀번호 변경</h2><form id="change-certificate-pin"><label for="certificate-current-pin">현재 비밀번호</label><input id="certificate-current-pin" name="currentPin" type="password" inputmode="numeric" pattern="[0-9]{6}" minlength="6" maxlength="6" autocomplete="current-password" required><label for="certificate-new-pin">새 비밀번호 6자리</label><input id="certificate-new-pin" name="newPin" type="password" inputmode="numeric" pattern="[0-9]{6}" minlength="6" maxlength="6" autocomplete="new-password" required><label for="certificate-confirm-pin">새 비밀번호 확인</label><input id="certificate-confirm-pin" name="confirmPin" type="password" inputmode="numeric" pattern="[0-9]{6}" minlength="6" maxlength="6" autocomplete="new-password" required><p id="certificate-management-message" role="status" aria-live="polite"></p><button type="submit" id="save-certificate-pin">비밀번호 변경</button><button type="button" id="close-certificate-management">닫기</button></form></dialog><div id="ov">
+ <div class="bar"><button id="back">‹</button><span>에어스카이 인증서</span><button type="button" class="m" id="manage-certificate" aria-haspopup="dialog" aria-controls="certificate-management">관리</button></div>
  <div class="blobs"><i></i><i></i><i></i></div>
  <div class="stage"><div id="card"><div id="tilt">
   <div class="rings"></div><div class="dots"></div><div class="glass"></div><div class="sheen"><i></i></div>
@@ -323,8 +325,8 @@ function frame(){rx+=(tx-rx)*.12;ry+=(ty-ry)*.12;card.style.transform=`rotateX($
  if(Math.abs(tx-rx)>.02||Math.abs(ty-ry)>.02)requestAnimationFrame(frame);else busy=false}
 function kick(){if(!busy){busy=true;requestAnimationFrame(frame)}}
 
-['contextmenu','copy','cut','selectstart','dragstart'].forEach(e=>document.addEventListener(e,x=>x.preventDefault()));
-addEventListener('keydown',e=>{const k=(e.key||'').toLowerCase(),m=e.ctrlKey||e.metaKey;if(e.key==='F12'||(m&&['c','x','s','p','u','a'].includes(k))||(m&&e.shiftKey&&['i','j','c'].includes(k)))e.preventDefault()});
+['contextmenu','copy','cut','selectstart','dragstart'].forEach(e=>document.addEventListener(e,x=>{if(!x.target.closest?.('#certificate-management input'))x.preventDefault()}));
+addEventListener('keydown',e=>{if(e.target.closest?.('#certificate-management input'))return;const k=(e.key||'').toLowerCase(),m=e.ctrlKey||e.metaKey;if(e.key==='F12'||(m&&['c','x','s','p','u','a'].includes(k))||(m&&e.shiftKey&&['i','j','c'].includes(k)))e.preventDefault()});
 const sd=document.getElementById('shield'),shield=v=>sd.style.display=v?'block':'none';
 addEventListener('keyup',e=>{if(e.key==='PrintScreen'){try{navigator.clipboard.writeText('')}catch(x){}shield(1);setTimeout(()=>shield(0),1500)}});
 document.addEventListener('visibilitychange',()=>shield(document.hidden));
@@ -345,7 +347,7 @@ async function check(){try{await window.unlockCertificate(buf);lock.classList.re
 document.getElementById('lf').onclick=()=>document.getElementById('warn2').classList.add('on');
 document.getElementById('w2ok').onclick=()=>document.getElementById('warn2').classList.remove('on');
 let hid=0;
-function relock(){const o=document.getElementById('ov');o.classList.remove('show','open');document.querySelector('.mini').style.opacity=1;document.getElementById('tilt').classList.remove('go');document.getElementById('hist').style.display='none';document.querySelector('.foot').style.opacity=1;document.getElementById('card').getAnimations().forEach(a=>a.cancel());buf='';paint();build();lock.classList.remove('gone');void lock.offsetWidth;lock.classList.remove('out')}
+function relock(){document.getElementById('certificate-management').close();document.getElementById('change-certificate-pin').reset();const o=document.getElementById('ov');o.classList.remove('show','open');document.querySelector('.mini').style.opacity=1;document.getElementById('tilt').classList.remove('go');document.getElementById('hist').style.display='none';document.querySelector('.foot').style.opacity=1;document.getElementById('card').getAnimations().forEach(a=>a.cancel());buf='';paint();build();lock.classList.remove('gone');void lock.offsetWidth;lock.classList.remove('out')}
 document.addEventListener('visibilitychange',()=>{if(document.hidden)hid=Date.now();else if(hid&&Date.now()-hid>10000&&lock.classList.contains('gone'))relock()});
 const lg=document.getElementById('llogo');lg.style.aspectRatio=document.querySelector('.title').style.aspectRatio;
 lg.innerHTML=L.map((d,i)=>`<img src="${d.u}" style="left:${d.x}%;width:${d.w}%;animation-delay:${(i*.09).toFixed(2)}s">`).join('');
