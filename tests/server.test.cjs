@@ -123,3 +123,11 @@ test('card buttons reject unsafe or malformed URLs and limits while accepting le
  for(const links of [null,{},Array.from({length:9},()=>({label:'링크',url:'https://example.com'})),[{label:' ',url:'https://example.com'}],[{label:'x'.repeat(41),url:'https://example.com'}],[{label:'링크',url:42}]])assert(validate(links).error);
  assert.equal(validate([{label:'링크',url:'https://example.com/path?q=1#top'}]).value[0].links[0].url,'https://example.com/path?q=1#top');
 });
+test('preview reads public roster only, blocks all writes, and fails closed on upstream errors',async()=>{
+ const savedFetch=global.fetch,savedEnv=process.env.VERCEL_ENV;process.env.VERCEL_ENV='preview';let calls=0;
+ global.fetch=async(url)=>{assert.equal(url,'https://skying-drone.kro.kr/api/crew-roster');calls++;return {ok:true,json:async()=>({members:require('../lib/default-crew.json')})}};
+ try{let r=res();await crewRoster({...req('GET'),query:{card:'se7'}},r);assert.equal(r.code,200);assert.equal(r.data.preview,true);assert.equal(r.data.member.id,'se7');assert.equal(calls,1);
+ for(const [method,query] of [['PATCH',{}],['GET',{admin:'1'}]]){r=res();await crewRoster({...req(method,null,'air_sky_admin='+s.session()),query},r);assert.equal(r.code,503)}assert.equal(calls,1);
+ global.fetch=async()=>({ok:false});r=res();await crewRoster(req('GET'),r);assert.equal(r.code,503);assert.equal(r.data.members,undefined);
+ }finally{global.fetch=savedFetch;if(savedEnv===undefined)delete process.env.VERCEL_ENV;else process.env.VERCEL_ENV=savedEnv}
+});

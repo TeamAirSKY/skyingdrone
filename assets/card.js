@@ -26,7 +26,7 @@ document.querySelector('#copy-card').addEventListener('click',copy);
 document.querySelector('#share-card').addEventListener('click',async()=>{if(!navigator.share)return copy();try{await navigator.share({title:document.title,url:shareURL});feedback.textContent='명함을 공유했습니다.'}catch(error){if(error.name!=='AbortError')await copy()}});
 async function load(){
  try{const path=location.pathname.match(/^\/card\/([a-z0-9][a-z0-9_-]{0,63})\/?$/),id=path?.[1]||new URLSearchParams(location.search).get('id');if(!id||!/^[a-z0-9][a-z0-9_-]{0,63}$/.test(id))throw Error('NOT_FOUND');
- const response=await fetch('/api/crew-roster?card='+encodeURIComponent(id)),data=await response.json();if(response.status===404)throw Error('NOT_FOUND');if(!response.ok||!data.member)throw Error('UNAVAILABLE');render(data.member,data.catalog||{});
+ const response=await fetch('/api/crew-roster?card='+encodeURIComponent(id)),data=await response.json();if(response.status===404)throw Error('NOT_FOUND');if(!response.ok||!data.member)throw Error('UNAVAILABLE');render(data.member,data.catalog||{});if(data.preview){const notice=node('p','미리보기 · 공개 크루 정보를 표시합니다. 어드민 수정은 운영 반영 후 사용할 수 있습니다.','hint');notice.setAttribute('role','note');card.prepend(notice)}
  }catch(error){const missing=error.message==='NOT_FOUND';status.replaceChildren(node('p','AIR SKY / CREW CARD','eyebrow'),node('h1',missing?'명함을 찾을 수 없습니다.':'잠시 연결이 어렵습니다.'),node('p',missing?'주소를 확인해주세요. 비공개 또는 삭제된 크루의 명함은 표시되지 않습니다.':'연결을 확인한 후 다시 시도해주세요.'));const retry=node('button','다시 불러오기','button');retry.type='button';retry.addEventListener('click',()=>location.reload());const back=node('a','크루 소개로 이동 ↗','button secondary');back.href='/crew.html';status.append(retry,document.createTextNode(' '),back)}
 }
 load();
