@@ -9,8 +9,8 @@ module.exports=async(req,res)=>{
  try{
   if(req.method==='GET'&&query.id){
    const card=await cards.publicCard(query.id);if(!card)return s.send(res,404,{error:'공개된 명함을 찾을 수 없습니다.'});
-   if(query.asset)return serveAsset(req,res,card,query.asset,true);
-   if(query.qr==='1')return serveQR(res,card.publicId);
+   if(query.asset)return await serveAsset(req,res,card,query.asset,true);
+   if(query.qr==='1')return await serveQR(res,card.publicId);
    return s.send(res,200,{card:cards.publicView(card),publicURL:publicURL(card.publicId)});
   }
   if(req.method==='DELETE'&&data?.action==='session'){auth.clear(res);return s.send(res,200,{ok:true})}
@@ -19,8 +19,8 @@ module.exports=async(req,res)=>{
   if(req.method==='POST'&&data?.action==='session')return s.send(res,200,{ok:true});
   const card=await cards.read(user.id);
   if(req.method==='GET'){
-   if(query.asset){if(!card)return s.send(res,404,{error:'명함이 없습니다.'});return serveAsset(req,res,card,query.asset,false)}
-   if(query.qr==='1'){if(!card)return s.send(res,404,{error:'명함이 없습니다.'});return serveQR(res,card.publicId)}
+   if(query.asset){if(!card)return s.send(res,404,{error:'명함이 없습니다.'});return await serveAsset(req,res,card,query.asset,false)}
+   if(query.qr==='1'){if(!card)return s.send(res,404,{error:'명함이 없습니다.'});return await serveQR(res,card.publicId)}
    return s.send(res,200,card?result(card):{card:null});
   }
   if(await s.limited(req,'business-card-edit:'+user.id,80,900))return s.send(res,429,{error:'저장 요청이 많습니다. 잠시 후 다시 시도해주세요.'});
