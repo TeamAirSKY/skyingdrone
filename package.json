@@ -1,1 +1,1 @@
-{"name":"air-sky","private":true,"engines":{"node":"22.x"},"scripts":{"test":"node --test tests/*.test.cjs"},"dependencies":{"@vercel/blob":"^2.8.1","firebase-admin":"^13.10.0"}}
+{"name":"air-sky","private":true,"engines":{"node":"22.x"},"scripts":{"test":"node --test tests/*.test.cjs"},"dependencies":{"@vercel/blob":"^2.8.1","firebase-admin":"^13.10.0","qrcode":"^1.5.4","sharp":"^0.35.5","yauzl":"^3.4.0"},"devDependencies":{"jsqr":"^1.4.0","playwright":"^1.64.1"}}

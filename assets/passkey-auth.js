@@ -3,7 +3,7 @@ let admin=false,unlocked=false,verified=false,busy=false;
 const fromAdmin=new URLSearchParams(location.search).get('from')==='admin';
 async function api(step,data={}){const response=await fetch('/api/admin-session',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'certificate',step,...data}),signal:AbortSignal.timeout(15000)});const result=await response.json();if(!response.ok)throw Error(result.error||'인증을 처리하지 못했습니다.');return result}
 const status=()=>document.querySelector('#auth-status');
-window.unlockCertificate=async pin=>{const result=await api('unlock',{pin,admin:fromAdmin});admin=result.admin;unlocked=true;verified=false;document.querySelector('.info h2').textContent=result.certificate.name;document.querySelector('.info .role').textContent=result.certificate.role;document.querySelector('.foot').textContent=admin?'인증하기':'☰ 인증 내역';document.querySelector('.mini').classList.toggle('attention',admin);status().textContent=admin?'멤버카드로 인증하세요. 카드를 누른 뒤 인증하기를 눌러주세요.':''};
+window.unlockCertificate=async pin=>{const result=await api('unlock',{pin,admin:fromAdmin});admin=result.admin;unlocked=true;document.querySelectorAll('.business-card-menu').forEach(x=>x.hidden=false);verified=false;document.querySelector('.info h2').textContent=result.certificate.name;document.querySelector('.info .role').textContent=result.certificate.role;document.querySelector('.foot').textContent=admin?'인증하기':'☰ 인증 내역';document.querySelector('.mini').classList.toggle('attention',admin);status().textContent=admin?'멤버카드로 인증하세요. 카드를 누른 뒤 인증하기를 눌러주세요.':''};
 window.passkeyAction=async()=>{
  if(!unlocked)return;
  if(!admin)openHist();

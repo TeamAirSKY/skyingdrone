@@ -11,7 +11,7 @@ module.exports=async(req,res)=>{
  if(req.method==='DELETE'){
  let auditSaved=true;
  if(s.authorized(req)){try{req.adminIdentity=await access.identity(req);await audit.append(req,res,'logout')}catch{auditSaved=false}}
- audit.appendCookie(res,s.cookie('',0));audit.appendCookie(res,'air_sky_certificate=; Path=/; HttpOnly; Secure; SameSite=Strict; Max-Age=0');return s.send(res,200,{ok:true,auditSaved});
+ require('../lib/card-auth').clear(res);audit.appendCookie(res,s.cookie('',0));audit.appendCookie(res,'air_sky_certificate=; Path=/; HttpOnly; Secure; SameSite=Strict; Max-Age=0');return s.send(res,200,{ok:true,auditSaved});
  }
  return s.send(res,403,{error:'인증서로 로그인해주세요.'});
 };
