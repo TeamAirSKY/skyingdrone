@@ -78,6 +78,6 @@ class Records{
  }
  clear(){this.generation++;this.busy=false;this.entries=[];this.drafts.clear();this.selected.clear();this.open.clear();this.loaded=false;this.offset=0;this.view='active';this.more.hidden=true;this.message.textContent='';this.render()}
 }
-window.AirSkyAdminRecords=Records;window.airSkyAdminBusy=()=>instances.some(x=>x.busy)||Boolean(window.airSkyOperationsBusy?.())||Boolean(window.airSkyAccountsBusy?.());window.airSkyHasDrafts=()=>instances.some(x=>x.drafts.size)||Boolean(window.airSkyOperationsDirty?.());
+window.AirSkyAdminRecords=Records;window.airSkyAdminBusy=()=>instances.some(x=>x.busy)||Boolean(window.airSkyOperationsBusy?.())||Boolean(window.airSkyAccountsBusy?.())||Boolean(window.airSkySiteBusy?.());window.airSkyHasDrafts=()=>instances.some(x=>x.drafts.size)||Boolean(window.airSkyOperationsDirty?.());
 window.addEventListener('beforeunload',event=>{if(window.airSkyHasDrafts()){event.preventDefault();event.returnValue=''}});
 })();

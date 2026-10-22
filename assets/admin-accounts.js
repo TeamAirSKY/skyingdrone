@@ -1,6 +1,6 @@
 (function(){
 const list=document.querySelector('#accounts-list'),message=document.querySelector('#accounts-message'),form=document.querySelector('#account-create-form'),created=document.querySelector('#account-created');let saved=null,busy=false,generation=0,loaded=false;
-const labels={filming:'촬영 신청',application:'크루 지원',suggestion:'건의사항',crew:'크루 등록·관리',settings:'모집·접수 설정',audit:'접속 기록',notices:'공지사항 작성',boards:'전체 게시판 작성',filmingBoard:'촬영팀 게시판 작성',planningBoard:'기획팀 게시판 작성',editingBoard:'편집팀 게시판 작성'};
+const labels={filming:'촬영 신청',application:'크루 지원',suggestion:'건의사항',crew:'크루 등록·관리',settings:'모집·접수 설정',site:'사이트 관리',audit:'접속 기록',notices:'공지사항 작성',boards:'전체 게시판 작성',filmingBoard:'촬영팀 게시판 작성',planningBoard:'기획팀 게시판 작성',editingBoard:'편집팀 게시판 작성'};
 function node(tag,text,cls){const e=document.createElement(tag);if(text)e.textContent=text;if(cls)e.className=cls;return e}
 function hidePin(){created.hidden=true;document.querySelector('#account-created-pin').textContent='';document.querySelector('#account-created-name').textContent=''}
 function choices(root,selected=[]){for(const [key,text] of Object.entries(labels)){const label=node('label',null,'consent'),input=node('input');input.type='checkbox';input.value=key;input.name='permissions';input.checked=selected.includes(key);label.append(input,node('span',text));root.append(label)}}
