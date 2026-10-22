@@ -1,5 +1,6 @@
 const s=require('../lib/server'),roster=require('../lib/crew-roster'),catalog=require('../assets/drone-catalog.json');
 module.exports=async(req,res)=>{
+ if(req.query?.businessCards==='1')return require('../lib/business-card-api')(req,res);
  if(req.query?.board)return require('../lib/boards')(req,res);
  if(req.query?.stats==='youtube')return require('../lib/channel-stats')(req,res);
  if(process.env.AIRSKY_MIGRATION_READ_ONLY==='1'&&req.method!=='GET')return s.send(res,503,{error:'서버 이전 중입니다. 잠시 후 다시 시도해주세요.'});

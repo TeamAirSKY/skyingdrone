@@ -17,6 +17,10 @@
       "dest": "/api/admin-page"
     },
     {
+      "src": "^/api/business-cards$",
+      "dest": "/api/crew-roster?businessCards=1"
+    },
+    {
       "handle": "filesystem"
     }
   ],

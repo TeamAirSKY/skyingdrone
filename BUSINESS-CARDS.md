@@ -3,6 +3,7 @@
 진입: `/passkey.html` 비밀번호 인증 후 인증서 아래 ‘명함’. 직접 진입은 `/card-manage.html`.
 공개 페이지는 `/card.html?id=<UUID>`이며 인증이 필요 없습니다. 처음에는 비공개이고, 관리 화면에서 ‘공개 페이지 사용’을 선택하고 저장하면 공개됩니다.
 기존 메인 화면·관리자 버튼·경로는 수정하지 않습니다.
+Vercel Hobby의 함수 12개 제한에 맞춰 `/api/business-cards`는 기존 crew-roster 함수로 라우팅하고 독립 명함 핸들러(`lib/business-card-api.js`)로 즉시 분기합니다. 기존 crew-roster 요청 처리 방식과 외부 URL은 유지됩니다.
 
 ## 인증과 데이터
 
