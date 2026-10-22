@@ -51,6 +51,7 @@ function card(member,role,context,index){
  if(keys.length>3){const button=node('button','더보기 · '+(keys.length-3)+'개 ▾','equipment-more');button.type='button';button.setAttribute('aria-expanded','false');button.setAttribute('aria-controls',list.id);button.addEventListener('click',()=>{const expanded=button.getAttribute('aria-expanded')!=='true';[...list.children].forEach((row,i)=>row.hidden=!expanded&&i>=3);button.setAttribute('aria-expanded',String(expanded));button.textContent=expanded?'접기 ▴':'더보기 · '+(keys.length-3)+'개 ▾'});section.append(button)}content.append(section);
  }
 
+ const businessCard=node('a','전자명함 보기 ↗','map-link');businessCard.href='/card/'+encodeURIComponent(member.id);content.append(businessCard);
  article.append(figure,content);if(profileObserver){article.classList.add('reveal-ready');profileObserver.observe(article)}return article;
 }
 function renderRoster(members){
