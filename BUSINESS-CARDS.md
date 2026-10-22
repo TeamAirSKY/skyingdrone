@@ -71,7 +71,7 @@ Android에서는 버튼을 만들지 않습니다. 공개 패스 파일은 다�
 기존 명함 UUID와 공개 설정은 유지됩니다. 가져오기는 즉시 서버에 저장됩니다.
 사이트 내부 사진은 원래 공개 assets URL을 참조하며, 직접 업로드한 프로필 사진이 있으면 우선합니다.
 
-명함 본문은 소개를 표시하고 QR은 별도 ‘QR 보기’ 대화상자에 표시합니다.
+명함 본문은 소개를 표시합니다. 내 명함 화면에서 QR은 별도 ‘QR 보기’ 대화상자에 표시합니다. 공개 페이지의 조작 버튼은 ‘명함 사진 저장’만 제공하며 QR 보기·Wallet·주소 복사·홈페이지 바로가기는 표시하지 않습니다.
 QR 링크는 같은 고유 공개 페이지이며 비공개일 때는 관리 화면에서 공유 전 공개 저장 안내를 합니다.
 공개 페이지의 ‘명함 사진 저장’은 공개 DTO만 이용해 기기 안에서 PNG를 만듭니다.
 공개 사진·색상·소개·정보와 고유 URL/QR을 포함하고, HTML 실행이나 외부 이미지 변환 서비스 호출은 하지 않습니다.
@@ -81,7 +81,7 @@ QR 링크는 같은 고유 공개 페이지이며 비공개일 때는 관리 화
 
 내 명함 관리 화면의 Wallet 버튼은 공개 표시 여부와 관계없이 본인의 업로드된 패스를 인증된 파일 URL로 엽니다.
 아이폰과 등록 파일이 있을 때만 버튼을 표시합니다. 패스가 없으면 필요한 파일 등록 안내를 표시합니다.
-공개 페이지의 Wallet 버튼은 기존과 같이 패스 공개 설정도 만족해야 합니다.
+공개 페이지에는 Wallet 버튼이나 등록 안내를 표시하지 않습니다. 내 명함의 Wallet 버튼과 관리자 패스 설정은 유지합니다.
 
 ## 명함 보기와 관리 분리
 
@@ -91,4 +91,4 @@ QR 링크는 같은 고유 공개 페이지이며 비공개일 때는 관리 화
 명함 화면은 서버 저장값으로 구성하며 편집 미리보기의 초안을 외부 표시 화면과 구분합니다.
 기존 공개 URL과 QR, 인증·저장 권한 및 모든 편집 기능은 유지합니다.
 
-Apple Wallet setup is restricted to the administrator’s 사이트 관리 tab and the `site` permission. `/api/site-settings?wallet=1` checks the existing admin session for listing, upload, replacement, publication and deletion. Card sessions cannot change pass files or their Wallet visibility. Owners automatically receive the new permission; existing scoped administrators must be granted 사이트 관리 explicitly. iPhone visitors without an available pass see an administrator registration request; Android visitors do not see Wallet actions.
+Apple Wallet setup is restricted to the administrator’s 사이트 관리 tab and the `site` permission. `/api/site-settings?wallet=1` checks the existing admin session for listing, upload, replacement, publication and deletion. Card sessions cannot change pass files or their Wallet visibility. Owners automatically receive the new permission; existing scoped administrators must be granted 사이트 관리 explicitly. On the personal card screen, iPhone owners without an available pass see an administrator registration request. The public card screen offers only image saving and never displays Wallet actions or registration guidance.
