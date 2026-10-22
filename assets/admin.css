@@ -15,3 +15,5 @@
 .admin-body #certificate-login:focus-visible{outline:3px solid #c7ddff;outline-offset:5px}
 .admin-body #certificate-login:disabled{opacity:.6;cursor:wait}
 @media(prefers-reduced-motion:reduce){.admin-body #certificate-login,.admin-body #certificate-login::after{transition:none}.admin-body #certificate-login:active{transform:none}}
+
+.card-editor{border-top:1px solid #2d3947;margin:24px 0;padding-top:20px}.card-editor h3{font-size:16px;margin:0 0 10px}.card-editor>.map-link{margin-right:18px}.card-editor>.button{margin:12px 0}.card-editor .hint{overflow-wrap:anywhere}.card-link-editor{display:grid;grid-template-columns:1fr 2fr auto;align-items:end;gap:12px;margin-top:18px}.card-link-editor .field{margin:0}.card-link-editor>.button{margin:0}.card-link-editor .field>label{font-size:12px}@media(max-width:600px){.card-link-editor{grid-template-columns:minmax(0,1fr);border:1px solid #2d3947;border-radius:10px;padding:14px}.card-link-editor>.button{justify-self:end}}

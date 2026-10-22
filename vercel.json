@@ -6,6 +6,10 @@
   },
   "routes": [
     {
+      "src": "^/card/[a-z0-9][a-z0-9_-]{0,63}/?$",
+      "dest": "/card.html"
+    },
+    {
       "src": "^/index\\.html$",
       "status": 308,
       "headers": {
