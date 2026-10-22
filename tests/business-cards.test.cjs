@@ -63,12 +63,36 @@ test('Wallet configuration requires site administration, never a card session or
  const record=JSON.parse(db.get('airsky:admin:accounts'));record.users[0].permissions=['site'];db.set('airsky:admin:accounts',JSON.stringify(record));const scoped=res();await require('../api/site-settings')(req('GET',null,'air_sky_admin='+s.session({id:'one',version:1}),{wallet:'1'}),scoped);assert.equal(scoped.code,200);
 });
 
-test('3MiB pass uploads keep exact bytes and reject even one extra byte',async()=>{
+test('10MiB pass uploads keep exact bytes and reject even one extra byte',async()=>{
  const created=await call('POST',{action:'create'},cookie()),url=created.data.publicURL;
- const base=pass(url),bytes=pass(url,files=>{files['icon.png']=Buffer.alloc(3*1024*1024-base.length+67);const manifest=JSON.parse(files['manifest.json']);manifest['icon.png']=crypto.createHash('sha1').update(files['icon.png']).digest('hex');files['manifest.json']=JSON.stringify(manifest)});
+ const base=pass(url),bytes=pass(url,files=>{files['icon.png']=Buffer.alloc(10*1024*1024-base.length+67);const manifest=JSON.parse(files['manifest.json']);manifest['icon.png']=crypto.createHash('sha1').update(files['icon.png']).digest('hex');files['manifest.json']=JSON.stringify(manifest)});
  // Pad a valid ZIP using its optional archive comment to hit the exact boundary.
- const padding=3*1024*1024-bytes.length;assert(padding>=0&&padding<65536);bytes.writeUInt16LE(padding,bytes.length-2);const exact=Buffer.concat([bytes,Buffer.alloc(padding)]);
- assert.equal(exact.length,3*1024*1024);assert.deepEqual(files.bytes(exact.toString('base64')),exact);
- let r=await adminCall('POST',{revision:0,filename:'large.pkpass',base64:exact.toString('base64')});assert.equal(r.code,200);assert.deepEqual((await call('GET',null,cookie(),{asset:'wallet'})).buffer,exact);
+ const padding=10*1024*1024-bytes.length;assert(padding>=0&&padding<65536);bytes.writeUInt16LE(padding,bytes.length-2);const exact=Buffer.concat([bytes,Buffer.alloc(padding)]);
+ assert.equal(exact.length,10*1024*1024);assert.deepEqual(files.bytes(exact.toString('base64')),exact);
+ const init=await adminCall('POST',{action:'upload-init',revision:0,filename:'large.pkpass',size:exact.length});assert.equal(init.code,200);
+ for(let start=0,index=0;start<exact.length;start+=init.data.chunkSize,index++){const part=await adminCall('POST',{action:'upload-part',uploadId:init.data.uploadId,index,revision:0,base64:exact.subarray(start,start+init.data.chunkSize).toString('base64')});assert.equal(part.code,200)}
+ assert.equal(binary.size,0);let r=await adminCall('POST',{action:'upload-complete',uploadId:init.data.uploadId,revision:0});assert.equal(r.code,200);assert.deepEqual((await call('GET',null,cookie(),{asset:'wallet'})).buffer,exact);
  r=await adminCall('POST',{revision:r.data.card.revision,filename:'too-large.pkpass',base64:Buffer.concat([exact,Buffer.alloc(1)]).toString('base64')});assert.equal(r.code,400);assert.equal(binary.size,1);assert.deepEqual((await call('GET',null,cookie(),{asset:'wallet'})).buffer,exact);
+});
+
+test('staged uploads bind actor, card, slot and revision, reject invalid chunks and clear cancelled sessions',async()=>{
+ await call('POST',{action:'create'},cookie());await call('POST',{action:'create'},cookie('two'));
+ let r=await adminCall('POST',{action:'upload-init',revision:0,filename:'x.pkpass',size:files.LIMIT+1});assert.equal(r.code,400);
+ const bytes=pass('https://example.com'),init=await adminCall('POST',{action:'upload-init',revision:0,filename:'x.pkpass',size:bytes.length}),id=init.data.uploadId;
+ assert.equal((await adminCall('POST',{action:'upload-complete',uploadId:id,revision:0})).code,400);
+ assert.equal((await adminCall('POST',{action:'upload-part',uploadId:id,revision:0,index:1,base64:bytes.toString('base64')})).code,400);
+ assert.equal((await adminCall('POST',{action:'upload-part',uploadId:id,revision:0,index:0,base64:Buffer.from('bad').toString('base64')})).code,400);
+ const record=JSON.parse(db.get('airsky:admin:accounts'));record.users[1].permissions=['site'];db.set('airsky:admin:accounts',JSON.stringify(record));
+ for(const [userId,token] of [['two',s.session()],['one',s.session({id:'two',version:1})]]){const response=res();await require('../api/site-settings')(req('POST',{userId,action:'upload-part',uploadId:id,revision:0,index:0,base64:bytes.toString('base64')},'air_sky_admin='+token,{wallet:'1'}),response);assert.equal(response.code,400)}
+ assert.equal((await adminCall('POST',{action:'upload-cancel',uploadId:id,revision:0})).code,200);assert.equal((await adminCall('POST',{action:'upload-complete',uploadId:id,revision:0})).code,400);assert.equal(binary.size,0);
+});
+
+test('expired staging records cannot be finalized and image upload stages use card authentication',async()=>{
+ await call('POST',{action:'create'},cookie());
+ const image=await require('sharp')({create:{width:32,height:32,channels:3,background:'#ffffff'}}).png().toBuffer();
+ const init=await call('POST',{action:'upload-init',slot:'profile',revision:0,filename:'photo.png',size:image.length},cookie());assert.equal(init.code,200);
+ let r=await call('POST',{action:'upload-part',uploadId:init.data.uploadId,slot:'profile',revision:0,index:0,base64:image.toString('base64')},cookie('two'));assert.equal(r.code,404);
+ r=await call('POST',{action:'upload-part',uploadId:init.data.uploadId,slot:'cover',revision:0,index:0,base64:image.toString('base64')},cookie());assert.equal(r.code,400);
+ const key=[...db.keys()].find(x=>x.endsWith(init.data.uploadId));db.delete(key);
+ r=await call('POST',{action:'upload-complete',uploadId:init.data.uploadId,slot:'profile',revision:0},cookie());assert.equal(r.code,400);assert.equal(binary.size,0);
 });
