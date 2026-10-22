@@ -62,3 +62,13 @@ test('Wallet configuration requires site administration, never a card session or
  const r=await adminCall('GET');assert.equal(r.code,200);assert.equal(r.data.users.length,3);for(const secret of ['pinHash','pinSealed','bio','phone'])assert(!JSON.stringify(r.data).includes(secret));
  const record=JSON.parse(db.get('airsky:admin:accounts'));record.users[0].permissions=['site'];db.set('airsky:admin:accounts',JSON.stringify(record));const scoped=res();await require('../api/site-settings')(req('GET',null,'air_sky_admin='+s.session({id:'one',version:1}),{wallet:'1'}),scoped);assert.equal(scoped.code,200);
 });
+
+test('3MiB pass uploads keep exact bytes and reject even one extra byte',async()=>{
+ const created=await call('POST',{action:'create'},cookie()),url=created.data.publicURL;
+ const base=pass(url),bytes=pass(url,files=>{files['icon.png']=Buffer.alloc(3*1024*1024-base.length+67);const manifest=JSON.parse(files['manifest.json']);manifest['icon.png']=crypto.createHash('sha1').update(files['icon.png']).digest('hex');files['manifest.json']=JSON.stringify(manifest)});
+ // Pad a valid ZIP using its optional archive comment to hit the exact boundary.
+ const padding=3*1024*1024-bytes.length;assert(padding>=0&&padding<65536);bytes.writeUInt16LE(padding,bytes.length-2);const exact=Buffer.concat([bytes,Buffer.alloc(padding)]);
+ assert.equal(exact.length,3*1024*1024);assert.deepEqual(files.bytes(exact.toString('base64')),exact);
+ let r=await adminCall('POST',{revision:0,filename:'large.pkpass',base64:exact.toString('base64')});assert.equal(r.code,200);assert.deepEqual((await call('GET',null,cookie(),{asset:'wallet'})).buffer,exact);
+ r=await adminCall('POST',{revision:r.data.card.revision,filename:'too-large.pkpass',base64:Buffer.concat([exact,Buffer.alloc(1)]).toString('base64')});assert.equal(r.code,400);assert.equal(binary.size,1);assert.deepEqual((await call('GET',null,cookie(),{asset:'wallet'})).buffer,exact);
+});
