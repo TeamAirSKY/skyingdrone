@@ -1,0 +1,26 @@
+(()=>{
+const {el}=CardView;
+function modal(title){const dialog=el('dialog',undefined,'card-dialog'),head=el('div',undefined,'dialog-head'),close=el('button','닫기');head.append(el('h2',title),close);dialog.append(head);document.body.append(dialog);close.onclick=()=>dialog.close();dialog.addEventListener('close',()=>{dialog.dispatchEvent(new Event('dispose'));dialog.remove()},{once:true});return dialog}
+function qr({url,src,published=true}){const dialog=modal('명함 QR 보기'),img=el('img',undefined,'large-qr');img.src=src;img.alt='공개 명함 상세 페이지로 연결하는 QR코드';dialog.append(img,el('p',published?'상대방이 카메라로 QR을 스캔하면 내 공개 명함이 열립니다.':'현재 명함은 비공개입니다. 공개 페이지 사용을 선택하고 저장해야 상대방이 열 수 있습니다.','help'),el('p',url,'url-box'));dialog.showModal()}
+async function image(src){if(!src)return null;const url=new URL(src,location.href);if(url.origin!==location.origin)throw Error('사진 주소를 확인해주세요. 같은 사이트의 사진만 이미지로 저장할 수 있습니다.');return new Promise((resolve,reject)=>{const img=new Image();img.onload=()=>resolve(img);img.onerror=()=>reject(Error('사진 또는 QR을 불러오지 못했습니다. 다시 시도해주세요.'));img.src=url.href})}
+function wrap(ctx,text,width){const lines=[];for(const paragraph of String(text||'').split('\n')){let line='';for(const char of Array.from(paragraph)){if(line&&ctx.measureText(line+char).width>width){lines.push(line);line=char}else line+=char}lines.push(line)}return lines}
+async function png(card,url,qrSrc){
+ await document.fonts?.ready;const [photo,cover,code]=await Promise.all([image(card.profile),image(card.cover),image(qrSrc)]);
+ const canvas=el('canvas');canvas.width=1080;canvas.height=15000;let ctx=canvas.getContext('2d'),y=90,truncated=false;
+ const font=size=>`${size}px -apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Noto Sans KR",sans-serif`;
+ const blocks=[];function block(value,size=38,color=card.theme.text,gap=26){ctx.font=font(size);const lines=wrap(ctx,value,900),height=lines.length*size*1.5+gap;if(y+height>13500){truncated=true;return}blocks.push({lines,size,color,y});y+=height}
+ const coverY=cover?y:0;if(cover)y+=370;const photoY=photo?y:0;if(photo)y+=250;
+ block('AIRSKY · PERSONAL CARD',26,card.theme.accent,40);block(card.name,64,card.theme.text,38);
+ for(const field of card.order){if(truncated)break;if(field==='links'){for(const row of card.links||[])block(row.title+'\n'+row.url,32)}else if(field==='extras'){for(const row of card.extras||[])block(row.title+'\n'+row.content,36)}else if(card[field]){block(CardView.labels[field],24,card.theme.accent,5);block(card[field])}}
+ if(truncated)block('… 전체 정보는 QR을 스캔해 확인해주세요.',26,card.theme.accent,16);
+ const footerY=y+30,height=footerY+380;canvas.height=height;ctx=canvas.getContext('2d');ctx.fillStyle=card.theme.background;ctx.fillRect(0,0,1080,height);ctx.strokeStyle=card.theme.accent;ctx.lineWidth=3;ctx.strokeRect(24,24,1032,height-48);
+ const crop=(img,x,top,w,h,px=50,py=50)=>{const scale=Math.max(w/img.width,h/img.height),sw=w/scale,sh=h/scale,sx=(img.width-sw)*px/100,sy=(img.height-sh)*py/100;ctx.drawImage(img,sx,sy,sw,sh,x,top,w,h)};
+ if(cover)crop(cover,90,coverY,900,320,card.theme.coverX,card.theme.coverY);
+ if(photo){const x=card.theme.photoAlign==='left'?90:card.theme.photoAlign==='right'?770:430;ctx.save();ctx.beginPath();ctx.roundRect(x,photoY,220,220,34);ctx.clip();crop(photo,x,photoY,220,220,card.theme.profileX,card.theme.profileY);ctx.restore()}
+ for(const b of blocks){ctx.font=font(b.size);ctx.fillStyle=b.color;b.lines.forEach((line,i)=>ctx.fillText(line,90,b.y+(i+1)*b.size*1.5))}
+ ctx.strokeStyle=card.theme.accent;ctx.beginPath();ctx.moveTo(90,footerY);ctx.lineTo(990,footerY);ctx.stroke();ctx.imageSmoothingEnabled=false;ctx.drawImage(code,90,footerY+42,260,260);ctx.font=font(29);ctx.fillStyle=card.theme.text;ctx.fillText('QR을 스캔해 웹 명함 열기',390,footerY+110);ctx.font=font(20);wrap(ctx,url,590).forEach((line,i)=>ctx.fillText(line,390,footerY+160+i*30));
+ return new Promise((resolve,reject)=>canvas.toBlob(blob=>blob?resolve(blob):reject(Error('명함 이미지를 만들지 못했습니다.')),'image/png'));
+}
+async function save(card,url,qrSrc){const dialog=modal('명함 사진 저장'),message=el('p','저장용 이미지를 만들고 있습니다…','help');dialog.append(message);dialog.showModal();try{const blob=await png(card,url,qrSrc);if(!dialog.isConnected)return;const objectURL=URL.createObjectURL(blob),img=el('img',undefined,'saved-card-image');img.src=objectURL;img.alt=card.name+' 저장용 명함';message.textContent='휴대전화에서는 이미지를 길게 눌러 사진에 저장할 수 있습니다. 기기에 따라 아래 다운로드나 공유 메뉴를 이용하세요.';const row=el('div',undefined,'toolbar'),download=el('a','PNG 다운로드','button');download.href=objectURL;download.download='airsky-card.png';row.append(download);const file=new File([blob],'airsky-card.png',{type:'image/png'});if(navigator.canShare?.({files:[file]})){const share=el('button','사진 공유 / 저장');share.onclick=async()=>{try{await navigator.share({files:[file],title:card.name+' 명함'})}catch(error){if(error.name!=='AbortError')message.textContent='공유 메뉴를 열지 못했습니다. 이미지를 길게 누르거나 PNG 다운로드를 이용해주세요.'}};row.append(share)}dialog.append(row,img);dialog.addEventListener('dispose',()=>URL.revokeObjectURL(objectURL),{once:true})}catch(error){message.textContent=error.message}}
+window.CardActions={qr,save,png};
+})();

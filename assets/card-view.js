@@ -13,8 +13,6 @@ function render(target,card,options={}){
   if(['links','extras'].includes(field)){for(const row of card[field]||[]){if(field==='links'){const a=el('a',row.title+' ↗','card-link');a.href=row.url;a.target='_blank';a.rel='noopener noreferrer';body.append(a)}else{const block=el('section',undefined,'card-field');block.append(el('h2',row.title),el('p',row.content));body.append(block)}}}
   else if(card[field]){const block=el('div',undefined,'card-field');block.append(el('span',labels[field],'label'));if(['phone','email'].includes(field)){const a=el('a',card[field]);a.href=field==='phone'?'tel:'+card[field].replace(/[^+0-9]/g,''):'mailto:'+card[field];block.append(a)}else block.append(el('div',card[field]));body.append(block)}
  }
- if(options.qr){const qr=el('div',undefined,'card-qr'),img=el('img');img.src=options.qr;img.alt='공개 명함 상세 페이지로 연결하는 QR코드';qr.append(img,el('p','QR을 스캔해\n이 명함을 열어보세요.'));body.append(qr)}
- if(card.wallet&&isIPhone()){const a=el('a','Apple Wallet에 추가','button wallet-link');a.href=card.wallet;body.append(a)}
  view.append(body);target.replaceChildren(view);
 }
 async function copy(value){try{await navigator.clipboard.writeText(value)}catch{const input=el('textarea');input.value=value;input.style.position='fixed';input.style.opacity='0';document.body.append(input);input.select();const success=document.execCommand('copy');input.remove();if(!success)throw Error('복사할 수 없습니다. 표시된 주소를 길게 눌러 복사해주세요.')}}
