@@ -90,3 +90,5 @@ QR 링크는 같은 고유 공개 페이지이며 비공개일 때는 관리 화
 ‘명함 보기’ 또는 ‘명함으로 돌아가기’로 돌아올 수 있고, 저장하지 않은 초안을 버릴 때에는 확인합니다.
 명함 화면은 서버 저장값으로 구성하며 편집 미리보기의 초안을 외부 표시 화면과 구분합니다.
 기존 공개 URL과 QR, 인증·저장 권한 및 모든 편집 기능은 유지합니다.
+
+Apple Wallet setup is restricted to the administrator’s 사이트 관리 tab and the `site` permission. `/api/site-settings?wallet=1` checks the existing admin session for listing, upload, replacement, publication and deletion. Card sessions cannot change pass files or their Wallet visibility. Owners automatically receive the new permission; existing scoped administrators must be granted 사이트 관리 explicitly. iPhone visitors without an available pass see an administrator registration request; Android visitors do not see Wallet actions.
